@@ -1,0 +1,397 @@
+%!TEX TS-program = pdflatex
+%!TEX encoding = UTF-8 Unicode
+
+
+
+    %                     %            %
+    %                                  %
+    %                                  %
+   %%%    %%%%   %%%%%   %%           %%%    %%%%  %    %
+    %    %    % %         %            %    %    %  %  %
+    %    %%%%%%  %%%%     %            %    %%%%%%   %%
+    %    %           %    %            %    %        %%
+    %    %           %    %     %%     %    %       %  %
+     %%   %%%%% %%%%%    %%%    %%      %%   %%%%% %    %
+
+
+
+         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+         %                                      %
+         %  "Scheletro" di una tesi di laurea   %
+         %           (in Matematica)            %
+         %      dell'Universita` di Udine       %
+         %                                      %
+         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+              %  Autore: Gianluca Gorni  %
+              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %%%%%   Ultima modifica:  10 luglio 2016        %%%%%
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+                                 %            %%
+                                 %             %
+   %%%%  % %%   %%%   %%%% %%%%  %%%%   %%%    %    %%%
+   %   % %%  % %   % %   % % % % %   % %   %   %   %   %
+   %   % %     %%%%% %   % % % % %   % %   %   %   %   %
+   %   % %     %     %  %% % % % %   % %   %   %   %   %
+   %%%%  %      %%%%  %% % % % % %%%%   %%%   %%%   %%%
+   %
+   %
+
+
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Usare una versione di LaTeX con sillabazione italiana %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper,twoside,english,italian]{book}
+
+% Usare "oneside" invece di "twoside"
+% nelle bozze, per risparmiare carta:
+% "twoside" produce diverse pagine bianche
+% alla fine dei capitoli.
+
+\usepackage[utf8]{inputenc}
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %                  babel                     %
+       % Pacchetto tipico per una tesi in italiano. %
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{babel}
+
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   % Se nella tesi si inseriscono dei passi in un'altra       %
+   % lingua (inglese, per fissare le idee), si puo' istruire  %
+   % il TeX di sillabare quella parte di testo con le regole  %
+   % inglesi, invece che italiane. A questo scopo basta       %
+   % scrivere                                                 %
+   %                                                          %
+   %    \documentclass[...,english,italian,...]{...}          %
+   %                                                          %
+   % al posto di \documentclass[...,italian,...],             %
+   % dopodiche' la sillabazione sara' italiana fintanto che   %
+   % non si incontra il comando \selectlanguage{english}.     %
+   % Per tornare all'italiano si scrive                       %
+   % \selectlanguage{italian}                                 %
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{uniudtesi}
+
+% Col pacchetto tocbibind compariranno nell'indice anche
+% la bibliografia ed eventualmente l'indice analitico
+\usepackage[nottoc]{tocbibind}
+
+% Il pacchetto indentfirst abolisce la fastidiosa convenzione
+% anglosassone di fa cominciare la prima riga di un
+% capitolo o sezione a margine sinistro, senza rientro:
+\usepackage{indentfirst}
+
+% \usepackage{graphicx} % gia' caricato da uniudtesi
+\graphicspath{{./figure/}}
+%\usepackage{epstopdf}
+
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       % Pacchetti tipici per una tesi di matematica  %
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{latexsym}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                    graphicx                         %
+%                                                     %
+%   Uno dei pacchetti per l'inserzione di figure      %
+%   in formato eps e` "graphicx". Ce ne sono diversi  %
+%   altri da cui scegliere.                           %
+%                                                     %
+%   Esempio di uso: avendo un file di nome            %
+%   figura1.eps questa si inserisce nella tesi        %
+%   col comando                                       %
+%                                                     %
+%        \begin{figure}[ht]                           %
+%        \begin{center}                               %
+%        \includegraphics{figura1.eps}                %
+%        \caption[nome breve]{nome lungo}             %
+%        \label{etichetta}                            %
+%        \end{center}                                 %
+%        \end{figure}                                 %
+%                                                     %
+%   Il "nome breve" e` quello che apparira`           %
+%   nell'indice delle figure ed e' opzionale.         %
+%   Il "nome lungo" e' quello che appare              %
+%   sotto la figura.                                  %
+%   (Ci sono opzioni per scalare, spostare, ruotare   %
+%   le figure).                                       %
+%   Con \graphicspath{{./figure/}} si dice            %
+%   al LaTeX di cercare le figure nella cartella      %
+%   "figure" situata allo stesso livello di           %
+%   questo documento                                  %
+%                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %  Esempi di macro definite dall'utente.  %
+   %  Le prime definiscono dei comandi per   %
+   %  scrivere i caratteri speciali per      %
+   %  gli insiemi numerici fondamentali      %
+   %  (naturali, interi, razionali, reali,   %
+   %  complessi                              %
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %  Delle macro che definiscono operatori   %
+   %  non predefiniti in LaTeX. Ogni utente   %
+   %  aggiunge quelle che servono. Questi     %
+   %  sono solo esempi arbitrari.             %
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareMathOperator{\traccia}{tr}
+\DeclareMathOperator{\sen}{sen}
+\DeclareMathOperator{\arcsen}{arcsen}
+\DeclareMathOperator*{\maxlim}{max\,lim}
+\DeclareMathOperator*{\minlim}{min\,lim}
+\DeclareMathOperator*{\deepinf}{\phantom{\makebox[0pt]{p}}inf}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Esempi di macro piu` elaborate,          %
+    % contenenti degli argomenti.              %
+    % Compongono gli indici delle sommatorie   %
+    % e delle produttorie in modo diverso      %
+    % da quello standard del TeX. Dovrebbero   %
+    % funzionare bene quando gli estremi della %
+    % sommatoria sono piccoli. Chi volesse     %
+    % usarle estesamente farebbe bene a        %
+    % lavorarci sopra.                         %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\varsum}[3]{\sum_{#2}^{#3}\!
+   {\vphantom{\sum}}_{#1}\;}
+\newcommand{\varprod}[3]{\sum_{#2}^{#3}\!
+   {\vphantom{\sum}}_{#1}\;}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %          Numerazione delle formule                  %
+  % Se non specificato altrimenti, il LaTeX numera le   %
+  % formule come (capitolo.formula) (per esempio (2.5)  %
+  % e` la quinta formula del secondo capitolo).         %
+  % Con le istruzioni seguenti invece la numerazione    %
+  % diventa (capitolo.sezione.formula) (per esempio     %
+  % (3.2.6) e` la sesta formula della seconda sezione   %
+  % del terzo capitolo):                                %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\makeatletter
+%\@addtoreset{equation}{section}
+%\makeatother
+%\renewcommand{\theequation}%
+%  {\thesection.\arabic{equation}}
+
+
+              %%%%%%%%%%%%%%%%%%%%%%%%%%
+              % Stile degli enunciati  %
+              %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Con le dichiarazioni seguenti                           %
+% teoremi, definizioni, proposizioni, lemmi e corollari   %
+% vengono numerati capitolo per capitolo e con un         %
+% contatore unico per tutti (per esempio, se subito dopo  %
+% il Teorema 2.1 c'e' una definizione, questa sara'       %
+% Definizione 2.2)                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\theoremstyle{plain}
+\newtheorem{teorema}{Teorema}[chapter]
+\newtheorem{proposizione}[teorema]{Proposizione}
+\newtheorem{lemma}[teorema]{Lemma}
+\newtheorem{corollario}[teorema]{Corollario}
+
+\theoremstyle{definition}
+\newtheorem{definizione}[teorema]{Definizione}
+\newtheorem{esempio}[teorema]{Esempio}
+
+\theoremstyle{remark}
+\newtheorem{osservazione}[teorema]{Osservazione}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % I comandi si usano cosi`:                            %
+  %                                                      %
+  %   \begin{teorema}[di Pitagora]                       %
+  %   La somma dei quadrati ecc.                         %
+  %   \end{teorema}                                      %
+  %                                                      %
+  % Le parole "di Pitagora" fra parentesi quadre         %
+  % sono facoltative. Non bisogna inserire               %
+  % manualmente degli spazi prima e dopo gli enunciati,  %
+  % perche' e` automatico!                               %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Il pacchetto amsthm definisce anche l'ambiente "proof"     %
+  % per le dimostrazioni.                                      %
+  % Esempio di uso:                                            %
+  %                                                            %
+  %   \begin{proof}                                            %
+  %   Sia $X$ un insieme ecc.                                  %
+  %   \end{proof}                                              %
+  %                                                            %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %                   makeidx                           %
+       %                                                     %
+       % Pacchetto per la generazione automatica dell'indice %
+       % analitico. Per esempio, se vogliamo che la parola   %
+       % "analitico" venga indicizzata nella frase           %
+       %                                                     %
+       %    "un metodo analitico di soluzione"               %
+       %                                                     %
+       % bisogna scrivere                                    %
+       %                                                     %
+       %    "un metodo analitico\index{analitico} di         %
+       %              soluzione".                            %
+       %                                                     %
+       % Compilando il file, il LaTeX produrra' un file      %
+       % ausiliario che termina con ".idx". Bisogna far      %
+       % processare questo file idx dal programma            %
+       % ausiliario "bibtex", che produrra' a sua volta un   %
+       % altro file ancora. Dare infine un'ultima passata    %
+       % col LaTeX. Si puo' tranquillamente lasciare         %
+       % la compilazione dell'indice verso la fine della     %
+       % stesura del lavoro, quando tutto e' ormai quasi     %
+       % definitivo.                                         %
+       %                                                     %
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{makeidx}
+%\makeindex
+
+% Ridefiniamo la riga di testa delle pagine:
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14.5pt}
+
+               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               %  Informazioni generali sulla Tesi  %
+               %    da usare nell'intestazione      %
+               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \titolo{Similarità di sottografi\\ nelle reti complesse}
+  \laureando{Gaspare Ferraro}
+  \annoaccademico{2016-2017}
+  \facolta{Scienze Matematiche, Fisiche e Naturali}
+  \corsodilaureatriennalein{Informatica}
+  \relatore[Prof.]{Roberto Grossi}
+  \relatoreDue[Prof.]{Andrea Marino}
+% \correlatore{Talaltro dei Tali}
+% \correlatoreDue{Secondo Correlatore}
+  \dedica{Ai miei genitori\\
+    per non avermi tagliato i viveri} % (facoltativo)
+
+% Per l'ipertesto:
+ \usepackage{hyperref} % gia' caricato da uniudtesi
+ \hypersetup{
+  % pdfpagelayout=SinglePage, % default
+  % pdfpagemode=UseOutlines, % default
+  bookmarksopen, % default
+  bookmarksopenlevel=2, % default;
+  pdftitle={La mia Tesi},
+  pdfauthor={Giovanna Tesista},
+  pdfsubject={Modello di Tesi di Laurea},
+  pdfkeywords={tesi laurea LaTeX}} % Queste informazioni non vengono stampate, ma sono conservate nel documento pdf. Sono consultabili col menu "File>Document Properites>Description". Vengono buone a scopi archivistici.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+   %%%                                    %        %%    %%
+  %   %                                   %         %     %
+  %      %%%  % %%  %%%%   %%%         %%%%  %%%    %     %    %%%%
+  %     %   % %%  % %   % %   %       %   % %   %   %     %   %   %
+  %     %   % %     %   % %   %       %   % %%%%%   %     %   %   %
+  %   % %   % %     %   % %   %       %   % %       %     %   %  %%
+   %%%   %%%  %     %%%%   %%%         %%%%  %%%%  %%%   %%%   %% %
+                    %
+                    %
+
+
+                          %%%%%               %
+                            %
+                            %    %%%   %%%%  %%
+                            %   %   % %       %
+                            %   %%%%%  %%%    %
+                            %   %         %   %
+                            %    %%%% %%%%   %%%
+
+
+ \begin{document}
+
+         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+         %            Intestazione                       %
+         %                                               %
+         % Per l'intestazione completa bisogna           %
+         % essersi procurati il file "polloPallido.eps". %
+         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frontmatter
+\maketitle
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %   Si puo` scegliere fra scrivere tutta la tesi in un    %
+  %   solo file, oppure distribuire ogni capitolo in un     %
+  %   file a parte. Qui si e` scelto tenere separati i      %
+  %   vari capitoli, che vengono caricati con \include      %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\theequation}{\arabic{equation}}%consigliato per migliorare i numeri di equazione nell'introduzione
+\renewcommand{\thesection}{\arabic{section}}%consigliato per migliorare i numeri di equazione nell'introduzione
+
+\input{introduzione}
+
+\tableofcontents
+\listoffigures
+
+\mainmatter
+
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}%si torna alle formule numerate come da default
+\renewcommand{\thesection}{\thechapter.\arabic{section}}%si torna alle sezioni numerate come da default
+
+\input{capitolo1}
+
+\input{capitolo2}
+
+\appendix
+
+\input{appendici}
+
+\backmatter
+
+\input{biblio}
+
+% \printindex % se si fa l'indice analitico.
+
+\end{document}

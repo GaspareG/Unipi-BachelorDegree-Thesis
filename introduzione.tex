@@ -1,0 +1,131 @@
+%!TEX TS-program = pdflatex
+%!TEX root = tesi.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+       %%%%%%%%%%%%%%%%%%%%%%
+       %                    %
+       %  Introduzione.tex  %
+       %                    %
+       %%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduzione}
+
+Il \TeX{} fu pensato ai lontani tempi in cui i terminali
+grafici erano un lusso stravagante e l'unico modo di
+comunicare coi calcolatori era di battere tasti della
+tastiera. Ancora oggi chi scrive in \TeX{} deve inserire i
+comandi di formattazione mescolati al testo ed è meglio
+se ha un manuale a portata di mano. Per rialzare
+il morale basta che si rammenti che il \TeX{} è ancora
+solidamente il più sofisticato sistema di impaginazione
+per testi scientifici, e che è gratis.
+
+\section{Prima sezione}
+
+Per cominciare a scrivere in \TeX{} bisogna individuare i
+\emph{caratteri speciali}, o \emph{caratteri di
+controllo}\index{caratteri di controllo}, che servono a
+distinguere il testo dai comandi. Chi lavora con la
+tastiera italiana\index{tastiera italiana} dovrà faticare
+all'inizio, perché alcuni di quei caratteri importanti
+si raggiungono solo attraverso certe combinazioni di
+tasti, che per di più cambiano da un sistema
+operativo\index{sistema operativo} a un altro. Consultate
+il manuale del vostro calcolatore o chiedete aiuto agli
+esperti se non vi raccapezzate.
+
+Questa è un'equazione numerata:
+\begin{equation}\label{prodottoNotevole}
+  (a-b)(a+b)=a^2-b^2.
+\end{equation}
+Notate il numero di equazione al margine destro. Ne riparleremo nel prossimo capitolo. Notate anche il numero di sezione. In questo esempio di tesi, le sezioni dell'introduzione sono numerate con un singolo numero, mentre nei capitoli seguenti\dots\ beh, guardate voi stessi.
+
+\begin{itemize}
+
+\item Il carattere speciale principe del \TeX{} è il
+\verb!\!, chiamato \emph{``backslash''}
+\index{backslash (\verb?\?)}
+(che significa grosso modo ``fendente inverso'', da non
+confondere con~\verb!/!, che è lo ``slash'', o linea di
+frazione), che serve per annunciare i comandi. Vi conviene
+imparare subito il suo posto sulla tastiera. Come carattere
+coincide con il segno meno della teoria degli insiemi
+($A\setminus B$)\index{sottrazione insiemistica}, che
+però si raccomanda di ricavare col comando
+\verb!\setminus!.
+
+\item Le \emph{parentesi
+graffe}~\verb!{}!\index{parentesi graffe} sono pure
+fondamentali e vanno individuate subito sulla tastiera.
+Servono per delimitare le zone di azione di un comando.
+Quando le graffe vanno stampate, come nella formula
+$\{a\}$, basta farle precedere dal backslash:
+\verb!\{a\}!.
+
+\item Il segno del \emph{dollaro}~\$ \index{dollaro,
+simbolo del} serve per delimitare le formule inglobate nel
+testo. Ad esempio per ottenere $A\setminus B$ scriviamo
+\verb!$A\setminus B$!.
+
+\item Gli \emph{accenti}\index{accenti} \verb!`! e \verb!'!
+preceduti da backslash servono per accentare il carattere
+che segue: per ottenere à, è, é, ù si batte
+\verb!à!, \verb!è!, \verb!é!, \verb!ù!. Addirittura
+la~ì accentata è patologicamente complicata: si
+ottiene battendo \verb!ì!. Se trovate farraginoso
+questo metodo di scrivere le lettere accentate, non siete
+gli unici. Per questo viene in aiuto il pacchetto
+``\verb!inputenc!'', che viene caricato col comando \begin{center}\verb!\usepackage[latin1]{inputenc}!\end{center} (su windows o unix)\index{accenti su windows o unix}.
+Con questo pacchetto attivo il \LaTeX{} interpreta
+correttamente gli accenti da tastiera ‡, Ë, È, ecc.
+Il backslash rimane per gli accenti e segni diacritici
+\index{accenti stranieri}
+non italiani: \verb!ô! per l'Hôpital,
+\verb!ö! per Gödel, \verb!ñ!
+per España, \verb!\c{c}! per gar\c{c}on, ecc.
+Battendo due volte gli accenti, come in
+\verb!``virgolette''! si ottengono le
+``virgolette''\index{virgolette} aperte e chiuse.
+
+\item Il \emph{percento}~\verb!%!\index{percento, segno
+del} dice al \TeX{} di ignorare il resto della riga di
+input, per inserire ``commenti'' al testo sorgente che non
+andranno stampati.
+
+\item Il \emph{``cappuccio''}~\verb!^!
+\index{cappuccio (\verb?^?)} e
+la \emph{sottolineatura}~\verb!_!\index{sottolineatura},
+che servono soprattutto per gli esponenti e gli indici
+nelle formule: per avere
+$a_i^2$ battere \verb!$a_i^2$!, o, indifferentemente
+\verb!$a^2_i$!.
+
+\item Le \emph{parentesi
+quadre}~\verb![]!\index{parentesi quadre} e i segni di
+\emph{disuguaglianza}~$<>$ servono nelle formule
+matematiche e in certe tastiere sono nascosti.
+
+\item L'\emph{``ampersand''}\index{ampersand (\verb?&?)}, o
+``e~commerciale''~\verb!&!, che separa gli argomenti di un
+allineamento.
+
+\item La
+\emph{``tilde''}~\verb!~!\index{tilde (\verb?~?)},
+che posta fra due parole vieta al \TeX{} di andare a capo
+in quel punto. Per esempio scriveremo
+\verb!Prof.~Tizio! se siamo pignoli e non vogliamo che
+``Prof.'' càpiti a fine riga e ``Tizio'' sia spedito a
+capo. L'accento tilde sulla lettera seguente (come in
+España o São Paulo) si ottiene con~\verb!\~!
+(\verb!España!,
+\verb!São Paulo!). La tilde nelle formule matematiche
+è diversa: per avere $\tilde a$ bisogna battere
+\verb!$\tilde a$!.
+
+\item Lo
+\emph{``hash''}~\verb!#!\index{hash (\verb?#?)}
+serve come segnaposto per gli argomenti delle funzioni.
+Troppo complicato da spiegare qui.
+
+\end{itemize}

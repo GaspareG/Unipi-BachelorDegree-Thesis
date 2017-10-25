@@ -1,0 +1,205 @@
+%!TEX TS-program = pdflatex
+%!TEX root = tesi.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+     %%%%%%%%%%%%%%%%%%%%
+     %                  %
+     %  capitolo1.tex   %
+     %                  %
+     %%%%%%%%%%%%%%%%%%%%
+
+\chapter{Rudimenti di \TeX}
+
+Raccogliamo qui alcune delle cose di base per un
+principiante di \TeX.
+
+\section{Spazi}
+
+Uno o più spazi fra due parole del testo sorgente non
+fanno differenza: \verb!uno due! ha lo stesso effetto
+di \verb!uno     due!. Per terminare il
+paragrafo e avere il rientro nella riga seguente il modo
+consigliato è di lasciare una o più righe bianche dopo
+la fine del paragrafo. Un'alternativa è di scrivere
+\verb!\par! alla fine del paragrafo.
+
+Un'altra equazione numerata:
+\begin{equation}\label{prodottoNotevole2}
+  (a-b)(a^2+ab+b^2)=a^3-b^3.
+\end{equation}
+
+La spaziatura verticale è gestita in gran parte
+automaticamente dal \LaTeX. Se si vuole uno stacco è
+spesso meglio vedere se non sia il caso di introdurre una
+nuova \verb!\section!, \verb!\subsection!
+\verb!\subsubsection!, \verb!itemize! o un enunciato
+(\verb!osservazione!, \verb!corollario! ecc.), e fidarsi
+della spaziatura automatica.
+
+Se proprio si vuole inserire uno spazio manualmente si
+può usare il comando
+\verb!\hspace{!\textit{lunghezza}\verb!}! per gli spazi
+orizzontali e \verb!\vspace{!\textit{lunghezza}\verb!}!
+per gli spazi verticali. Per esempio scrivendo
+\begin{center}
+  \verb!\hspace{1cm}!
+\end{center}
+si lascia uno spazio orizzontale di 1 centimetro.
+Per gli spazi verticali è meglio scegliere fra i
+seguenti tre spazi standardizzati piccolo, medio e grande:
+\begin{center}
+  \verb!\smallskip!, \verb!\medskip!, \verb!\bigskip!.
+\end{center}
+
+\section{Trattini}
+
+Il \TeX{} distingue quattro tipi di trattini
+orizzontali. Notate come sono diversi per lunghezza,
+spessore e spaziatura.
+
+\begin{itemize}
+
+\item il trattino semplice (esempio:
+video-proiettore), che si ottiene battendo il tasto del
+trattino (o~segno meno): \verb!video-proiettore!.
+
+\item il trattino medio, che per quanto ne so si usa
+solo fra due numeri per indicare l'intervallo fra i due,
+per esempio nel citare le pagine da 15 a 21 di un libro
+potrò scrivere ``p.~15--21''. Questo trattino si
+ottiene battendo due volte il tasto del trattino semplice:
+\verb!p. 15--21!.
+
+\item il trattino lungo, poco usato in italiano, ma che
+in inglese è spesso usato per delimitare un
+inciso---come noi useremmo una parentesi. Si ottiene
+battendo tre volte il trattino semplice:
+\verb!inciso---come!. Nella tipografia inglese non si
+lasciano spazi attorno al trattino lungo.
+
+\item il segno meno, che si usa nelle formule
+matematiche: $a-1$. Si ottiene battendo il trattino
+semplice, ma all'interno di una formula: \verb!$a-1$!.
+Qui i dollari servono per delimitare la formula.
+
+\end{itemize}
+
+Un'altra equazione numerata:
+\begin{equation}
+  (a-b)(a^3+a^2b+ab^2+b^3)=a^4-b^4.
+\end{equation}
+Per come è settato questo esempio di tesi, il numero di equazione è una coppia il cui primo elemento è il numero di capitolo e il secondo è il numero di formula all'interno del capitolo. Per esempio, nella formula~\eqref{prodottoNotevole2} di pag.~\pageref{prodottoNotevole2} il primo~`1' si riferisce al capitolo (non alla sezione!) e il secondo~`1' alla formula. Fanno eccezione le formule dell'introduzione, il cui numero non è una coppia ma un singolo numero d'ordine (vedi la formula~\eqref{prodottoNotevole} di pag.~\pageref{prodottoNotevole}).
+
+
+\section{Accenti, lettere insolite, e cambi di font}
+
+Alcuni esempi di lettere o accenti stranieri:
+\begin{center}
+\begin{tabular}{ll}
+  Weierstraß& \verb!Weierstraß! \\
+  Gödel & \verb!Gödel! \\
+  naïve & \verb!naïve! \\
+   Øystein & \verb!Øystein! \\
+  Ångström & \verb!Ångström! \\
+  Stanis{\l}aw \'Swierczkowski & 
+    \verb!Stanis{\l}aw \'Swierczkowski! \\
+  Pál Erd\H{o}s &
+    \verb!Pál Erd\H{o}s! \\
+  T\=oky\=o & \verb!T\=oky\=o! \\
+  L'Hôpital & \verb!L'Hôpital!
+\end{tabular}
+\end{center}
+Se ve ne servono degli altri consultate un manuale.
+
+\medskip
+
+Varie \emph{forme} dei caratteri e i comandi per
+ottenerle:
+
+\medskip
+
+\begin{center}
+\begin{tabular}{ll}
+  \textup{Testo normale (upright)} &
+    \verb!\textup{Testo normale!\\
+    &\qquad\verb!(upright)}!\\ 
+  \textit{corsivo (``italic'')} &
+    \verb!\textit{corsivo!\\
+    &\qquad\verb!(``italic'')}!\\
+  \textsl{inclinato (``slanted'')} &
+    \verb!\textsl{inclinato!\\
+    &\qquad\verb!(``slanted'')}!\\
+  \textsc{maiuscolette (``small caps'')} &
+    \verb!\textsc{maiuscolette!\\
+    &\qquad\verb!(``small caps'')}!
+\end{tabular}
+\end{center}
+%
+Varie \emph{serie} (o pesantezza) di caratteri:
+%
+\begin{center}
+\begin{tabular}{ll}
+  \textmd{serie media (normale)} &
+    \verb!\textmd{serie media!\\
+    &\qquad\verb!(normale)}!\\
+  \textbf{serie grassetta (``boldface'')} &
+    \verb!\textbf{grassetto!\\
+    &\qquad\verb!(``boldface'')}!
+\end{tabular}
+\end{center}
+%
+Varie \emph{famiglie} di caratteri:
+%
+\begin{center}
+\begin{tabular}{ll}
+  \textrm{famiglia romana (normale)} &
+    \verb!\textrm{famiglia romana!\\
+    &\qquad\verb!(normale)}!\\
+  \textsf{senza grazie (``sans serif'')} &
+    \verb!\textsf{senza grazie!\\
+    &\qquad\verb!(``sans serif'')}!\\
+  \texttt{telescrivente (``typewriter'')}&
+    \verb!\texttt{telescrivente!\\
+    &\qquad\verb!(``typewriter'')}!
+\end{tabular}
+\end{center}
+%
+Forme, serie e famiglie si possono combinare: battendo
+\begin{center}
+  \verb!\textsf{\textbf{Cosa?}}!
+\end{center}
+si ottiene \textsf{\textbf{Cosa?}} Non tutte le
+combinazioni però sono supportate.
+
+Attenzione! Una tesi di laurea non è il luogo per
+sbizzarrirsi con l'uso di caratteri strani. La parola
+d'ordine è \emph{sobrietà} e da evitare sono le
+\emph{pacchianate}. Normalmente non avrete bisogno di
+altro che di evidenziare qualche parola qua e là nel
+testo, e per questo si raccomanda di usare il comando
+\verb!\emph!. Per esempio per produrre
+\emph{testo enfatico} basta battere
+\verb!\emph{testo enfatico}! e lasciare il resto al
+\LaTeX.
+
+Chi deve inserire nel testo dei listati di programmi di
+calcolatore, si veda i manuali riguardo i comandi
+\verb!\verb!, \verb!\verbatim! e i pacchetti
+\verb!verbatim!, \verb!moreverb! e simili.
+
+Il pacchetto \verb!hyperref!,\index{ipertesto} (chiamato automaticamente da \verb!uniudtesi!, agevola i riferimenti a internet:
+
+\begin{itemize}
+
+\item gestisce automaticamente i font adatti, e 
+
+\item rende ``cliccabili'' i riferimenti nelle versioni su schermo (dvi o pdf).
+
+\end{itemize}
+
+\noindent Per esempio, scrivendo \verb!\url{http://www.dimi.uniud.it}! viene
+
+\begin{center}
+\url{http://www.dimi.uniud.it}
+\end{center}

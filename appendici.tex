@@ -1,0 +1,57 @@
+%!TEX TS-program = pdflatex
+%!TEX root = tesi.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+
+\chapter{Come si fanno le appendici}
+  
+    \index{appendici}
+    
+    Le appendici si fanno con \verb!\appendix! seguito da
+    \verb!\chapter{...}!
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Esempi di Citazioni Bibliografiche}
+  
+    \index{bibliografia}
+    \index{citazioni}
+    
+    P\^{y}r{\l}å in~\cite{pyrl} ha poi
+    generalizzato i risultati di
+    Bi\v{s}ker~\cite{bisker1}.
+    
+    Il pacchetto \verb!uniudtesi! carica
+    automaticamente \verb!hyperref!\index{ipertesto},
+    che a sua volta rende ``cliccabili'' i riferimenti 
+    bibliografici nel documento elettronico.
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Ambiente GNU/Linux (ad esempio Ubuntu)}
+
+    \index{Linux}
+    
+    \begin{flushright}Contributo di\\ Leonardo Taglialegne
+    \end{flushright}
+    
+    Gli ambienti GNU/Linux contengono parecchi strumenti utili per
+    la stesura di una tesi di laurea, in particolare segnaliamo:
+    \begin{itemize}
+     \item Kile
+     \item KBibTeX
+    \end{itemize}
+    Il primo è un editor per il \LaTeX, che include una tabella
+    dei simboli, la visualizzazione della struttura, evidenziazione
+    del codice e simili comodità, e nelle ultime versioni fornisce
+    una visualizzazione in anteprima dei risultati di compilazione.
+    
+    Il secondo è uno strumento di ricerca, modifica ed inserimento
+    di citazioni in formato BibTeX.
+    
+    I pacchetti relativi (ed altri utili) si installano,
+    su ambienti Debian e Ubuntu con:
+    \texttt{sudo apt-get install kile kile-l10n kbibtex
+           texlive-science \\
+           texlive-math-extra texlive-lang-italian }
