@@ -10,16 +10,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[bindingoffset=1cm]{geometry}
 
-
-%\hypersetup{pdfpagelayout=SinglePage,
-%pdfpagemode=UseOutlines,
-%bookmarksopen,
-%bookmarksopenlevel=2,
-%pdftitle=Tesi di Laurea,
-%pdfauthor=Tesista,
-%pdfsubject=Tesi di Laurea,
-%pdfkeywords=tesi laurea LaTeX}
-
 \newcommand{\@facolta}{?}
 \newcommand{\@dipartimento}{Scienze Matematiche, Fisiche e Natural}
 \newcommand{\@corsodilaurea}{?}
@@ -62,21 +52,21 @@
 \newcommand{\annoaccademico}[1]{%
   \renewcommand{\@annoaccademico}{#1}}
 \newcommand{\relatore}[2][Prof.]{%
-  \renewcommand{\@relatore}{#1 \uppercase{#2}}}
+  \renewcommand{\@relatore}{#1  \textit{#2}}}
 \newcommand{\correlatore}[2][Prof.]{%
   \renewcommand{\@correlatore}{#1 \uppercase{#2}}}
 \newcommand{\relatoreDue}[2][Prof.]{%
-  \renewcommand{\@relatoreDue}{#1 \uppercase{#2}}}
+  \renewcommand{\@relatoreDue}{#1 \textit{#2}}}
 \newcommand{\correlatoreDue}[2][Prof.]{%
   \renewcommand{\@correlatoreDue}{#1 \uppercase{#2}}}
 \newcommand{\laureando}[1]{%
-  \renewcommand{\@laureando}{\uppercase{#1}}%
-  \renewcommand{\@autore}{\uppercase{#1}}%
-  \renewcommand{\@laureandoOlaureanda}{Laureando}}
+\renewcommand{\@laureando}{\textit{#1}}%
+\renewcommand{\@autore}{\textit{#1}}%
+\renewcommand{\@laureandoOlaureanda}{Candidato}}
 \newcommand{\laureanda}[1]{%
-  \renewcommand{\@laureanda}{\uppercase{#1}}%
-  \renewcommand{\@autore}{\uppercase{#1}}%
-  \renewcommand{\@laureandoOlaureanda}{Laureanda}}
+  \renewcommand{\@laureanda}{\textit{#1}}%
+  \renewcommand{\@autore}{\textit{#1}}%
+  \renewcommand{\@laureandoOlaureanda}{Candidata}}
 \newcommand{\dedica}[1]{%
   \renewcommand{\@dedica}{#1}}
 \newcommand{\data}[1]{\date{#1}}
@@ -94,21 +84,18 @@
 \renewcommand\maketitle{\begin{titlepage}
   \begin{sffamily}
   \begin{large}
+  	\begin{center}
+  		\includegraphics[width=100px]{cherubino}
+	\end{center}
+  \medskip
   \begin{center}
-    \vbox to0pt{%
-    \vbox to\textheight{\vfil
-    \includegraphics[width=\textwidth]{polloPallido}%
-    \vfil}\vss}
-  \end{center}
-  \begin{center}
-  \begin{Large}
+  \begin{Large}    
     \uppercase{Universit\`a di Pisa}
     \end{Large}\\
   \rule{9cm}{.4pt}\\
   \smallskip
   \ifthenelse{\equal{\@facolta}{?}}{Dipartimento di 
      \@dipartimento}{Facolt\`a di \@facolta}\\
-  \medskip
   Corso di Laurea \@triennaleOspecialisticaOmagistrale in
      \@corsodilaurea\\
   \bigskip\vfill

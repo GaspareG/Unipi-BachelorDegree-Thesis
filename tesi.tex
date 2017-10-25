@@ -1,55 +1,6 @@
 %!TEX TS-program = pdflatex
 %!TEX encoding = UTF-8 Unicode
 
-
-
-    %                     %            %
-    %                                  %
-    %                                  %
-   %%%    %%%%   %%%%%   %%           %%%    %%%%  %    %
-    %    %    % %         %            %    %    %  %  %
-    %    %%%%%%  %%%%     %            %    %%%%%%   %%
-    %    %           %    %            %    %        %%
-    %    %           %    %     %%     %    %       %  %
-     %%   %%%%% %%%%%    %%%    %%      %%   %%%%% %    %
-
-
-
-         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-         %                                      %
-         %  "Scheletro" di una tesi di laurea   %
-         %           (in Matematica)            %
-         %      dell'Universita` di Udine       %
-         %                                      %
-         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-              %  Autore: Gianluca Gorni  %
-              %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%%%%   Ultima modifica:  10 luglio 2016        %%%%%
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-                                 %            %%
-                                 %             %
-   %%%%  % %%   %%%   %%%% %%%%  %%%%   %%%    %    %%%
-   %   % %%  % %   % %   % % % % %   % %   %   %   %   %
-   %   % %     %%%%% %   % % % % %   % %   %   %   %   %
-   %   % %     %     %  %% % % % %   % %   %   %   %   %
-   %%%%  %      %%%%  %% % % % % %%%%   %%%   %%%   %%%
-   %
-   %
-
-
-
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Usare una versione di LaTeX con sillabazione italiana %
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \documentclass[12pt,a4paper,twoside,english,italian]{book}
 
 % Usare "oneside" invece di "twoside"
@@ -58,13 +9,6 @@
 % alla fine dei capitoli.
 
 \usepackage[utf8]{inputenc}
-
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-       %                  babel                     %
-       % Pacchetto tipico per una tesi in italiano. %
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \usepackage{babel}
 
 
@@ -86,69 +30,13 @@
 
 \usepackage{uniudtesi}
 
-% Col pacchetto tocbibind compariranno nell'indice anche
-% la bibliografia ed eventualmente l'indice analitico
 \usepackage[nottoc]{tocbibind}
 
-% Il pacchetto indentfirst abolisce la fastidiosa convenzione
-% anglosassone di fa cominciare la prima riga di un
-% capitolo o sezione a margine sinistro, senza rientro:
 \usepackage{indentfirst}
 
-% \usepackage{graphicx} % gia' caricato da uniudtesi
 \graphicspath{{./figure/}}
-%\usepackage{epstopdf}
-
-
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-       % Pacchetti tipici per una tesi di matematica  %
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{latexsym}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                    graphicx                         %
-%                                                     %
-%   Uno dei pacchetti per l'inserzione di figure      %
-%   in formato eps e` "graphicx". Ce ne sono diversi  %
-%   altri da cui scegliere.                           %
-%                                                     %
-%   Esempio di uso: avendo un file di nome            %
-%   figura1.eps questa si inserisce nella tesi        %
-%   col comando                                       %
-%                                                     %
-%        \begin{figure}[ht]                           %
-%        \begin{center}                               %
-%        \includegraphics{figura1.eps}                %
-%        \caption[nome breve]{nome lungo}             %
-%        \label{etichetta}                            %
-%        \end{center}                                 %
-%        \end{figure}                                 %
-%                                                     %
-%   Il "nome breve" e` quello che apparira`           %
-%   nell'indice delle figure ed e' opzionale.         %
-%   Il "nome lungo" e' quello che appare              %
-%   sotto la figura.                                  %
-%   (Ci sono opzioni per scalare, spostare, ruotare   %
-%   le figure).                                       %
-%   Con \graphicspath{{./figure/}} si dice            %
-%   al LaTeX di cercare le figure nella cartella      %
-%   "figure" situata allo stesso livello di           %
-%   questo documento                                  %
-%                                                     %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %  Esempi di macro definite dall'utente.  %
-   %  Le prime definiscono dei comandi per   %
-   %  scrivere i caratteri speciali per      %
-   %  gli insiemi numerici fondamentali      %
-   %  (naturali, interi, razionali, reali,   %
-   %  complessi                              %
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -156,31 +44,12 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
 
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %  Delle macro che definiscono operatori   %
-   %  non predefiniti in LaTeX. Ogni utente   %
-   %  aggiunge quelle che servono. Questi     %
-   %  sono solo esempi arbitrari.             %
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \DeclareMathOperator{\traccia}{tr}
 \DeclareMathOperator{\sen}{sen}
 \DeclareMathOperator{\arcsen}{arcsen}
 \DeclareMathOperator*{\maxlim}{max\,lim}
 \DeclareMathOperator*{\minlim}{min\,lim}
 \DeclareMathOperator*{\deepinf}{\phantom{\makebox[0pt]{p}}inf}
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Esempi di macro piu` elaborate,          %
-    % contenenti degli argomenti.              %
-    % Compongono gli indici delle sommatorie   %
-    % e delle produttorie in modo diverso      %
-    % da quello standard del TeX. Dovrebbero   %
-    % funzionare bene quando gli estremi della %
-    % sommatoria sono piccoli. Chi volesse     %
-    % usarle estesamente farebbe bene a        %
-    % lavorarci sopra.                         %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\varsum}[3]{\sum_{#2}^{#3}\!
    {\vphantom{\sum}}_{#1}\;}
@@ -312,8 +181,8 @@
   \relatoreDue[Prof.]{Andrea Marino}
 % \correlatore{Talaltro dei Tali}
 % \correlatoreDue{Secondo Correlatore}
-  \dedica{Ai miei genitori\\
-    per non avermi tagliato i viveri} % (facoltativo)
+%  \dedica{Ai miei genitori\\
+%    per non avermi tagliato i viveri} % (facoltativo)
 
 % Per l'ipertesto:
  \usepackage{hyperref} % gia' caricato da uniudtesi
@@ -322,75 +191,40 @@
   % pdfpagemode=UseOutlines, % default
   bookmarksopen, % default
   bookmarksopenlevel=2, % default;
-  pdftitle={La mia Tesi},
-  pdfauthor={Giovanna Tesista},
+  pdftitle={Similarita' di sottografi nelle reti complesse},
+  pdfauthor={Gaspare Ferraro},
   pdfsubject={Modello di Tesi di Laurea},
-  pdfkeywords={tesi laurea LaTeX}} % Queste informazioni non vengono stampate, ma sono conservate nel documento pdf. Sono consultabili col menu "File>Document Properites>Description". Vengono buone a scopi archivistici.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  pdfkeywords={tesi laurea LaTeX}
+  }
 
-
-   %%%                                    %        %%    %%
-  %   %                                   %         %     %
-  %      %%%  % %%  %%%%   %%%         %%%%  %%%    %     %    %%%%
-  %     %   % %%  % %   % %   %       %   % %   %   %     %   %   %
-  %     %   % %     %   % %   %       %   % %%%%%   %     %   %   %
-  %   % %   % %     %   % %   %       %   % %       %     %   %  %%
-   %%%   %%%  %     %%%%   %%%         %%%%  %%%%  %%%   %%%   %% %
-                    %
-                    %
-
-
-                          %%%%%               %
-                            %
-                            %    %%%   %%%%  %%
-                            %   %   % %       %
-                            %   %%%%%  %%%    %
-                            %   %         %   %
-                            %    %%%% %%%%   %%%
-
-
- \begin{document}
-
-         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-         %            Intestazione                       %
-         %                                               %
-         % Per l'intestazione completa bisogna           %
-         % essersi procurati il file "polloPallido.eps". %
-         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\frontmatter
-\maketitle
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %   Si puo` scegliere fra scrivere tutta la tesi in un    %
-  %   solo file, oppure distribuire ogni capitolo in un     %
-  %   file a parte. Qui si e` scelto tenere separati i      %
-  %   vari capitoli, che vengono caricati con \include      %
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\renewcommand{\theequation}{\arabic{equation}}%consigliato per migliorare i numeri di equazione nell'introduzione
-\renewcommand{\thesection}{\arabic{section}}%consigliato per migliorare i numeri di equazione nell'introduzione
-
-\input{introduzione}
-
-\tableofcontents
-\listoffigures
-
-\mainmatter
+\begin{document}
 
 \renewcommand{\theequation}{\thechapter.\arabic{equation}}%si torna alle formule numerate come da default
 \renewcommand{\thesection}{\thechapter.\arabic{section}}%si torna alle sezioni numerate come da default
 
-\input{capitolo1}
+\frontmatter
 
-\input{capitolo2}
+\maketitle
+
+% \renewcommand{\theequation}{\arabic{equation}}%consigliato per migliorare i numeri di equazione nell'introduzione
+% \renewcommand{\thesection}{\arabic{section}}%consigliato per migliorare i numeri di equazione nell'introduzione
+
+\tableofcontents
+
+% \listoffigures
+
+\mainmatter
+ 
+ \input{introduzione}
+ \input{capitolo1}
 
 \appendix
 
-\input{appendici}
+% \input{appendici}
 
 \backmatter
 
-\input{biblio}
+% \input{biblio}
 
 % \printindex % se si fa l'indice analitico.
 
