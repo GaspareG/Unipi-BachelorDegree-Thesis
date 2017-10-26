@@ -19,7 +19,7 @@
 	
 	Se due vertici $u, v \in V$ sono congiunti da un arco si dicono estremi dell'arco, in questo caso indichiamo l'arco con la coppia $(u, v) \in E$.
 	
-	Se $(u,v) \in E \Leftrightarrow (v,u) \in E$ il grafo si dice non orientato. Considereremo solo grafo non orientati se non specificato altrimenti.
+	Se $(u,v) \in E \Leftrightarrow (v,u) \in E$ il grafo si dice non orientato. Considereremo solo grafi non orientati se non specificato altrimenti.
 	
 	Chiamiamo gli elementi dell'insieme $N(v) = \{ u : (v,u) \in E \}$ vicini del vertice $v$. Il numero dei vicini di $v$ è detto grado di $v$.
 	
@@ -38,11 +38,11 @@
 	Denotato con $\Sigma$ l'alfabeto, chiamiamo $\Sigma^{k}$ l'insieme di tutte le stringhe lunghe $k$ formate da simboli di $\Sigma$.
 	
 \begin{definizione}\label{def:grafoetichettato}
-	Si dice grafo etichettato una terna ordinata $(V,E,L)$ con $(V,E)$ grafo e $L : V \rightarrow \Sigma$ una funzione che associa ad ogni vertice $v$ un carattere (o etichetta) dell'alfabeto $\Sigma$.   
+	Si dice grafo etichettato una terna ordinata $(V,E,L)$ con $(V,E)$ grafo e $L : V \rightarrow \Sigma$ una funzione che associa ad ogni vertice $v$ un carattere (detto etichetta del vertice) dell'alfabeto $\Sigma$.   
 \end{definizione}
 
 	Dato un cammino $\pi = v_{1}, v_{2}, \ldots, v_{k}$,
-	estendiamo la funzione $L$ e indichiamo con $L(\pi) = L(v_{2}) \cdot L(v_{1}) \cdot \ldots \cdot L(v_{k})$ la stringa ottenuta concatenando le etichette dei singoli nodi del cammino.
+	estendiamo la funzione $L$ e indichiamo con $L(\pi) = L(v_{1}) \cdot L(v_{2}) \cdot \ldots \cdot L(v_{k})$ la stringa ottenuta concatenando\footnote{Con il simbolo $\cdot$ indichiamo la concatenazione tra due stringhe} le etichette dei singoli nodi del cammino.
 	
 
 \section{Il problema}
