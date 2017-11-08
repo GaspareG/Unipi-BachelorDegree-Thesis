@@ -90,12 +90,9 @@
 \theoremstyle{remark}
 \newtheorem{osservazione}[teorema]{Osservazione}
 
-%\usepackage[backend=biber]{biblatex}
-%\addbibresource{tesi.bib}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{tesi.bib}
 
-\usepackage{biblatex}
-\addbibresource{tesi.bib} % with extension
-.
 \usepackage{makeidx}
 \makeindex
 
@@ -181,10 +178,11 @@
 
 \clearpage
 
+
 \printbibliography
 
 % \bibliographystyle{ACM-Reference-Format}
-%\bibliography{tesi} 
+% \bibliography{tesi} 
 
 \clearpage
 

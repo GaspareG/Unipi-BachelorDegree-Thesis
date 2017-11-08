@@ -17,7 +17,6 @@
 \newcommand{\@corsodilaureaspecialistica}{?}
 \newcommand{\@triennaleOspecialisticaOmagistrale}{?}
 \newcommand{\@titolo}{Senza Titolo}
-\newcommand{\@titoloeng}{No Title}
 \newcommand{\@sottotitolo}{?}
 \newcommand{\@annoaccademico}{?}
 \newcommand{\@relatore}{?}
@@ -48,8 +47,6 @@
   \renewcommand{\@triennaleOspecialisticaOmagistrale}{Magistrale }}
 \newcommand{\titolo}[1]{%
   \renewcommand{\@titolo}{\uppercase{#1}}}
-\newcommand{\titoloeng}[1]{%
-  \renewcommand{\@titoloeng}{\uppercase{#1}}}
 \newcommand{\sottotitolo}[1]{%
   \renewcommand{\@sottotitolo}{\uppercase{#1}}}
 \newcommand{\annoaccademico}[1]{%
@@ -74,12 +71,15 @@
   \renewcommand{\@dedica}{#1}}
 \newcommand{\data}[1]{\date{#1}}
 
-\newcommand{\clearemptydoublepage}{
-    \clearpage
-  %\newpage{\pagestyle{empty}%
-  %\cleardoublepage}
-    
-}
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}%
+  \cleardoublepage}}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                                   %
+    %  Formattazione dell'intestazione  %
+    %  della tesi                       %
+    %                                   %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \renewcommand\maketitle{\begin{titlepage}
   \begin{sffamily}
@@ -106,14 +106,8 @@
     \begin{Huge}
       {\renewcommand{\\}{\cr}
      \halign{\hbox to\textwidth{\strut\hfil##\hfil}\cr
-     \@titoloeng\cr
-     }}
+     \@titolo\cr}}
     \end{Huge}%
-     \begin{large}
-            \halign{\hbox to\textwidth{\strut\hfil##\hfil}\cr
-     \@titolo\cr
-     }
-     \end{large}
     \begin{LARGE}
       {\renewcommand{\\}{\cr}
       \ifthenelse{\equal{\@sottotitolo}{?}}{}%

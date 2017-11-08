@@ -31,13 +31,11 @@
 \usepackage[nottoc]{tocbibind}
 
 \usepackage{indentfirst}
-\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 
 \graphicspath{{./figure/}}
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{latexsym}
-
-% \usepackage{natbib}
+\usepackage{natbib_ita}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -74,6 +72,18 @@
 %\renewcommand{\theequation}%
 %  {\thesection.\arabic{equation}}
 
+
+              %%%%%%%%%%%%%%%%%%%%%%%%%%
+              % Stile degli enunciati  %
+              %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Con le dichiarazioni seguenti                           %
+% teoremi, definizioni, proposizioni, lemmi e corollari   %
+% vengono numerati capitolo per capitolo e con un         %
+% contatore unico per tutti (per esempio, se subito dopo  %
+% il Teorema 2.1 c'e' una definizione, questa sara'       %
+% Definizione 2.2)                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \theoremstyle{plain}
@@ -83,21 +93,65 @@
 \newtheorem{corollario}[teorema]{Corollario}
 
 \theoremstyle{definition}
-%\newtheorem{definizione}[teorema]{Definizione}
-\newtheorem{definizione}[teorema]{Definition}
+\newtheorem{definizione}[teorema]{Definizione}
 \newtheorem{esempio}[teorema]{Esempio}
 
 \theoremstyle{remark}
 \newtheorem{osservazione}[teorema]{Osservazione}
 
-%\usepackage[backend=biber]{biblatex}
-%\addbibresource{tesi.bib}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % I comandi si usano cosi`:                            %
+  %                                                      %
+  %   \begin{teorema}[di Pitagora]                       %
+  %   La somma dei quadrati ecc.                         %
+  %   \end{teorema}                                      %
+  %                                                      %
+  % Le parole "di Pitagora" fra parentesi quadre         %
+  % sono facoltative. Non bisogna inserire               %
+  % manualmente degli spazi prima e dopo gli enunciati,  %
+  % perche' e` automatico!                               %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{biblatex}
-\addbibresource{tesi.bib} % with extension
-.
-\usepackage{makeidx}
-\makeindex
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Il pacchetto amsthm definisce anche l'ambiente "proof"     %
+  % per le dimostrazioni.                                      %
+  % Esempio di uso:                                            %
+  %                                                            %
+  %   \begin{proof}                                            %
+  %   Sia $X$ un insieme ecc.                                  %
+  %   \end{proof}                                              %
+  %                                                            %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %                   makeidx                           %
+       %                                                     %
+       % Pacchetto per la generazione automatica dell'indice %
+       % analitico. Per esempio, se vogliamo che la parola   %
+       % "analitico" venga indicizzata nella frase           %
+       %                                                     %
+       %    "un metodo analitico di soluzione"               %
+       %                                                     %
+       % bisogna scrivere                                    %
+       %                                                     %
+       %    "un metodo analitico\index{analitico} di         %
+       %              soluzione".                            %
+       %                                                     %
+       % Compilando il file, il LaTeX produrra' un file      %
+       % ausiliario che termina con ".idx". Bisogna far      %
+       % processare questo file idx dal programma            %
+       % ausiliario "bibtex", che produrra' a sua volta un   %
+       % altro file ancora. Dare infine un'ultima passata    %
+       % col LaTeX. Si puo' tranquillamente lasciare         %
+       % la compilazione dell'indice verso la fine della     %
+       % stesura del lavoro, quando tutto e' ormai quasi     %
+       % definitivo.                                         %
+       %                                                     %
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{makeidx}
+%\makeindex
 
 % Ridefiniamo la riga di testa delle pagine:
 \usepackage{fancyhdr}
@@ -112,8 +166,13 @@
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\headheight}{14.5pt}
 
+               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               %  Informazioni generali sulla Tesi  %
+               %    da usare nell'intestazione      %
+               %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
   \titolo{Similarità di sottografi nelle reti complesse}
-  \titoloeng{Subgraph Similarity\\in Complex Networks}
+  \titoloeng{Subgraph Similarity\\in Real-World Labeled Networks}
   \laureando{Gaspare Ferraro}
   \annoaccademico{2016-2017}
   \facolta{Scienze Matematiche, Fisiche e Naturali}
@@ -122,8 +181,8 @@
   \relatoreDue[Prof.]{Andrea Marino}
 % \correlatore{Talaltro dei Tali}
 % \correlatoreDue{Secondo Correlatore}
-  \dedica{Ai miei genitori\\
-    per non avermi tagliato i viveri} % (facoltativo)
+%  \dedica{Ai miei genitori\\
+%    per non avermi tagliato i viveri} % (facoltativo)
 
 % Per l'ipertesto:
  \usepackage{hyperref} % gia' caricato da uniudtesi
@@ -137,18 +196,6 @@
   pdfsubject={Modello di Tesi di Laurea},
   pdfkeywords={tesi laurea LaTeX}
   }
-  
-  \usepackage{listings}
-\usepackage{xcolor}
-\lstset{language=C++,
-                basicstyle=\ttfamily,
-                keywordstyle=\color{blue}\ttfamily,
-                stringstyle=\color{red}\ttfamily,
-                commentstyle=\color{green}\ttfamily,
-                morecomment=[l][\color{magenta}]{\#}
-}
-
-\let\cleardoublepage\clearpage
 
 \begin{document}
 
@@ -159,35 +206,28 @@
 
 \maketitle
 
+% \renewcommand{\theequation}{\arabic{equation}}%consigliato per migliorare i numeri di equazione nell'introduzione
+% \renewcommand{\thesection}{\arabic{section}}%consigliato per migliorare i numeri di equazione nell'introduzione
+
 \tableofcontents
 
 % \listoffigures
 
 \mainmatter
  
- \input{1_introduzione}
- \input{2_capitolo}
- \input{3_capitolo}
- \input{4_capitolo}
- \input{5_capitolo}
+ \input{introduzione}
+ \input{capitolo1}
 
 \appendix
 
-    \input{appendici}
+% \input{appendici}
 
 \backmatter
 
-% \input{biblio}
+\bibliography{tesi} 
 
-\clearpage
+%  \input{biblio}
 
-\printbibliography
-
-% \bibliographystyle{ACM-Reference-Format}
-%\bibliography{tesi} 
-
-\clearpage
-
-\printindex
+% \printindex % se si fa l'indice analitico.
 
 \end{document}

@@ -1,0 +1,107 @@
+\chapter{Computation of subgraph similarity}
+
+    \begin{algorithm}[h]
+    
+    \small
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{\ $W$ a dictionary of strings \\ $f_{A}[W], f_{B}[W]$ }
+    \Output{\ $BC(A,B)$ Bray-Curtis index}
+    
+    \BlankLine
+    
+    
+    %\textbf{parallel} \ForEach{$u \in V$}{
+    %    \ForEach{$v \in N(u)$}{
+    %        \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
+    %            $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
+    %            $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
+    %        }
+    %    }
+    %}   
+
+    \Return{$M$}
+    %\setcounter{AlgoLine}{0}
+    
+    \caption{\textsc{Bray-Curtis}}
+    
+    \label{alg:bray-curtis}
+    \end{algorithm}
+
+\section{Naive approach}
+
+    \begin{algorithm}[h]
+    
+    \small
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
+    \Output{\ $(f_{A}[x],f_{B}[x]) $ dynamic programming table for color coding.}
+    
+    \BlankLine
+    
+    
+    %\textbf{parallel} \ForEach{$u \in V$}{
+    %    \ForEach{$v \in N(u)$}{
+    %        \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
+    %            $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
+    %            $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
+    %        }
+    %    }
+    %}   
+
+    \Return{$M$}
+    %\setcounter{AlgoLine}{0}
+    
+    \caption{$preprocess$: \textsc{brute-force}}
+    
+    \label{alg:color-coding}
+    \end{algorithm}
+
+\section{Efficient computation}
+
+\subsection*{Color coding}
+
+    \begin{algorithm}[h]
+    
+    \small
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
+    \Output{\ $M = $ dynamic programming table for color coding.}
+    
+    \BlankLine
+    
+    \textbf{parallel} \lForEach{$u \in V$}{$M_{1,u} = \langle \chi(u), 1 \rangle$}
+    
+    \For{$i \in \{ 2, 3, \ldots, q\}$}{
+         \textbf{parallel} \ForEach{$u \in V$}{
+            \ForEach{$v \in N(u)$}{
+                \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
+                    $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
+                    $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
+                }
+            }
+        }   
+    }
+    \Return{$M$}
+    %\setcounter{AlgoLine}{0}
+    
+    \caption{$preprocess$: \textsc{color-coding}}
+    
+    \label{alg:color-coding}
+    \end{algorithm}
+
+
+\subsection*{Colorful sampling}
+
+\subsection*{Frequency count}
+
+\subsection*{Frequency sampling}
+
+\subsection*{Estimating similarity indices}
+
+\section{Baseline algorithm}

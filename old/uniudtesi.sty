@@ -74,12 +74,15 @@
   \renewcommand{\@dedica}{#1}}
 \newcommand{\data}[1]{\date{#1}}
 
-\newcommand{\clearemptydoublepage}{
-    \clearpage
-  %\newpage{\pagestyle{empty}%
-  %\cleardoublepage}
-    
-}
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}%
+  \cleardoublepage}}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                                   %
+    %  Formattazione dell'intestazione  %
+    %  della tesi                       %
+    %                                   %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \renewcommand\maketitle{\begin{titlepage}
   \begin{sffamily}
@@ -110,9 +113,7 @@
      }}
     \end{Huge}%
      \begin{large}
-            \halign{\hbox to\textwidth{\strut\hfil##\hfil}\cr
-     \@titolo\cr
-     }
+       \@titolo
      \end{large}
     \begin{LARGE}
       {\renewcommand{\\}{\cr}

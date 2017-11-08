@@ -2,54 +2,175 @@
 %!TEX root = tesi.tex
 %!TEX encoding = UTF-8 Unicode
 
-\chapter{Come si fanno le appendici}
-  
-    \index{appendici}
-    
-    Le appendici si fanno con \verb!\appendix! seguito da
-    \verb!\chapter{...}!
-
 %%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Esempi di Citazioni Bibliografiche}
+\chapter{Code snippets}
   
-    \index{bibliografia}
-    \index{citazioni}
-    
-    P\^{y}r{\l}å in~\cite{pyrl} ha poi
-    generalizzato i risultati di
-    Bi\v{s}ker~\cite{bisker1}.
-    
-    Il pacchetto \verb!uniudtesi! carica
-    automaticamente \verb!hyperref!\index{ipertesto},
-    che a sua volta rende ``cliccabili'' i riferimenti 
-    bibliografici nel documento elettronico.
+  All the code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/ColorCoding}}
 
-%%%%%%%%%%%%%%%%%%%%%%
+\section{Color Coding}
 
-\chapter{Ambiente GNU/Linux (ad esempio Ubuntu)}
+\begin{lstlisting}
+map<COLORSET, long long> M[Q][V];
+void ColorCoding() {
+  #pragma omp parallel for schedule(static, 1)
+  for (int u = 0; u < N; u++)
+    M[0][u][setBit(0, color[u])] = 1;
 
-    \index{Linux}
-    
-    \begin{flushright}Contributo di\\ Leonardo Taglialegne
-    \end{flushright}
-    
-    Gli ambienti GNU/Linux contengono parecchi strumenti utili per
-    la stesura di una tesi di laurea, in particolare segnaliamo:
-    \begin{itemize}
-     \item Kile
-     \item KBibTeX
-    \end{itemize}
-    Il primo è un editor per il \LaTeX, che include una tabella
-    dei simboli, la visualizzazione della struttura, evidenziazione
-    del codice e simili comodità, e nelle ultime versioni fornisce
-    una visualizzazione in anteprima dei risultati di compilazione.
-    
-    Il secondo è uno strumento di ricerca, modifica ed inserimento
-    di citazioni in formato BibTeX.
-    
-    I pacchetti relativi (ed altri utili) si installano,
-    su ambienti Debian e Ubuntu con:
-    \texttt{sudo apt-get install kile kile-l10n kbibtex
-           texlive-science \\
-           texlive-math-extra texlive-lang-italian }
+  for (int i = 1; i < q; i++) {
+    #pragma omp parallel for schedule(static, 1)
+    for (int u = 0; u < V; u++) {
+      for (int v : G[u]) {
+        for (auto d : M[i-1][v]) {
+          COLORSET s = d.first;
+          long long f = d.second;
+          if ( !getBit(s, color[u]))
+            M[i][u][setBit(s, color[u])] += f;
+        }
+      }
+    }
+  }
+}
+\end{lstlisting}
+
+
+\clearpage
+\section{Colorful sampling}
+
+\begin{lstlisting}
+vector<int> randomPathTo(int u) {
+  list<int> P;
+  P.push_front(u);
+  COLORSET D = getCompl(setBit(0l, color[u]));
+  for (int i = q - 1; i > 0; i--) {
+    vector<ll> freq;
+    for (int v : G[u]) freq.push_back(M[i][v][D]);
+    disc_distr<int> dist(freq.begin(), freq.end());
+    u = G[u][dist(eng)];
+    P.push_front(u);
+    D = clearBit(D, color[u]);
+  }
+//  reverse(P.begin(), P.end());
+  return vector<int>( begin(P), end(P));
+}
+
+set<string> colorfulSample(vector<int> X, int r) {
+  set<string> W;
+  set<vector<int>> R;
+  vector<ll> freqX;
+  for (int x : X) freqX.push_back(M[q][x][getCompl(0)]);
+  disc_distr<int> dist(freqX.begin(), freqX.end());
+  while (R.size() < (size_t)r) {
+    int u = X[dist(eng)];
+    vector<int> P = randomPathTo(u);
+    if (R.find(P) == R.end()) R.insert(P);
+  }
+  for (auto r : R) {
+    // reverse(r.begin(), r.end());
+    W.insert(L(r));
+  }
+  return W;
+}
+\end{lstlisting}
+
+\clearpage
+\section{Frequency count}
+
+\begin{lstlisting}
+map<string, ll> frequencyCount(set<string> W, multiset<int> X) {
+  set<string> WR;
+  for (string w : W) {
+    reverse(w.begin(), w.end());
+    WR.insert(w);
+  }
+  vector<tuple<int, string, COLORSET>> old;
+
+  for (int x : X)
+    if (isPrefix(WR, string(&label[x], 1)))
+      old.push_back(make_tuple(x, string(&label[x], 1), setBit(0ll, color[x])));
+
+  for (int i = q - 1; i > 0; i--) {
+    vector<tuple<int, string, COLORSET>> current;
+    #pragma omp parallel for schedule(static, 1)
+    for (int j = 0; j < (int)old.size(); j++) {
+      auto o = old[j];
+      int u = get<0>(o);
+      string LP = get<1>(o);
+      COLORSET CP = get<2>(o);
+      for (int v : G[u]) {
+        if (getBit(CP, color[v])) continue;
+        COLORSET CPv = setBit(CP, color[v]);
+        string LPv = LP + label[v];
+        if (!isPrefix(WR, LPv)) continue;
+        #pragma omp critical
+        { current.push_back(make_tuple(v, LPv, CPv)); }
+      }
+    }
+    old = current;
+  }
+  map<string, ll> frequency;
+  for (auto c : old) {
+    string s = get<1>(c);
+    reverse(s.begin(), s.end());
+    frequency[s]++;
+  }
+  return frequency;
+}
+
+\end{lstlisting}
+
+\clearpage
+\section{Frequency sampling}
+
+\begin{lstlisting}
+map<pair<int, string>, ll> randomColorfulSamplePlus(vector<int> X, int r) {
+  map<pair<int, string>, ll> W;
+  set<vector<int>> R;
+  vector<ll> freqX;
+  freqX.clear();
+  for (int x : X) freqX.push_back(M[q][x][getCompl(0ll)]);
+  discrete_distribution<int> distribution(freqX.begin(), freqX.end());
+  while (R.size() < (size_t)r) {
+    int u = X[distribution(eng)];
+    vector<int> P = randomPathTo(u);
+    if (R.find(P) == R.end()) R.insert(P);
+  }
+  for (auto r : R) {
+    reverse(r.begin(), r.end());
+    W[make_pair(*r.begin(), L(r))]++;
+  }
+  return W;
+}
+\end{lstlisting}
+
+\clearpage
+\section{Similarity indices}
+
+\begin{lstlisting}
+double BCW(set<string> W, 
+           map<string, ll> freqA, 
+           map<string, ll> freqB) {
+  ll num = 0ll;
+  ll den = 0ll;
+  for (string x : W) {
+    ll fax = freqA[x];
+    ll fbx = freqB[x];
+    num += 2 * min(fax, fbx);
+    den += fax + fbx;
+  }
+  return (double)num / (double)den;
+}
+
+double FJW(set<string> W, map<string, ll> freqA, map<string, ll> freqB,
+           long long R) {
+  ll num = 0ll;
+  for (string x : W) {
+    ll fax = freqA[x];
+    ll fbx = freqB[x];
+    num += min(fax, fbx);
+  }
+  return (double)num / (double)R;
+}
+\end{lstlisting}
+
+

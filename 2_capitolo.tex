@@ -1,0 +1,75 @@
+%!TEX TS-program = pdflatex
+%!TEX root = tesi.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+     %%%%%%%%%%%%%%%%%%%%
+     %                  %
+     %  capitolo1.tex   %
+     %                  %
+     %%%%%%%%%%%%%%%%%%%%
+
+\chapter{Basic tools}
+
+In this chapter we first recall some definition on documents similarity and then introduce two different definitions of subgraphs similarity.
+
+%Following we use square brackets [ ] to distinguish multisets from sets, leaving the curly brackets \{ \} to sets 
+
+
+\section{Similarity indices}
+
+\begin{definizione}\label{def:jaccard}
+    Given two set $A$ and $B$ we define the \textbf{Jaccard index} as the ratio between the size of intersection and of the union between the two sets:
+    
+    \begin{equation}
+    J(A,B) = \frac{|A \cap B|}{|A \cup B|}
+    \end{equation}
+    
+\end{definizione}
+
+\begin{definizione}\label{def:bray}
+    Given two set $A$ and $B$ we define the \textbf{Bray-Curtis index} as:
+    
+    \begin{equation}
+    BC(A,B) = \frac{2 \times |A \cap B|}{|A| + |B|}
+    \end{equation}
+    
+\end{definizione}
+
+We can easily extended the two previous definition to multiset:
+
+\begin{definizione}\label{def:wjaccard}
+    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{weighted Frequency Jaccard index} as:
+    
+    \begin{equation}
+    FJ(A,B) = \frac{\sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n { max(a_{i}, b_{i}) }}
+    \end{equation}
+    
+\end{definizione}
+
+\begin{definizione}\label{def:wbray}
+    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis index} on multiset as:
+    
+    \begin{equation}
+    BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {a_{i} + b_{i}}}
+    \end{equation}
+    
+\end{definizione}
+
+
+\section{Documents similarity}
+
+...
+
+\section{Graphs similarity}
+
+\section{Subgraphs similarity}
+
+...
+
+\section{Sketches}
+
+\subsection{min-wise permutation}
+\subsection{bottom-k sketches}
+
+\section{Color Coding}
