@@ -4,7 +4,7 @@
 
 
 \begin{thebibliography}{3}
-\selectlanguage{english}
+% \selectlanguage{english}
 \frenchspacing
 
 \bibitem{bisker1}
@@ -17,7 +17,27 @@ U. P\^{y}r{\l}\aa, \emph{Generalization
 of Bi\v{s}ker's theorem}. Paperopolis
 J. Math. \textbf{14} (2001), 125--132.
 
+@article{Alon:1995:COL:210332.210337,
+ author = {Alon, Noga and Yuster, Raphael and Zwick, Uri},
+ title = {Color-coding},
+ journal = {J. ACM},
+ issue_date = {July 1995},
+ volume = {42},
+ number = {4},
+ month = jul,
+ year = {1995},
+ issn = {0004-5411},
+ pages = {844--856},
+ numpages = {13},
+ url = {http://doi.acm.org/10.1145/210332.210337},
+ doi = {10.1145/210332.210337},
+ acmid = {210337},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {derandomization, perfect hashing, subgraph isomorphism, tree-width},
+} 
+
 
 \end{thebibliography}
-\selectlanguage{italian}
+% \selectlanguage{italian}
 \nonfrenchspacing

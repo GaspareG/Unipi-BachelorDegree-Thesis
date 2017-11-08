@@ -3,28 +3,7 @@
 
 \documentclass[12pt,a4paper,twoside,english,italian]{book}
 
-% Usare "oneside" invece di "twoside"
-% nelle bozze, per risparmiare carta:
-% "twoside" produce diverse pagine bianche
-% alla fine dei capitoli.
-
 \usepackage[utf8]{inputenc}
-
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   % Se nella tesi si inseriscono dei passi in un'altra       %
-   % lingua (inglese, per fissare le idee), si puo' istruire  %
-   % il TeX di sillabare quella parte di testo con le regole  %
-   % inglesi, invece che italiane. A questo scopo basta       %
-   % scrivere                                                 %
-   %                                                          %
-   %    \documentclass[...,english,italian,...]{...}          %
-   %                                                          %
-   % al posto di \documentclass[...,italian,...],             %
-   % dopodiche' la sillabazione sara' italiana fintanto che   %
-   % non si incontra il comando \selectlanguage{english}.     %
-   % Per tornare all'italiano si scrive                       %
-   % \selectlanguage{italian}                                 %
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{uniudtesi}
 
@@ -36,6 +15,7 @@
 \graphicspath{{./figure/}}
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{latexsym}
+\usepackage{graphicx} % [demo] is just for the example
 
 % \usepackage{natbib}
 
@@ -43,6 +23,7 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\R}{\mathbb{R}}
+
 \newcommand{\C}{\mathbb{C}}
 
 \DeclareMathOperator{\traccia}{tr}
@@ -56,17 +37,6 @@
    {\vphantom{\sum}}_{#1}\;}
 \newcommand{\varprod}[3]{\sum_{#2}^{#3}\!
    {\vphantom{\sum}}_{#1}\;}
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %          Numerazione delle formule                  %
-  % Se non specificato altrimenti, il LaTeX numera le   %
-  % formule come (capitolo.formula) (per esempio (2.5)  %
-  % e` la quinta formula del secondo capitolo).         %
-  % Con le istruzioni seguenti invece la numerazione    %
-  % diventa (capitolo.sezione.formula) (per esempio     %
-  % (3.2.6) e` la sesta formula della seconda sezione   %
-  % del terzo capitolo):                                %
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\makeatletter
 %\@addtoreset{equation}{section}
@@ -85,7 +55,8 @@
 \theoremstyle{definition}
 %\newtheorem{definizione}[teorema]{Definizione}
 \newtheorem{definizione}[teorema]{Definition}
-\newtheorem{esempio}[teorema]{Esempio}
+\newtheorem{esempio}[teorema]{Example}
+\newtheorem{problema}[teorema]{Problem}
 
 \theoremstyle{remark}
 \newtheorem{osservazione}[teorema]{Osservazione}
@@ -93,9 +64,9 @@
 %\usepackage[backend=biber]{biblatex}
 %\addbibresource{tesi.bib}
 
-\usepackage{biblatex}
-\addbibresource{tesi.bib} % with extension
-.
+% \usepackage{biblatex}
+%\addbibresource{tesi.bib} % with extension
+
 \usepackage{makeidx}
 \makeindex
 
@@ -120,22 +91,17 @@
   \corsodilaureatriennalein{Informatica}
   \relatore[Prof.]{Roberto Grossi}
   \relatoreDue[Prof.]{Andrea Marino}
-% \correlatore{Talaltro dei Tali}
-% \correlatoreDue{Secondo Correlatore}
-  \dedica{Ai miei genitori\\
-    per non avermi tagliato i viveri} % (facoltativo)
+  \dedica{Ai miei genitori\\per non avermi tagliato i viveri}
 
 % Per l'ipertesto:
  \usepackage{hyperref} % gia' caricato da uniudtesi
  \hypersetup{
-  % pdfpagelayout=SinglePage, % default
-  % pdfpagemode=UseOutlines, % default
   bookmarksopen, % default
   bookmarksopenlevel=2, % default;
-  pdftitle={Similarita' di sottografi nelle reti complesse},
+  pdftitle={Subgraph Similarity in Complex Networks},
   pdfauthor={Gaspare Ferraro},
-  pdfsubject={Modello di Tesi di Laurea},
-  pdfkeywords={tesi laurea LaTeX}
+  pdfsubject={Tesis of Bachelor Degree in Computer Science},
+  pdfkeywords={Tesis Bachelor Degree Computer Science Gaspare Ferraro}
   }
   
   \usepackage{listings}
@@ -159,6 +125,7 @@
 
 \maketitle
 
+
 \tableofcontents
 
 % \listoffigures
@@ -173,20 +140,14 @@
 
 \appendix
 
-    \input{appendici}
+ \input{appendici}
+
+\clearpage
+
+\bibliographystyle{}
+\bibliography{mybib}{}
 
 \backmatter
-
-% \input{biblio}
-
-\clearpage
-
-\printbibliography
-
-% \bibliographystyle{ACM-Reference-Format}
-%\bibliography{tesi} 
-
-\clearpage
 
 \printindex
 
