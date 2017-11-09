@@ -6,25 +6,70 @@
 
 \chapter{Code snippets}
   
-  All the code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/ColorCoding}}
+ All the code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/ColorCoding}}.\\
 
-\section{Color Coding}
+Snippet of common definition used in all the algorithms:
 
 \begin{lstlisting}
-map<COLORSET, long long> M[Q][V];
-void ColorCoding() {
-  #pragma omp parallel for schedule(static, 1)
-  for (int u = 0; u < N; u++)
-    M[0][u][setBit(0, color[u])] = 1;
+typedef long long ll;
 
+// We define COLORSET as a bitset of 32 bit
+typedef COLORSET uint32_t
+
+// Number of nodes and number of edge
+unsigned int N, E;
+
+// Random coloring of nodes
+int color[N];
+
+// Labeled of nodes
+char label[N];
+
+// Adjacency list for every node in G
+vector<int> G[N];
+
+// Dynamic Programming table
+map<COLORSET, ll> M[Q][N];
+\end{lstlisting}
+
+\clearpage
+
+
+\section*{Color Coding}
+
+\begin{lstlisting}
+// Get pos-th bit of n
+inline bool getBit(COLORSET n, int pos) { 
+	return ((n >> pos) & 1) == 1; 
+}
+
+// Set pos-th bit of n to 1
+inline COLORSET setBit(COLORSET n, int pos) { 
+	return n |= 1 << pos; 
+}
+
+// Reset pos-th bit of n to 0
+inline COLORSET clearBit(COLORSET n, int pos) { 
+	return n &= ~(1 << pos); 
+}
+
+// Complementary colorset of n
+inline COLORSET getCompl(COLORSET n) { 
+	return ((1 << q) - 1) & (~n); 
+}
+
+void ColorCoding() {
+  #pragma omp parallel for schedule(static)
+  for (int u = 0; u < N; u++) 
+	  M[0][u][setBit(0, color[u])] = 1;
   for (int i = 1; i < q; i++) {
-    #pragma omp parallel for schedule(static, 1)
+    #pragma omp parallel for schedule(static)
     for (int u = 0; u < V; u++) {
       for (int v : G[u]) {
         for (auto d : M[i-1][v]) {
           COLORSET s = d.first;
           long long f = d.second;
-          if ( !getBit(s, color[u]))
+          if (!getBit(s, color[u]))
             M[i][u][setBit(s, color[u])] += f;
         }
       }
@@ -35,92 +80,100 @@ void ColorCoding() {
 
 
 \clearpage
-\section{Colorful sampling}
+
+\section*{Colorful sampling}
 
 \begin{lstlisting}
 vector<int> randomPathTo(int u) {
-  list<int> P;
-  P.push_front(u);
-  COLORSET D = getCompl(setBit(0l, color[u]));
-  for (int i = q - 1; i > 0; i--) {
-    vector<ll> freq;
-    for (int v : G[u]) freq.push_back(M[i][v][D]);
-    disc_distr<int> dist(freq.begin(), freq.end());
-    u = G[u][dist(eng)];
-    P.push_front(u);
-    D = clearBit(D, color[u]);
-  }
-//  reverse(P.begin(), P.end());
-  return vector<int>( begin(P), end(P));
+	vector<int> P;
+	P.push_back(u);
+	COLORSET D = getCompl(setBit(0l, color[u]));
+	
+	for (int i = q - 2; i >= 0; i--) {
+		vector<ll> freq;
+		for (int v : G[u]) 
+			freq.push_back(M[i][v][D]);
+		discrete_distribution<int> 
+			distr(freq.begin(), freq.end());
+		u = G[u][distr(eng)];
+		P.push_back(u);
+		D = clearBit(D, color[u]);
+	}
+	
+	reverse(P.begin(), P.end());
+	return P;
 }
 
-set<string> colorfulSample(vector<int> X, int r) {
+set<string> colorfulSampling(vector<int> X, int r) {
   set<string> W;
   set<vector<int>> R;
   vector<ll> freqX;
-  for (int x : X) freqX.push_back(M[q][x][getCompl(0)]);
-  disc_distr<int> dist(freqX.begin(), freqX.end());
+  for (int x : X) 
+  freqX.push_back(M[q-1][x][getCompl(0)]);
+  discrete_distribution<int> 
+  distr(freqX.begin(), freqX.end());
+
   while (R.size() < (size_t)r) {
-    int u = X[dist(eng)];
+    int u = X[distr(eng)];
     vector<int> P = randomPathTo(u);
-    if (R.find(P) == R.end()) R.insert(P);
-  }
-  for (auto r : R) {
-    // reverse(r.begin(), r.end());
-    W.insert(L(r));
-  }
-  return W;
+if (R.find(P) == R.end()) R.insert(P);
+}
+for (auto r : R)
+W.insert(L(r));
+return W;
 }
 \end{lstlisting}
 
 \clearpage
-\section{Frequency count}
+\section*{Frequency count}
 
 \begin{lstlisting}
-map<string, ll> frequencyCount(set<string> W, multiset<int> X) {
-  set<string> WR;
-  for (string w : W) {
-    reverse(w.begin(), w.end());
-    WR.insert(w);
-  }
-  vector<tuple<int, string, COLORSET>> old;
-
-  for (int x : X)
-    if (isPrefix(WR, string(&label[x], 1)))
-      old.push_back(make_tuple(x, string(&label[x], 1), setBit(0ll, color[x])));
-
-  for (int i = q - 1; i > 0; i--) {
-    vector<tuple<int, string, COLORSET>> current;
-    #pragma omp parallel for schedule(static, 1)
-    for (int j = 0; j < (int)old.size(); j++) {
-      auto o = old[j];
-      int u = get<0>(o);
-      string LP = get<1>(o);
-      COLORSET CP = get<2>(o);
-      for (int v : G[u]) {
-        if (getBit(CP, color[v])) continue;
-        COLORSET CPv = setBit(CP, color[v]);
-        string LPv = LP + label[v];
-        if (!isPrefix(WR, LPv)) continue;
-        #pragma omp critical
-        { current.push_back(make_tuple(v, LPv, CPv)); }
-      }
-    }
-    old = current;
-  }
-  map<string, ll> frequency;
-  for (auto c : old) {
-    string s = get<1>(c);
-    reverse(s.begin(), s.end());
-    frequency[s]++;
-  }
-  return frequency;
+map<string, ll> processFrequency(set<string> W, multiset<int> X) {
+	set<string> WR;
+	for (string w : W) {
+		reverse(w.begin(), w.end());
+		WR.insert(w);
+	}
+	
+	vector<tuple<int, string, COLORSET>> old;
+	
+	for (int x : X)
+	if (isPrefix(WR, string(&label[x], 1)))
+	old.push_back(make_tuple(x, string(&label[x], 1), setBit(0ll, color[x])));
+	
+	for (int i = q - 1; i > 0; i--) {
+		vector<tuple<int, string, COLORSET>> current;
+		current.clear();
+		#pragma omp parallel for schedule(static)
+		for (int j = 0; j < (int)old.size(); j++) {
+			auto o = old[j];
+			int u = get<0>(o);
+			string LP = get<1>(o);
+			COLORSET CP = get<2>(o);
+			for (int v : G[u]) {
+				if (getBit(CP, color[v])) continue;
+				COLORSET CPv = setBit(CP, color[v]);
+				string LPv = LP + label[v];
+				if (!isPrefix(WR, LPv)) continue;
+				#pragma omp critical
+				{ current.push_back(make_tuple(v, LPv, CPv)); }
+			}
+		}
+		old = current;
+	}
+	
+	map<string, ll> frequency;
+	for (auto c : old) {
+		string s = get<1>(c);
+		reverse(s.begin(), s.end());
+		frequency[s]++;
+	}
+	return frequency;
 }
-
 \end{lstlisting}
 
 \clearpage
-\section{Frequency sampling}
+\section*{Frequency sampling}
 
 \begin{lstlisting}
 map<pair<int, string>, ll> randomColorfulSamplePlus(vector<int> X, int r) {
@@ -144,7 +197,7 @@ map<pair<int, string>, ll> randomColorfulSamplePlus(vector<int> X, int r) {
 \end{lstlisting}
 
 \clearpage
-\section{Similarity indices}
+\section*{Similarity indices}
 
 \begin{lstlisting}
 double BCW(set<string> W, 

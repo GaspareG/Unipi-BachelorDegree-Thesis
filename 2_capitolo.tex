@@ -2,26 +2,18 @@
 %!TEX root = tesi.tex
 %!TEX encoding = UTF-8 Unicode
 
-
-     %%%%%%%%%%%%%%%%%%%%
-     %                  %
-     %  capitolo1.tex   %
-     %                  %
-     %%%%%%%%%%%%%%%%%%%%
-
 \chapter{Basic tools}
 
-In this chapter we first give a definition of subgraphs similarity 
+In this chapter we introduce some notion of similarity already existing in literature and then extending them to define similarity among subgraphs in labeled graph. 
 
-% In this chapter we first recall some definition on documents similarity and then introduce two different definitions of subgraphs similarity.
+In the last sections we present two different techniques we will use afterwards to estimate such similarity.
 
-%Following we use square brackets [ ] to distinguish multisets from sets, leaving the curly brackets \{ \} to sets 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Similarity indices}
 
 \begin{definizione}\label{def:jaccard}
-    Given two set $A$ and $B$ we define the \textbf{Jaccard index} as the ratio between the size of intersection and of the union between the two sets:
+    Given two set $A$ and $B$ we define the \textbf{Jaccard index} as the size of the intersection divided by the size of the union between the two sets:
     
     \begin{equation}
     J(A,B) = \frac{|A \cap B|}{|A \cup B|}
@@ -38,10 +30,34 @@ In this chapter we first give a definition of subgraphs similarity
     
 \end{definizione}
 
-We can easily extended the two previous definition to multiset:
+\begin{esempio}
+	Given $A = \{1, 3, 4, 5, 7, 8\}$ and $B = \{1, 2, 4, 6, 8\}$ we have:
+	
+	\begin{equation}
+	J(A,B) = \frac{|\{1, 4, 8\}|}{|\{1, 2, 3, 4, 5, 6, 7, 8\}|} = \frac{3}{8} 
+	\end{equation}
+	
+	\begin{equation}
+	BC(A,B) = \frac{2 \times |\{1, 4, 8\}|}{|\{1, 3, 4, 5, 7, 8\}| + |\{1, 2, 4, 6, 8\}|} = \frac{6}{11} 
+	\end{equation}
+\end{esempio}
+
+Note that when $A = B$ we have $J(A,B) = BC(A,B) = 1$ and when $A \cap B = \emptyset$ we have $J(A,B) = BC(A,B) = 0$.
+
+\clearpage
+
+Using set may be limiting as we consider only once the repeated values, we can easily extended the two previous definition to multiset.\\
+
+\begin{definizione}
+	A multiset is a generalization of set that allows multiple instances of elements.
+\end{definizione}
+
+To avoid confusion afterwards we use square brackets $[\ ]$ to indicate multiset and curly brackets $\{\ \}$ to indicate set.\\
+
+Multiset can also be seen as an array of frequencies of its object (e.g. we indicate with $A = (2, 0, 3)$ the multiset with $2$ elements of first type, $0$ elements of second type and $3$ elements of third type, this notation is equivalent to write $A = [1, 1, 3, 3, 3]$).
 
 \begin{definizione}\label{def:wjaccard}
-    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{weighted Frequency Jaccard index} as:
+    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
     
     \begin{equation}
     FJ(A,B) = \frac{\sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n { max(a_{i}, b_{i}) }}
@@ -50,7 +66,7 @@ We can easily extended the two previous definition to multiset:
 \end{definizione}
 
 \begin{definizione}\label{def:wbray}
-    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis index} on multiset as:
+    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis index on multiset} as:
     
     \begin{equation}
     BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {a_{i} + b_{i}}}
@@ -58,20 +74,108 @@ We can easily extended the two previous definition to multiset:
     
 \end{definizione}
 
+\begin{esempio}
+	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have:
+	
+	\begin{equation}
+	J(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 2} = \frac{4}{13} 
+	\end{equation}
+	
+	\begin{equation}
+	BC(A,B) = \frac{2 \times (0 + 0 + 1 + 1 + 0 + 2) }{2 + 2 + 4 + 4 + 1 + 4} = \frac{8}{17}
+	\end{equation}
+\end{esempio}
 
+
+Both indices are widely used in practical application, Bray-Curtis index gives a greater weight to the intersection, on the other side the Jaccard Index is a distance metric and may be preferred to Bray-Curtis index since it is only a semi-metric distance (as it does not satisfy the triangle inequality). 
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Documents similarity}
 
-...
+Documents similarity is an hot topic in Information Retrieval, as it can be seen as the problem of duplicate detection or, from another point of view, plagiarism detection.\\
 
+To define documents similarity we need the notion of \textit{$q$-gram}:
+
+\begin{definizione}
+	A $q$-gram is a contiguous subsequence of $q$ items from a sequence.
+\end{definizione}
+
+In this case the sequence is a document and the items can be words, characters or even syllables. If the elements used are words, $q$-gram may also be called shingles.
+
+\begin{esempio}
+	Given the document \textit{"I live and study in Pisa"} all the possible $3$-grams are: 
+	\textit{"I live and"}, \textit{"live and study"}, \textit{"and study in"} and \textit{"study in Pisa"}.
+\end{esempio}
+
+Note that in a document with $n$ words the possible $q$-grams are exactly $n-q+1$.\\
+
+It is easy to see if we use the set, or multi-set, of the all possible $q$-grams of two documents we can use it to calculate their similarity based on the Jaccard or Bray-Curtis index.\\
+
+Considering that the number of $q$-grams in a document is linear in its number of words, documents similarity is not an hard problem as we have only to perform union and intersection between set, or multi-set.
+
+\begin{esempio}
+	Given the documents 
+	\begin{equation*}
+	A = \textit{I live, work and study in Pisa}
+	\end{equation*}
+	\begin{equation*}
+	B = \textit{You work and study in Livorno}
+	\end{equation*}
+	The set of their $2$-grams are:
+	\begin{equation*}
+	S_{A} = (\textit{I live}, \textit{live work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Pisa})
+	\end{equation*}
+	\begin{equation*}
+	S_{B} = (\textit{You work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Livorno})
+	\end{equation*}
+	The similarity using both Jaccard and Bray-Curtis are:\\
+	\begin{equation*}
+		J(A,B) = \frac{|S_{A} \cap S_{B} |}{|S_{A} \cup S_{B} |} = \frac{3}{8}
+	\end{equation*}
+	\begin{equation*}
+		BC(A,B) = \frac{2 \times |S_{A} \cap S_{B} |}{|S_{A}| +|S_{B}|} = \frac{6}{11}
+	\end{equation*}
+\end{esempio}
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Graphs similarity}
 
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Subgraphs similarity}
 
-...
+\clearpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sketches}
 
-\subsection{min-wise permutation}
-\subsection{bottom-k sketches}
+\clearpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Min-wise permutation}
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Bottom-k sketches}
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Color Coding}
+
+\cite{Alon:1995:COL:210332.210337}
+
+\clearpage

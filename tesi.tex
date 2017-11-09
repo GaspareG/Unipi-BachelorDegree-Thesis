@@ -91,7 +91,7 @@
   \corsodilaureatriennalein{Informatica}
   \relatore[Prof.]{Roberto Grossi}
   \relatoreDue[Prof.]{Andrea Marino}
-  \dedica{Ai miei genitori\\per non avermi tagliato i viveri}
+  % \dedica{Ai miei genitori\\per non avermi tagliato i viveri}
 
 % Per l'ipertesto:
  \usepackage{hyperref} % gia' caricato da uniudtesi
@@ -114,7 +114,7 @@
                 morecomment=[l][\color{magenta}]{\#}
 }
 
-\let\cleardoublepage\clearpage
+% \let\cleardoublepage\clearpage
 
 \begin{document}
 
@@ -125,30 +125,33 @@
 
 \maketitle
 
+\cleardoublepage
 
 \tableofcontents
 
-% \listoffigures
+\listoffigures
 
 \mainmatter
  
- \input{1_introduzione}
- \input{2_capitolo}
- \input{3_capitolo}
- \input{4_capitolo}
- \input{5_capitolo}
+\input{1_introduzione}
+ 
+\input{2_capitolo}
+ 
+\input{3_capitolo}
+
+\input{4_capitolo}
+
+\input{5_capitolo}
 
 \appendix
 
- \input{appendici}
+\input{appendici}
 
 \clearpage
 
-\bibliographystyle{}
-\bibliography{mybib}{}
+\bibliographystyle{plain}
+\bibliography{mybib}
 
-\backmatter
-
-\printindex
+% \printindex
 
 \end{document}
