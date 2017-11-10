@@ -4,7 +4,7 @@
 
 \chapter{Basic tools}
 
-In this chapter we introduce some notion of similarity already existing in literature and then extending them to define similarity among subgraphs in labeled graph. 
+In this chapter we introduce some notion of similarity already existing in literature and then extending them to define similarity among subgraphs in labeled graphs. 
 
 In the last sections we present two different techniques we will use afterwards to estimate such similarity.
 
@@ -152,6 +152,66 @@ Considering that the number of $q$-grams in a document is linear in its number o
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Subgraphs similarity}
 
+After discussing the already existing notions of similarity, we are ready to extend them to define similarity in a labeled complex network.\\
+
+Consider a labeled graph $G = (V, E, L)$ over an alphabet $\Sigma$ where $L \rightarrow \Sigma$ is the node labeling, so that each node $u \in V$ has a label $L(u) \in \Sigma$\footnote{Alternatively we can labeling edges in $E$ instead of nodes in $V$ without making too many changes in the following definitions.}, we are interest in analyzing $G$ using the sequence of labels in its path.
+
+\clearpage
+
+Now we present a little example to better understand.\\
+
+Note that given two multi-set $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the following operations:
+
+\begin{itemize}
+	\item multi-set intersection $C = A \cap B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \min(a_{i}, b_{i})$
+	\item multi-set union $C = A \cup B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \max(a_{i}, b_{i})$
+	\item multi-set sum $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
+\end{itemize}
+
+
+\begin{esempio}
+	
+	\begin{figure}[h]
+		\centering
+		\begin{minipage}[t]{.45\textwidth}
+			\centering
+			\includegraphics[width=6cm,height=7.7cm]{figure/figure-2-1}
+			\caption{Labeled graph with $|V| = 5$ and $|E| = 6$}
+		\end{minipage}\hfill
+	\end{figure}
+
+	We want to calculate the similarity between the two set $S_{1} = \{0,1\}$ and $S_{2} = \{1, 3\}$ using their $3$-grams:
+	
+	\begin{equation*}
+		L(S_{1}) = [aab, acb, baa, bca, bca, bcb, cab, cba]
+	\end{equation*}
+	\begin{equation*}
+		L(S_{2}) = [baa, baa, bca, bca, caa, cba, cba]
+	\end{equation*}
+	
+	% Their union and intersection:
+	
+	% \begin{equation*}
+	% L(S_{1}) \cup L(S_{2}) = [aab, acb, baa, bca, bca, bcb, cab, cba]
+	% \end{equation*}
+	% \begin{equation*}
+	% L(S_{1}) \cap L(S_{2}) = [baa, baa, bca, bca, caa, cba, cba]
+	% \end{equation*}
+	
+	
+	So we have that:
+	
+	\begin{equation*}
+		FJ(S_{1}, S_{2}) = \frac{4}{11}
+	\end{equation*}
+	
+	\begin{equation*}
+		BC(S_{1}, S_{2}) = \frac{8}{15}
+	\end{equation*}
+	
+\end{esempio}
+
+\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

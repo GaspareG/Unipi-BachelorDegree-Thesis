@@ -1,36 +1,9 @@
 \chapter{Computation of subgraph similarity}
 
-    \begin{algorithm}[h]
-    
-    \small
-    \DontPrintSemicolon
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{\ $W$ a dictionary of strings \\ $f_{A}[W], f_{B}[W]$ }
-    \Output{\ $BC(A,B)$ Bray-Curtis index}
-    
-    \BlankLine
-    
-    
-    %\textbf{parallel} \ForEach{$u \in V$}{
-    %    \ForEach{$v \in N(u)$}{
-    %        \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
-    %            $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
-    %            $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
-    %        }
-    %    }
-    %}   
-
-    \Return{$M$}
-    %\setcounter{AlgoLine}{0}
-    
-    \caption{\textsc{Bray-Curtis}}
-    
-    \label{alg:bray-curtis}
-    \end{algorithm}
-
-\clearpage
-
+	In this chapter we present four different theoretical algorithm to compute subgraphs similarity as previously defined: an exhaustive enumeration, two similar randomized approach using the tools described in the previous chapter and a naive randomized approach.\\
+	
+	In the following algorithms, we will make use of parallel instruction, but we leave the specific programming choices and the comparison among the different approaches in the next chapter.
+	
 \section{Naive approach}
 
     \begin{algorithm}[h]
