@@ -4,8 +4,8 @@
 
 \chapter{Introduction}
 
-With the spread of Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important.
-Graphs are a powerful data structure that model in a natural way a lot of information. 
+With the spread of the Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important.
+Graphs are a powerful data structure that model in a natural way a lot of information.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,12 +55,12 @@ In this thesis we mainly focus to analyze complex network: special graph with a 
 	\centering
 	\begin{minipage}[t]{.45\textwidth}
 		\centering
-		\includegraphics[width=.8\textwidth,height=3.5cm]{figure/cherubino} % TODO
+		\includegraphics[width=5.8cm,height=3.5cm]{figure/figure-1-1} % TODO
 		\caption{Degree distribution of a random network}
 	\end{minipage}\hfill
 	\begin{minipage}[t]{.45\textwidth}
-		\centering
-		\includegraphics[width=.8\textwidth,height=3.5cm]{figure/cherubino} % TODO
+		\centering 
+		\includegraphics[width=5.8cm,height=3.5cm]{figure/figure-1-2} % TODO
 		\caption{Degree distribution of a scale-free complex network}
 	\end{minipage}
 \end{figure}
@@ -69,13 +69,13 @@ In this thesis we mainly focus to analyze complex network: special graph with a 
 	\centering
 	\begin{minipage}[t]{.45\textwidth}
 		\centering
-		\includegraphics[width=.8\textwidth,height=3.5cm]{figure/cherubino} % TODO
-		\caption{Random network with $|N| = 100$ and $|E| = 1000$}
+		\includegraphics[width=4cm,height=4cm]{figure/figure-1-3}
+		\caption{Random network with $|N| = 8$ and $|E| = 13$}
 	\end{minipage}\hfill
 	\begin{minipage}[t]{.45\textwidth}
 		\centering
-		\includegraphics[width=.8\textwidth,height=3.5cm]{figure/cherubino} % TODO
-		\caption{Complex network with $|N| = 100$ and $|E| = 1000$}
+		\includegraphics[width=3.8cm,height=4cm]{figure/figure-1-4}
+		\caption{Complex network with $|N| = 10$ and $|E| = 11$}
 	\end{minipage}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,12 +104,12 @@ In this thesis we exploit the problem using randomized techniques and paralleliz
 The problem can be applied to a lot of context.
 That is why it is very important to choose the right domains for the values of the $V, E, L, \Sigma, q$:
 \begin{itemize}
-\item $V$ are 
+\item $V$ are out object we want to modeling.
 \item $E$ represent the set of interactions, two vertices are connected if exists a relation among them.
-\item $L$ and $\Sigma$ are the category that partition $V$, note that if $|\Sigma| = 1$ the labeling is useless.
-\item $q$ should be low as $N^{<q}(u)$ could be a large portion of $G$, (e.g. in Facebook for $q \simeq 4$ we have $N^{<q}(u) \simeq G$).
+\item $L$ and $\Sigma$ are the category that partition $V$, $|\Sigma|$ should not be too high or to low, note that if $|\Sigma| = 1$ the labeling is useless as $V$ is not really partitioned.
+\item $q$ should be low as $N^{<q}(u)$ could be a large portion of $G$, (e.g. in Facebook for $q \simeq 4$ we have $N^{<q}(u) \simeq G$)\cite{Facebook}.
 \end{itemize}
 
-Furthermore, we have to choose $G1$ and $G2$ , like ego networks or connected components.\\
+Furthermore, we have to choose $G1$ and $G2$ in a way that similarity between two groups answer use some real question, like compare to each other two ego networks or two connected components.\\
 
 % A pratical example: given a social network of people connected by friendship relation, where every people are labeled with their favorite musical genre, estimate the similary, in terms of musical tastes, of two different geographic regions.

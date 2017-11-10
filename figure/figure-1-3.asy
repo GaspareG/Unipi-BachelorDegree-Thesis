@@ -10,37 +10,50 @@ pen p2 = black+1;
 pen p3 = blue+1+dashed;
 pen p4 = red+1+dashed;
 
-// posizioni dei vertici
-pair[] P = {
-	(1.5,4), (0,2), (3, 2), (0,0),(3,0)
-};
+srand(42);
 
-pair[] pos = {
-	N, N,N,S,S
-};
+int N = 8;
+int M = 20;
+int R = 3;
+
+pair[] P = {};
+
+for(int i =0; i<N; ++i)
+{
+	pair p = ( R*cos( 2* 3.1415 / N * i ), R*sin( 2*3.1415 / N * i  )  );
+	P.push( p );
+}
+
+// posizioni dei vertici
+//pair[] P = {
+//	(0,0), (2,0), 
+//	(3, 1.5), (2,3), (0,3),
+//	(-1, 1.5)
+//};
+
 
 // colori dei vertici
 pen[]  colV = {pb};
 
 // archi del grafo
-int[][] E = {{0, 1},{0, 2},{1,3},{2,4},{3,4},{1,2}};
+int[][] E = {}; // { {0,1}, {0,2}, {0,3}, {1,4}, {2,5}, {3,4}, {4,5} };
+
+for(int i=0; i<M ; ++i)
+{
+	int[] e = { rand()%N,  rand()%N };
+	if( e[0] == e[1] )
+	{
+		--i;
+		continue;
+	}
+	E[i] =  e ;
+}
 
 // colori degli archi
 pen[]  colE = {p2, p2};
 
-// label 
-string C[] = {"B","A","C","A","B"};
-
-for (int i=0; i<5; ++i)
-  label(C[i],P[i],4*pos[i]);
 
 //for (int i=0; i<5; ++i)
 //   filldraw(roundedpath(P[i]+(0.7,0.7)--P[i]+(-0.7,0.7)--P[i]+(-0.7,-0.7)--P[i]+(0.7,-0.7)--cycle,0.2), palegrey, grey+2);
-
-draw(ellipse((0,1),1,2.5), p3);
-label("S2",(-1.2,1),W,blue);
-
-draw(rotate(-35,(0.75,3))*ellipse((0.75,3),1,2.5), p4);
-label("S1",(0,4),W, red);
 
 grafi.main(P, colV, E, colE);
