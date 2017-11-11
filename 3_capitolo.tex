@@ -4,6 +4,25 @@
 	
 	In the following algorithms, we will make use of parallel instruction, but we leave the specific programming choices and the comparison among the different approaches in the next chapter.
 	
+% \section{Calculation of indices}
+\section{Indices calculation}
+
+Now we illustrate the procedures to calculate the Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.
+
+As previously seen, instead of iterate over all the strings in $\Sigma^{q}$ we can restrict to $\mathcal{L} \subseteq \Sigma^{q}$, the set of all possible $q$-grams found in the $q$-paths of $G$. 
+
+An additional improvement can be made: if we want to calculate the similarity between two set $A, B \subset V$ ranging over $\mathcal{W} = L(A) \cup L(B) \subseteq \Sigma^{q}$ it is enough, as we can easily see that for $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.
+
+\begin{algorithm}
+	contenuto...
+\end{algorithm}
+
+\begin{algorithm}
+	contenuto...
+\end{algorithm}
+
+Defined this procedures, in the next algorithms we focus only to compute $\mathcal{W}$ 
+
 \section{Naive approach}
 
     \begin{algorithm}[h]

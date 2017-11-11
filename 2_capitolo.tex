@@ -8,27 +8,6 @@ In this chapter we introduce some notion of similarity already existing in liter
 
 In the last sections we present two different techniques we will use afterwards to estimate such similarity.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Calculation of indices}
-
-Now we illustrate the procedures to calculate the Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.
-
-As previously seen, instead of iterate over all the strings in $\Sigma^{q}$ we can restrict to $\mathcal{L} \subseteq \Sigma^{q}$, the set of all possible $q$-grams found in the $q$-paths of $G$. 
-
-An additional improvement can be made: if we want to calculate the similarity between two set $A, B \subset V$ ranging over $\mathcal{W} = L(A) \cup L(B) \subseteq \Sigma^{q}$ it is enough, as we can easily see that for $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.
-
-\begin{algorithm}
-	contenuto...
-\end{algorithm}
-
-\begin{algorithm}
-	contenuto...
-\end{algorithm}
-
-Defined this procedures, in the next algorithms we focus only to compute $\mathcal{W}$ 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Similarity indices}
@@ -84,7 +63,6 @@ Multiset can also be seen as an array of frequencies of its object (e.g. we indi
   \item union $C = A \cup B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \max(a_{i}, b_{i})$
   \item multiset union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
 \end{itemize}
-
 
 \begin{definizione}\label{def:wjaccard}
     Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
@@ -184,9 +162,34 @@ Considering that the number of $q$-grams in a document is linear in its number o
 
 After discussing the already existing notions of similarity, we are ready to extend them to define similarity in a labeled complex network.\\
 
-Consider a labeled graph $G = (V, E, L)$ over an alphabet $\Sigma$ where $L \rightarrow \Sigma$ is the node labeling, so that each node $u \in V$ has a label $L(u) \in \Sigma$\footnote{Alternatively we can labeling edges in $E$ instead of nodes in $V$ without making too many changes in the following definitions.}, we are interest in analyzing $G$ using the sequence of labels in its path.
+Consider a labeled graph $G = (V, E, L)$ over an alphabet $\Sigma$ where $L \rightarrow \Sigma$ is the node labeling, so that each node $u \in V$ has a label $L(u) \in \Sigma$\footnote{Alternatively we can labeling edges in $E$ instead of nodes in $V$ without making too many changes in the following definitions, for sake of simplicity we consider the graph labeled on its nodes.}, we are interest in analyzing $G$ using the sequence of labels in its path.\\
 
-\clearpage
+For a fixed integer $q > 0$, consider an arbitrary simple path $\pi = u_{1}, \ldots, u_{q}$, we call the orientation $u_{1} \rightarrow \ldots \rightarrow u_{q}$ of $\pi$ a $q$-path leading to $u_{q}$ and $L(\pi) = L(u_{i}) \ldots L(u_{q}) \in \Sigma^{q}$ its $q$-gram, obtained by concatenating the labels of its nodes.\footnote{Note that in an undirected graph we have, for a single simple path, two possible $q$-path, one for each orientation: one leading to $u_{q}$ from $u_{1}$ and one leading to $u_{1}$ from $u_{q}$.}. 
+
+For a set of nodes $A \subseteq V$, we define $L(A)$ as the corresponding multiset of $q$-grams for all $q$-path $\pi$ leading to a node $u \in A$. 
+\begin{equation}
+L(A) = [x \in \Sigma^{q} : \exists \text{ $q$-path } \pi \text{ leading to } u \in A \text{ with } L(\pi) = x]
+\end{equation}
+
+In this way, for each $q$-path $\pi = u_{1}, \ldots, u_{q}$ leading to $u_{q} \in A$, we have that $u_{i} \in A \cup N^{<q}(A)$ $\forall$ $1 \leq i < q$. This is a good definition because, as it was mentioned before, we take into account both the internal structure of $A$ and its neighborhood $N^{<q}(A)$. Note that we explicitly exclude all the $q$-path both beginning and starting outside $A$, as we not considering them influential to define the similarity.\\
+
+Given a single $q$-gram $x$ we are interested in its frequency within the multiset $L(A)$ so we define:
+\begin{equation}
+	f_{A}[x] = |\{ \pi : \pi \text{ is a $q$-path leading to } u \in A \text{ and } L(\pi) = x \}|
+\end{equation}
+
+With the property that $f_{A}[x] = \sum_{u \in A}{f_{\{u\}}[x]}$.\\
+
+We are now ready to extend the two previously seen similarity indices:
+
+\begin{definizione}
+	\begin{equation}	
+		BC(A,B) = \frac{ 2 \times \Sigma_{x \in \Sigma^{q}} \min(f_{A}[x], f_{B}[x]) }{}
+	\end{equation}
+\end{definizione}
+
+Let $\mathcal{L} = \{ x \in \Sigma^{q} : x \in L(V) \} \subseteq \Sigma^{q}$ be the set of all distinct $q$-grams found in the $q$-paths of G. REDO
+
 
 Now we present a little example to better understand.\\
 
@@ -232,11 +235,7 @@ Now we present a little example to better understand.\\
 	So we have that:
 	
 	\begin{equation*}
-		FJ(S_{1}, S_{2}) = \frac{4}{11}
-	\end{equation*}
-	
-	\begin{equation*}
-		BC(S_{1}, S_{2}) = \frac{8}{15}
+		FJ(S_{1}, S_{2}) = \frac{4}{11} \text{  and  } BC(S_{1}, S_{2}) = \frac{8}{15}
 	\end{equation*}
 	
 \end{esempio}
