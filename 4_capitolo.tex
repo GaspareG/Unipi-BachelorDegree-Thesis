@@ -1,15 +1,14 @@
 %%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Project development}
-
-    In this chapter we describe  
     
     \section{Implementation choices}
     
+    TODO 
     
     \section{Dataset}
     
-    For the experiments we use two differents kind of dataset, a small one so we can easily brute-force the real indices and compare the relative error, and a big one in order to 
+    For the experiments we use two different kind of dataset, a small one so we can easily brute-force the real indices and compare the relative error, and a big one in order to benchmark the performance of the different approach.
     
     \paragraph*{NetInf} This graph represents the flow of information on the web among blogs and news websites. The graph was computed by the \textit{NetInf} approach, as part of the \textit{SNAP} project~\cite{netinf}, by tracking cascades of information diffusion to reconstruct ``who copies who'' relationships. Each node represents a blog or news website, and a website is connected to those who frequently copy their content. The graph contains 854 nodes and 3824 edges. We labelled websites according to their importance, using Amazon's Alexa ranking~\cite{alexarank}: the labels correspond to respectively the websites ranked in the top $4\%$, the following $15\%$, the following $30\%$, and the remaining $51\%$ (i.e. $|\Sigma|=4$). 
     
@@ -19,10 +18,9 @@
     
     \textsl{Considered query:} similarity of actors' ego networks. Given two actors $a$ and $b$, let $A$ and $B$ be their ego-networks, i.e., the sets of nodes corresponding to movies in which respectively $a$ and $b$ starred. Compute the similarity of $A$ and $B$.
     %Compute $BC(A,B)$, $J(A,B)$, $FJ(A,B)$, and random $q$-walks.
-
-
     
     \section{Experimental results}
 
     We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux version 4.4.0-22-generic. Code written in C++ and compiled with g++ version 5.4.1 with OpenMP. 
     
+	TODO 

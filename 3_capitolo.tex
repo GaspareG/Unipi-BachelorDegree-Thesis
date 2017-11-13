@@ -7,21 +7,55 @@
 % \section{Calculation of indices}
 \section{Indices calculation}
 
-Now we illustrate the procedures to calculate the Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.
+Now we illustrate the procedures to calculate the Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.\\
 
 As previously seen, instead of iterate over all the strings in $\Sigma^{q}$ we can restrict to $\mathcal{L} \subseteq \Sigma^{q}$, the set of all possible $q$-grams found in the $q$-paths of $G$. 
 
-An additional improvement can be made: if we want to calculate the similarity between two set $A, B \subset V$ ranging over $\mathcal{W} = L(A) \cup L(B) \subseteq \Sigma^{q}$ it is enough, as we can easily see that for $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.
+An additional improvement can be made: if we want to calculate the similarity between two set $A, B \subset V$ ranging over $\mathcal{W} = \{ x \in \Sigma^{q} : x \in L(A) \text{ or } x \in L(B) \} \subseteq \Sigma^{q}$ it is enough, as we can easily see that for $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.\\
 
-\begin{algorithm}
-	contenuto...
+A last note, we can observe that in the Jaccard index we don't have to explicitly calculate $f_{A \cup B}[x]$ and its summary, as the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$ can be easily calculate from $f_{A}[x] \text{ and } f_{B}[x]$.\\
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $\mathcal{W}$, $f_{A}[x]$, $f_{X}[x]$}
+	\Output{\ $BC(A,B) = $ the similarity between $A$ and $B$ according to Bray-Curtis index}
+	\BlankLine
+	$num \gets 0$\;
+	$den \gets 0$\;
+	\ForEach{$x \in \mathcal{W}$}{
+		$num \gets num + 2 \times \min( f_{A}[x], f_{B}[x] )$\;
+		$dem \gets den + f_{A}[x] + f_{B}[x]$\;
+	}
+	$BC \gets \frac{num}{den}$\;
+	\Return{$BC$}
+	\caption{\textsc{Bray-Curtis}}
+	\label{alg:bray-curtis}
 \end{algorithm}
 
-\begin{algorithm}
-	contenuto...
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $\mathcal{W}$, $f_{A}[x]$, $f_{X}[x]$, $R$}
+	\Output{\ $FJ(A,B) = $ the similarity between $A$ and $B$ according to Jaccard index}
+	\BlankLine
+	$num \gets 0$\;
+	\ForEach{$x \in \mathcal{W}$}{
+		$num \gets num + \min( f_{A}[x], f_{B}[x] )$\;
+	}
+	$FJ \gets \frac{num}{R}$\;
+	\Return{$FJ$}
+	\caption{\textsc{Jaccard}}
+	\label{alg:jaccard}
 \end{algorithm}
 
-Defined this procedures, in the next algorithms we focus only to compute $\mathcal{W}$ 
+Defined this procedures, in the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$ and $R$.
+
+\clearpage 
 
 \section{Naive approach}
 
@@ -31,8 +65,8 @@ Defined this procedures, in the next algorithms we focus only to compute $\mathc
     \DontPrintSemicolon
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
-    \Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
-    \Output{\ $(f_{A}[x],f_{B}[x]) $ dynamic programming table for color coding.}
+    \Input{\ $G = (V,E, L)$ undirected labeled graph}
+    \Output{\ }
     
     \BlankLine
     
@@ -46,71 +80,92 @@ Defined this procedures, in the next algorithms we focus only to compute $\mathc
     %    }
     %}   
 
-    \Return{$M$}
+    % \Return{$M$}
     %\setcounter{AlgoLine}{0}
     
-    \caption{$preprocess$: \textsc{brute-force}}
+    \caption{\textsc{brute-force}}
     
-    \label{alg:color-coding}
+    \label{alg:brute-force}
     \end{algorithm}
 
+	TODO 
 \clearpage
 
 \section{Efficient computation}
 
-\clearpage
+% \clearpage
 
 \subsection*{Color coding}
 
-    \begin{algorithm}[h]
-    
-    \small
-    \DontPrintSemicolon
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
-    \Output{\ $M = $ dynamic programming table for color coding.}
-    
-    \BlankLine
-    
-    \textbf{parallel} \lForEach{$u \in V$}{$M_{1,u} = \langle \chi(u), 1 \rangle$}
-    
-    \For{$i \in \{ 2, 3, \ldots, q\}$}{
-         \textbf{parallel} \ForEach{$u \in V$}{
-            \ForEach{$v \in N(u)$}{
-                \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
-                    $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
-                    $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
-                }
-            }
-        }   
-    }
-    \Return{$M$}
-    %\setcounter{AlgoLine}{0}
-    
-    \caption{$preprocess$: \textsc{color-coding}}
-    
-    \label{alg:color-coding}
-    \end{algorithm}
-
-\clearpage
+TODO 
+% \clearpage
 
 \subsection*{Colorful sampling}
 
-\clearpage
+TODO 
+% \clearpage
 
 \subsection*{Frequency count}
 
-\clearpage
+TODO 
+% \clearpage
 
 \subsection*{Frequency sampling}
 
-\clearpage
+TODO 
+% \clearpage
 
 \subsection*{Estimating similarity indices}
 
+TODO 
 \clearpage
 
 \section{Baseline algorithm}
+
+In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach 
+
+ the baseline algorithm BASELINE, 
+that finds random paths in a simple way,
+
+\begin{algorithm}[h]
+	
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $X =$ array of nodes from graph $G$; $ r =$ number of paths to sample.}
+	\Output{\ $f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
+	
+	$R\gets\{\}$\;
+	\textbf{parallel} \For{$j\in [r]$}{
+		$u\gets$ randomly chosen $v \in X$ with uniform probability\;
+		$P\gets \textsc{naive-random-path-to}(u)$\;
+		\lIf{$P \neq \mathtt{null}$ and $P\not\in R$}{$R \gets R \cup \{ P \}$ \quad //critical section}
+		\lElse{$j\gets j-1$ \quad //repeat the step}
+	}
+	$W \gets [ L(P) : P \in R ]$\;
+	$f_X \gets (0,\ldots,0)$\;
+	\lForEach{$x \in W$}{
+		$f_X[x] \gets f_X[x]+1$
+	}
+	\Return{$f_X$}
+	%\setcounter{AlgoLine}{0}
+	
+	\BlankLine
+	
+	\SetKwProg{myproc}{Function}{}{}
+	\myproc{\textsc{naive-random-path-to}(u)}{
+		$P\gets \langle u \rangle$\;
+		\For{$i \in \{q-1,\ldots, 1\}$}{
+			\lIf{$N(u) \setminus P = \emptyset$}{return $\mathtt{null}$}
+			$u\gets$ randomly chosen $v \in N(u) \setminus P$ with uniform prob.\;
+			$P\gets u \cdot P$\;
+		}
+		\Return{P}   
+	}
+	
+	\caption{\textsc{base}\xspace, the baseline sampler}
+	\label{alg:baseline}
+\end{algorithm}
 
 \clearpage

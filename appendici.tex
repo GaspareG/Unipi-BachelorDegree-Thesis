@@ -128,47 +128,51 @@ return W;
 \section*{Frequency count}
 
 \begin{lstlisting}
-map<string, ll> processFrequency(set<string> W, multiset<int> X) {
-	set<string> WR;
-	for (string w : W) {
-		reverse(w.begin(), w.end());
-		WR.insert(w);
-	}
-	
-	vector<tuple<int, string, COLORSET>> old;
-	
-	for (int x : X)
-	if (isPrefix(WR, string(&label[x], 1)))
-	old.push_back(make_tuple(x, string(&label[x], 1), setBit(0ll, color[x])));
-	
-	for (int i = q - 1; i > 0; i--) {
-		vector<tuple<int, string, COLORSET>> current;
-		current.clear();
-		#pragma omp parallel for schedule(static)
-		for (int j = 0; j < (int)old.size(); j++) {
-			auto o = old[j];
-			int u = get<0>(o);
-			string LP = get<1>(o);
-			COLORSET CP = get<2>(o);
-			for (int v : G[u]) {
-				if (getBit(CP, color[v])) continue;
-				COLORSET CPv = setBit(CP, color[v]);
-				string LPv = LP + label[v];
-				if (!isPrefix(WR, LPv)) continue;
-				#pragma omp critical
-				{ current.push_back(make_tuple(v, LPv, CPv)); }
-			}
-		}
-		old = current;
-	}
-	
-	map<string, ll> frequency;
-	for (auto c : old) {
-		string s = get<1>(c);
-		reverse(s.begin(), s.end());
-		frequency[s]++;
-	}
-	return frequency;
+map<string, ll> processFrequency(set<string> W, 
+                                 multiset<int> X) {
+  set<string> WR;
+  for (string w : W) {
+    reverse(w.begin(), w.end());
+    WR.insert(w);
+  }
+
+  vector<tuple<int, string, COLORSET>> old;
+
+  for (int x : X)
+    if (isPrefix(WR, string(&label[x], 1)))
+      old.push_back(
+	      make_tuple(x, 
+	                 string(&label[x], 1), 
+	                 setBit(0ll, color[x])));
+
+  for (int i = q - 1; i > 0; i--) {
+    vector<tuple<int, string, COLORSET>> current;
+    current.clear();
+    #pragma omp parallel for schedule(static)
+      for (int j = 0; j < (int)old.size(); j++) {
+        auto o = old[j];
+        int u = get<0>(o);
+        string LP = get<1>(o);
+        COLORSET CP = get<2>(o);
+        for (int v : G[u]) {
+          if (getBit(CP, color[v])) continue;
+          COLORSET CPv = setBit(CP, color[v]);
+          string LPv = LP + label[v];
+          if (!isPrefix(WR, LPv)) continue;
+          #pragma omp critical
+          { current.push_back(make_tuple(v, LPv, CPv)); }
+        }
+      }
+    old = current;
+  }
+
+  map<string, ll> frequency;
+  for (auto c : old) {
+    string s = get<1>(c);
+    reverse(s.begin(), s.end());
+    frequency[s]++;
+  }
+  return frequency;
 }
 \end{lstlisting}
 
@@ -176,23 +180,26 @@ map<string, ll> processFrequency(set<string> W, multiset<int> X) {
 \section*{Frequency sampling}
 
 \begin{lstlisting}
-map<pair<int, string>, ll> randomColorfulSamplePlus(vector<int> X, int r) {
-  map<pair<int, string>, ll> W;
-  set<vector<int>> R;
-  vector<ll> freqX;
-  freqX.clear();
-  for (int x : X) freqX.push_back(M[q][x][getCompl(0ll)]);
-  discrete_distribution<int> distribution(freqX.begin(), freqX.end());
-  while (R.size() < (size_t)r) {
-    int u = X[distribution(eng)];
-    vector<int> P = randomPathTo(u);
-    if (R.find(P) == R.end()) R.insert(P);
-  }
-  for (auto r : R) {
-    reverse(r.begin(), r.end());
-    W[make_pair(*r.begin(), L(r))]++;
-  }
-  return W;
+map<pair<int, string>, ll> 
+  randomColorfulSamplePlus(vector<int> X, int r) {
+    map<pair<int, string>, ll> W;
+    set<vector<int>> R;
+    vector<ll> freqX;
+    freqX.clear();
+    for (int x : X) 
+      freqX.push_back(M[q][x][getCompl(0ll)]);
+    discrete_distribution<int> 
+      distr(freqX.begin(), freqX.end());
+    while (R.size() < (size_t)r) {
+      int u = X[distribution(eng)];
+      vector<int> P = randomPathTo(u);
+      if (R.find(P) == R.end()) R.insert(P);
+    }
+    for (auto r : R) {
+      reverse(r.begin(), r.end());
+      W[make_pair(*r.begin(), L(r))]++;
+    }
+    return W;
 }
 \end{lstlisting}
 
@@ -214,7 +221,9 @@ double BCW(set<string> W,
   return (double)num / (double)den;
 }
 
-double FJW(set<string> W, map<string, ll> freqA, map<string, ll> freqB,
+double FJW(set<string> W,
+           map<string, ll> freqA, 
+           map<string, ll> freqB,
            long long R) {
   ll num = 0ll;
   for (string x : W) {

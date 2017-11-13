@@ -1,3 +1,17 @@
 \chapter{Conclusion and future works}
     
+We presented randomized algorithms and data structures for sketching subgraph similarity, which take into account both the internal structure of subgraphs and their interface to the rest of the network. 
+The sketches are relatively small in size (near logarithmic)
+and exploit the distributions of the q-grams involved. The proposed
+algorithms, f-samp and f-count, guarantee a good approximation
+(as unbiased estimators) of the Bray-Curtis index and the Frequency
+Jaccard index, and show good practical performance compared to a
+less refined baseline sampler. In particular the steady running time
+of f-samp on networks with hundreds of millions of edges suggests
+its usefulness as an estimator on very large networks.
+The assumption that the graph is undirected with one label per
+node can be removed, and it would be interesting to study further
+similarity indexes that can be sketched with our algorithms
+
+TODO 
 \clearpage
