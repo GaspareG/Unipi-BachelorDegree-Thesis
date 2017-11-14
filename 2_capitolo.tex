@@ -313,12 +313,40 @@ TODO
 
 TODO 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Color Coding}
 
-TODO 
-% \cite{Alon:1995:COL:210332.210337}
+The color-coding is a method proposed in 1994 by Alon, Yuster and Zwick that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only to finds $q$-simple paths.\\
+
+The idea behind this method, which gives it the name, is to randomly coloring each node of $V$ with one of the $q$ possible color.
+
+We restrict our attention to $q = O(log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Where $[k] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ have a color $\chi(u) \in [q]$.\\
+
+After assigning a color to each node, we will focus to find only the colorful $q$-path. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\\
+
+The main advantage of this method is that reduce the number of $q$-paths by roughly a factor of $q! / q^{q} \geq 1/e^{q}$, as a colorful $q$-path can use $q!$ colorings of its nodes out of $q^{q}$ possible ones. So the number of $q$-paths exponentially decrease as the value of $q$ increases, when $q = 3$ we look only for the $\sim22\%$ colorful $q$-paths and only for $\sim4\%$ when $q = 5$.\\
+
+As we will show in the next chapter, all the colorful $q$-paths can be easily found using a dynamic programming approach.\\
+
+An interesting fact is that the method of color-coding can be derandomized using a $k$-perfect hash family, that enumerating all possible $k$-colorings of $V$.
+
+\begin{esempio}
+	
+	\begin{figure}[h]
+		\centering
+		\begin{minipage}[t]{1\textwidth}
+		\centering
+		\includegraphics[width=4.8cm,height=4.3cm]{figure/figure-2-6}
+		\caption{Graph randomly $3$-colored}
+		\end{minipage}\hfill
+	\end{figure}
+
+	In this $3$-colored graph out of $6$ simple $3$-path starting from $0$ 
+	($\textsc{0-1-2}$, $\textsc{0-1-3}$, $\textsc{0-2-1}$, $\textsc{0-2-4}$, $\textsc{0-2-6}$ and $\textsc{0-5-6}$), 
+	only $3$ are colorful ($\textsc{0-1-2}$, $\textsc{0-2-1}$ and $\textsc{0-2-4}$).
+\end{esempio}
+
+
 
 \clearpage
