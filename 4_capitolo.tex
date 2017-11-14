@@ -34,11 +34,62 @@
     
     % , nodes correspond to movies, and there is a link between two movies if their casts share at least one actor. The graph contains 1\,060\,209 movies (nodes) and 288\,008\,472 edges. Each movie is labeled with one of $|\Sigma|=36$ genres. 
     
-    \textsl{Considered query:} similarity of actors' ego networks. Given two actors $a$ and $b$, let $A$ and $B$ be their ego-networks, i.e., the sets of nodes corresponding to movies in which respectively $a$ and $b$ starred, compute the similarity of $A$ and $B$.
+    \textsl{Considered query:} similarity of actors' ego-networks. Given two actors $a$ and $b$, let $A$ and $B$ be their ego-networks, i.e., the sets of nodes corresponding to movies in which respectively $a$ and $b$ starred, compute the similarity of $A$ and $B$.
     %Compute $BC(A,B)$, $J(A,B)$, $FJ(A,B)$, and random $q$-walks.
     
     \section{Experimental results}
 
-    We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux version 4.4.0-22-generic. Code written in C++ and compiled with g++ version 5.4.1 with OpenMP 4.5. 
+    We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux v.4.4.0-22-generic. Code written in C++17, compiled with g++ v.5.4.1 and OpenMP 4.5.\\
     
-	TODO 
+    To better analyze the different approaches described, we take several kinds of experiment in each of them.  \footnote{Unless otherwise stated all the results are the average of $100$ identical experiment, in order to reduce the possible errors randomly caused by the machine.}
+     
+	\subsection*{Running time}
+	
+	In this experiment we compare the different running time, of all the parts, from all algorithms.
+	
+	Note that this is an important experiments, as in the real application time is crucial factor.\\
+
+	TODO
+	
+	\subsection*{Relative error and variance}
+	
+	In this experiment we will compare, for increasing value of $R$, how accurate are the different algorithms.\\
+	
+	TODO
+	
+	\subsection*{Fixed relative error}
+	
+	In this experiment we set the relative error $\epsilon_{r}$ and compare how many paths $R$ we need to reach such relative error.\\
+	
+	TODO
+	
+	\subsection*{Fixed time precision}
+	
+	In this experiment we set the computing time and compare how many path.\\
+	
+	TODO
+	
+	\subsection*{Actors' ego-networks}
+	
+	As last test, in order to show a real application easy to understand, we compare
+	some pairs of actors' ego-networks (using \fcount algorithm with $q=3$ and $R=1\,000$):
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{c|c|l|l}
+			Actor/actress & Actor/actress & BC index & FJ index\\ 
+			\hline
+			Stan Laurel & Oliver Hardy & 0.936167 & 0.774053 \\
+			Robert De Niro & Al Pacino & 0.730935 & 0.231474\\
+			Woody Allen & Meryl Streep & 0.556071 & 0.222857\\
+			Meryl Streep & Roberto Benigni & 0.482909 & 0.160181\\
+			%\hline
+		\end{tabular}
+	\end{table}
+
+	The values respect the theory very faithfully for many reasons.
+	
+	The Bray-Curtis index, as we already told, is always greater than the Frequency Jaccard and takes more into account the intersection:
+	the ego-networks of the famous comic duo Laurel and Hardy have a big intersection, this make the Bray-Curtis value very close to 1, however the Frequency-Jaccard is much smaller as Oliver Hardy starred in about $300$ movie without Stan Laurel.
+	
+	One last observation about the couple Meryl Streep and Roberto Benigni: we have a big difference between the Bray-Curtis and the Frequency Jaccard, this can be due from the fact they are both famous actors (both won the Oscar Prize) who starred with a lot of other famous actor but they haven't starred together.

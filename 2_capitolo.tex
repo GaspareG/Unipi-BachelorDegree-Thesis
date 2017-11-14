@@ -33,13 +33,13 @@ In the last sections we present two different techniques we will use afterwards 
 \begin{esempio}
 	Given $A = \{1, 3, 4, 5, 7, 8\}$ and $B = \{1, 2, 4, 6, 8\}$ we have:
 	
-	\begin{equation}
+	\begin{equation*}
 	J(A,B) = \frac{|\{1, 4, 8\}|}{|\{1, 2, 3, 4, 5, 6, 7, 8\}|} = \frac{3}{8} 
-	\end{equation}
+	\end{equation*}
 	
-	\begin{equation}
+	\begin{equation*}
 	BC(A,B) = \frac{2 \times |\{1, 4, 8\}|}{|\{1, 3, 4, 5, 7, 8\}| + |\{1, 2, 4, 6, 8\}|} = \frac{6}{11} 
-	\end{equation}
+	\end{equation*}
 \end{esempio}
 
 
@@ -131,7 +131,7 @@ Note that in a document with $n$ words the possible $q$-grams are exactly $n-q+1
 
 It is easy to see if we use the set, or multiset, of the all possible $q$-grams of two documents we can use it to calculate their similarity based on the Jaccard or Bray-Curtis index.\\
 
-Considering that the number of $q$-grams in a document is linear in its number of words, documents similarity is not an hard problem as we have only to perform union and intersection between set, or multiset.
+Considering that the number of $q$-grams in a document is linear in its number of words, documents similarity is not an hard problem as we have only to perform union and intersection between set, or multiset.\\
 
 \begin{esempio}
 	Given the documents 
@@ -178,7 +178,7 @@ With the notion of graph similarity we can define a similarity between graph:
 
 Unfortunately subgraphs isomorphism is a NP-complete problem, so the only way to solve it is by using heuristic or approximated methods.
 
-\clearpage 
+% \clearpage 
 \begin{esempio}
 	\begin{figure}[h]
 		\centering
@@ -256,7 +256,7 @@ In general $BC(A,B) \geq FJ(A,B)$. When $A \cap B = \emptyset$ we have that $f_{
 % 	\item multiset sum $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
 % \end{itemize}
 
-% \clearpage
+%  \clearpage
 
 Now we present a little example to better understand.
 
@@ -398,21 +398,33 @@ The main advantage of this method is that reduce the number of $q$-paths by roug
 As we will show in the next chapter, all the colorful $q$-paths can be easily found using a dynamic programming approach.\\
 
 An interesting fact is that the method of color-coding can be derandomized using a $k$-perfect hash family, that enumerating all possible $k$-colorings of $V$.
-
-\begin{esempio}
 	
-	\begin{figure}[h]
-		\centering
-		\begin{minipage}[t]{1\textwidth}
-		\centering
-		\includegraphics[width=4.8cm,height=4.3cm]{figure/figure-2-6}
-		\caption{Graph randomly $3$-colored}
-		\end{minipage}\hfill
-	\end{figure}
+%	\begin{figure}[h]
+%		\centering
+%		\begin{minipage}[t]{1\textwidth}
+%		\centering
+%		\includegraphics[width=4.8cm,height=4.3cm]{figure/figure-2-6}
+%		\caption{Graph randomly $3$-colored}
+%		\end{minipage}\hfill
+%	\end{figure}
 
-	In this $3$-colored graph out of $6$ simple $3$-path starting from $0$ 
-	($\textsc{0-1-2}$, $\textsc{0-1-3}$, $\textsc{0-2-1}$, $\textsc{0-2-4}$, $\textsc{0-2-6}$ and $\textsc{0-5-6}$), 
-	only $3$ are colorful ($\textsc{0-1-2}$, $\textsc{0-2-1}$ and $\textsc{0-2-4}$).
-\end{esempio}
+%	In this $3$-colored graph out of $6$ simple $3$-path starting from $0$ 
+%	($\textsc{0-1-2}$, $\textsc{0-1-3}$, $\textsc{0-2-1}$, $\textsc{0-2-4}$, $\textsc{0-2-6}$ and $\textsc{0-5-6}$), 
+%	only $3$ are colorful ($\textsc{0-1-2}$, $\textsc{0-2-1}$ and $\textsc{0-2-4}$).
+
+	\begin{minipage}{0.55\textwidth}\raggedright
+		\begin{esempio}
+		\end{esempio}
+		
+		In this $3$-colored graph out of $6$ simple $3$-path starting from $0$\\
+		($\textsc{0-1-2}$ $\textsc{0-1-3}$ $\textsc{0-2-1}$ $\textsc{0-2-4}$ $\textsc{0-2-6}$ $\textsc{0-5-6}$)\\ 
+		only $3$ are colorful ($\textsc{0-1-2}$ $\textsc{0-2-1}$ $\textsc{0-2-4}$).
+	\end{minipage}
+	\begin{minipage}{0.35\textwidth}
+		\includegraphics[width=\linewidth]{figure/figure-2-6}
+	\end{minipage}
+
+\noindent
+\\
 
 \clearpage

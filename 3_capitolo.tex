@@ -41,7 +41,7 @@ A last note, we can observe that in the Frequency Jaccard index we don't have to
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, $f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ , $f_{X}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$, $R =$ summation of all frequency}
-	\Output{\ $FJ(A,B) = $ the similarity between $A$ and $B$ according to Jaccard index}
+	\Output{\ $FJ(A,B) = $ the similarity between $A$ and $B$ according to Frequency Jaccard index}
 	\BlankLine
 	$num \gets 0$\;
 	\ForEach{$x \in \mathcal{W}$}{
@@ -101,29 +101,140 @@ Defined this procedures, in the next algorithms we focus only to compute the val
 
 \subsection*{Color coding}
 
-TODO 
-% \clearpage
+\begin{algorithm}[h]
+	
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
+	\Output{\ $M = $ dynamic programming table for color coding.}
+	
+	% $M\in [q]\times V$ is the dynamic programming table of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
+	
+	\BlankLine
+	
+	\textbf{parallel} \lForEach{$u \in V$}{$M_{1,u} = \langle \chi(u), 1 \rangle$}
+	
+	\For{$i \in \{ 2, 3, \ldots, q\}$}{
+		\textbf{parallel} \ForEach{$u \in V$}{
+			\ForEach{$v \in N(u)$}{
+				\ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
+					$f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
+					$M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
+				}
+			}
+		}   
+	}
+	\Return{$M$}
+	%\setcounter{AlgoLine}{0}
+	
+	\caption{preprocess: \textsc{color-coding}}
+	\label{alg:color-coding}
+\end{algorithm}
 
+\clearpage
 \subsection*{Colorful sampling}
 
-TODO 
-% \clearpage
+\begin{algorithm}[h]
+	
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $X =$ array of nodes from graph $G$; $M =$ color coding table for $G$; $r =$ number of colorful paths to sample.}
+	\Output{\ $W = $ random sample set of colorful grams $x \in L(X)$ with probability $p_X(x)$.}
+	
+	%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
+	
+	$R \gets \{\}$\;
+	\textbf{parallel} \For{$j\in [r]$}{
+		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
+		$P\gets \textsc{random-path-to}(u)$\;
+		\lIf{$P\not\in R$}{$R \gets R \cup \{ P \}$ \quad //critical section}
+		\lElse{$j\gets j-1$ \quad //repeat the step}
+	}
+	\Return{$W = \{ L(P) : P \in R \}$}
+	%\setcounter{AlgoLine}{0}
+	
+	\BlankLine
+	
+	\SetKwProg{myproc}{Function}{}{}
+	\myproc{\textsc{random-path-to}(u)}{
+		$P\gets \langle u \rangle$\;
+		$D\gets [q] \setminus \{\chi(u)\}$\;
+		
+		\For{$i \in \{q-1,\ldots, 1\}$}{
+			%Let $N$ be the neighbors $v$ of $u$ s.t. $M[i][v]$ contains the set of colors $D$\;
+			$u\gets$ randomly chosen $v \in N(u)$ with probability~$p_{v} = \frac{M_{i,v}(D) }{ \sum_{z\in N(u)} M_{i,z}(D)}$\;
+			$P\gets u \cdot P$\;
+			$D\gets D\setminus \{\chi(u)\}$\;
+		}
+		\Return{P}   
+	}
+	
+	
+	\caption{query: \textsc{colorful-sampler}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
 
+\clearpage
 \subsection*{Frequency count}
 
-TODO 
-% \clearpage
+\begin{algorithm}[h]
+	
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{\ $X =$ array of nodes from graph $G$; $W = $ sample of its colorful $q$-grams.}
+	\Output{\ $f_X[x] = $ frequency of each $x \in W$.}
+	
+	%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
+	
+	\BlankLine
+	$T\gets[\,]$ \quad // step~$i=1$\; 
+	\textbf{parallel} \ForEach{$u \in X$ such that $L(u)$ appears at the end of a $q$-gram in $W$}{
+		$T \gets T \cup [\langle u, L(u), \{\chi(u) \} \rangle]$\;
+	}
+	
+	\For{$i \in \{ 2, 3, \ldots, q\}$}{
+		$T' \gets [\,]$\;
+		\textbf{parallel} \ForEach{$\langle z, x, C \rangle \in T$}{
+			\ForEach{$v \in N(z)$ such that $\chi(v) \not \in C$}{
+				\If{$L(v) \cdot x$ is a suffix of a $q$-gram in $W$}{
+					$T' \gets T' \cup [\langle v, L(v) \cdot x, C \cup \{\chi(v)\} \rangle]$  \quad //critical s.\;
+				}
+			}
+		}   
+		$T \gets T'$\;
+	}
+	$f_X \gets (0,\ldots,0)$\;
+	\lForEach{$\langle z, x, C \rangle \in T$}{
+		$f_X[x] \gets f_X[x]+1$
+	}
+	
+	\Return{$f_X$}
+	%\setcounter{AlgoLine}{0}
+	
+	\caption{f-count, exactly counting frequencies of sampled $q$-grams}
+	\label{alg:frequency}
+\end{algorithm}
 
+\clearpage
 \subsection*{Frequency sampling}
 
 TODO 
 % \clearpage
 
+\clearpage
 \subsection*{Estimating similarity indices}
 
 TODO 
 %  \clearpage
 
+\clearpage
 \section{Baseline algorithm}
 
 In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach .
