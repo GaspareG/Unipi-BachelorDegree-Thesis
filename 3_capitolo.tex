@@ -24,7 +24,7 @@ So we define the following procedures:\\
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, \\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ , \\$f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$}
+	\Input{$\mathcal{W} = $ dictionary of $q$-grams\\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$\\$f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$}
 	\Output{$BC(A,B) = $ the similarity between $A$ and $B$ according to Bray-Curtis index}
 	\BlankLine
 	$num \gets 0$\;
@@ -45,7 +45,7 @@ So we define the following procedures:\\
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, \\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ ,\\ $f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$,\\ $R =$ summation of all frequency}
+	\Input{$\mathcal{W} = $ dictionary of $q$-grams\\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$\\ $f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$\\ $R =$ summation of all frequency}
 	\Output{$FJ(A,B) = $ the similarity between $A$ and $B$ according to Frequency Jaccard index}
 	\BlankLine
 	$num \gets 0$\;
@@ -65,7 +65,7 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Naive approach}
 
-	The naive approach consists in enumerate all the possible $q$-grams of $q$-paths leading to $u \in A \cup B$. 
+	The naive approach consists in enumerate all the possible $q$-grams of simple $q$-paths leading to $u \in A \cup B$. 
 	This can be done by starting a modified $\textsc{dfs}$ for each $u \in A \cup B$.
 	
     \begin{algorithm}[h]
@@ -73,8 +73,8 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
     \DontPrintSemicolon
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
-    \Input{\ $q = $ length of the paths,\\$A, B = $ set of nodes to compare}
-    \Output{\ $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R$}
+    \Input{$q = $ length of the paths\\$A, B = $ set of nodes to compare}
+	\Output{$\mathcal{W} = $ dictionary of $q$-grams\\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$\\ $f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$\\ $R =$ summation of all frequency}
     \BlankLine
     $R \gets 0$\;
 	$\mathcal{W} \gets \emptyset$\;
@@ -83,9 +83,9 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	$f_{B} \gets \emptyset$\; 
 	\BlankLine
     \textbf{parallel} \ForEach{$u \in A \cup B$}{
-		$\mathcal{W}_{u}, f_{u}  \gets \textsc{DFS}(u, q)$\;
+		$\langle \mathcal{W}_{u}, f_{u} \rangle \gets \textsc{DFS}(\langle u \rangle, q)$\;
 		$\mathcal{W} \gets \mathcal{W} \cup \mathcal{W}_{u}$\;
-		$f_{A \cup B} = f_{A \cup B} \cup f_{u}$\;
+		$f_{A \cup B} \gets f_{A \cup B} \cup f_{u}$\;
 	}
 	\BlankLine    
 	\ForEach{$\langle u, x \rangle \in f_{A \cup B}$}{ 
@@ -98,7 +98,7 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 		}
 	}
 	\BlankLine
-    \Return{$\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R$}
+    \Return{$\langle \mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R \rangle$}
     \caption{\textsc{brute-force}}
     \label{alg:brute-force}
     \end{algorithm}
@@ -106,11 +106,59 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	Note that, as we have to separate the frequencies between $f_{A}$ and $f_{B}$, the type of $f_{A \cup B}$ is not a map $ \Sigma^{q} \rightarrow \mathbb{N}$
 	but instead is a map $V \times \Sigma^{q} \rightarrow \mathbb{N}$, where the element in $V$ is the leading node of the $q$-path associated to the $q$-gram.\\ 
 	
-	The value of $FJ(A,B)$ and $BC(A,B)$ calculated using this method\\
+	The values of $FJ(A,B)$ and $BC(A,B)$ calculated using this method are exact, we will use it only to compare the precision of the following approaches as it found all the possibile $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\\
 	
-	For completeness we also illustrate the $\textsc{DFS}$ algorithm.
+	\clearpage
 	
-% \clearpage
+	For completeness we also illustrate the modified $\textsc{DFS}$ algorithm that keeps track of the current $q$-path and the relative $q$-gram.
+	
+    \begin{algorithm}[h]
+		\small
+		\DontPrintSemicolon
+		\SetKwInOut{Input}{Input}
+		\SetKwInOut{Output}{Output}
+		\Input{$\pi = \langle u_{1}, \ldots, u_{|\pi|} \rangle $ current traversing path of length $\leq q$ \\$q = $ length of the paths }
+		\Output{$\mathcal{W} =$ dictionary of $q$-grams of $q$-path having $\pi$ as suffix\\$f_{u}[x] = $ frequency of each $x \in \mathcal{W}$  }
+		\BlankLine
+		$\mathcal{W} \gets \emptyset$\;
+		$f_{u} \gets \emptyset$ \quad \;    
+		\BlankLine
+		\If{$|\pi| = q$}{
+			$\mathcal{W} \gets \mathcal{W} \cup \{ L(\pi) \}$\;
+			$f_{u}[\langle u_{q}, L(\pi) \rangle] \gets 1$\;
+		}
+		\Else{
+			\ForEach{$v \in N(u_{1}) \setminus \pi$}{
+				$\langle \mathcal{W}_{v}, f_{v} \rangle \gets \textsc{DFS}(\langle v \rangle \cdot \pi, q)$\;
+				$\mathcal{W} \gets \mathcal{W} \cup \mathcal{W}_{v}$\;
+				$f_{u} \gets f_{u} \cup f_{v}$\;
+			}	
+		}
+		\BlankLine
+		\Return{$\langle \mathcal{W}$, $f_{u} \rangle$}
+		\caption{\textsc{DFS}}
+		\label{alg:brute-force}
+	\end{algorithm}
+
+	Where the symbol $\cdot$ is the concatenation of paths, note that we put the node $v$ before the path $\pi$ as we are interested to find all the $q$-path leading to the original calling node $u$.
+	
+	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already present in the path $\pi$, so we restrict to the simple $q$-paths.\\
+	
+	\begin{minipage}{0.6\textwidth}\raggedright
+		\begin{esempio}
+		\end{esempio}
+		The call to the method $\textsc{DFS}(0, 3)$ return:\\
+		
+		$\mathcal{W} = \{ abc, acb, acc \}$\\
+		$f_{u}[\langle 0, abc \rangle] = 4$ ($\textsc{0-1-3}$ $\textsc{0-1-4}$ $\textsc{0-2-3}$ $\textsc{0-2-4}$)\\
+		$f_{u}[\langle 0, acb \rangle] = 2$ ($\textsc{0-4-1}$ $\textsc{0-4-2}$)\\
+		$f_{u}[\langle 0, acc \rangle] = 1$ ($\textsc{0-4-3}$)\\
+	\end{minipage}
+	\begin{minipage}{0.35\textwidth}
+		\includegraphics[width=\linewidth]{figure/figure-3-2}
+	\end{minipage}
+			
+\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
