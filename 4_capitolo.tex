@@ -41,34 +41,104 @@
 
     We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux v.4.4.0-22-generic. Code written in C++17, compiled with g++ v.5.4.1 and OpenMP 4.5.\\
     
-    To better analyze the different approaches described, we take several kinds of experiment in each of them.  \footnote{Unless otherwise stated all the results are the average of $100$ identical experiment, in order to reduce the possible errors randomly caused by the machine.}
+    To better analyze the different approaches described, we take several kinds of experiment in each of them .\footnote{Unless otherwise stated all the results are the average of $100$ identical experiment, in order to reduce the possible errors randomly caused by the machine.}\\
      
+    An important fact of which to take into account is that we make large use of parallelization, 
+    so all the running times scale (approximately) linearly on the number of cores used.
+    
 	\subsection*{Running time}
 	
 	In this experiment we compare the different running time, of all the parts, from all algorithms.
 	
 	Note that this is an important experiments, as in the real application time is crucial factor.\\
 
-	TODO
+	\begin{table}[h]
+		\centering
+		\label{my-label}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+		\end{tabular}
+		\caption{Time in milliseconds}
+	\end{table}
 	
 	\subsection*{Relative error and variance}
 	
 	In this experiment we will compare, for increasing value of $R$, how accurate are the different algorithms.\\
-	
+		
 	TODO
-	
+	\begin{table}[h]
+		\centering
+		\label{my-label}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+		\end{tabular}
+		\caption{Time in milliseconds}
+	\end{table}
+		
 	\subsection*{Fixed relative error}
 	
 	In this experiment we set the relative error $\epsilon_{r}$ and compare how many paths $R$ we need to reach such relative error.\\
 	
 	TODO
+	\begin{table}[h]
+		\centering
+		\label{my-label}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+		\end{tabular}
+		\caption{Time in milliseconds}
+	\end{table}
 	
 	\subsection*{Fixed time precision}
 	
 	In this experiment we set the computing time and compare how many path.\\
 	
 	TODO
-	
+	\begin{table}[h]
+		\centering
+		\label{my-label}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
+			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+		\end{tabular}
+		\caption{Time in milliseconds}
+	\end{table}
+
 	\subsection*{Actors' ego-networks}
 	
 	As last test, in order to show a real application easy to understand, we compare

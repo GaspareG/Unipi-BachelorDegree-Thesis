@@ -5,6 +5,8 @@
 	In the following algorithms, we will make use of parallel instruction, but we leave the specific programming choices and the comparison among the different approaches in the next chapter.
 	
 % \section{Calculation of indices}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Indices calculation}
 
 Now we illustrate the procedures to calculate the Frequency Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.\\
@@ -15,13 +17,15 @@ An additional improvement can be made: if we want to calculate the similarity be
 
 A last note, we can observe that in the Frequency Jaccard index we don't have to explicitly calculate $f_{A \cup B}[x]$ and its summary, as the exact value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$ can be easily calculate from $f_{A}[x] \text{ and } f_{B}[x]$.\\
 
+So we define the following procedures:\\
+
 \begin{algorithm}[h]
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, $f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ , $f_{X}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$}
-	\Output{\ $BC(A,B) = $ the similarity between $A$ and $B$ according to Bray-Curtis index}
+	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, \\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ , \\$f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$}
+	\Output{$BC(A,B) = $ the similarity between $A$ and $B$ according to Bray-Curtis index}
 	\BlankLine
 	$num \gets 0$\;
 	$den \gets 0$\;
@@ -35,13 +39,14 @@ A last note, we can observe that in the Frequency Jaccard index we don't have to
 	\label{alg:bray-curtis}
 \end{algorithm}
 
+
 \begin{algorithm}[h]
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, $f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ , $f_{X}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$, $R =$ summation of all frequency}
-	\Output{\ $FJ(A,B) = $ the similarity between $A$ and $B$ according to Frequency Jaccard index}
+	\Input{\ $\mathcal{W} = $ dictionary of $q$-grams, \\$f_{A}[x] = $ frequency of each $x \in \mathcal{W}$ in $A$ ,\\ $f_{B}[x] = $ frequency of each $x \in \mathcal{W}$ in $B$,\\ $R =$ summation of all frequency}
+	\Output{$FJ(A,B) = $ the similarity between $A$ and $B$ according to Frequency Jaccard index}
 	\BlankLine
 	$num \gets 0$\;
 	\ForEach{$x \in \mathcal{W}$}{
@@ -53,52 +58,68 @@ A last note, we can observe that in the Frequency Jaccard index we don't have to
 	\label{alg:jaccard}
 \end{algorithm}
 
-Defined this procedures, in the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$ and $R$.
+In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$ and $R$.
 
-% \clearpage 
-
+\clearpage 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Naive approach}
 
 	The naive approach consists in enumerate all the possible $q$-grams of $q$-paths leading to $u \in A \cup B$. 
-	This can be done by starting a $\textsc{dfs}$ for each $u \in A \cup B$
+	This can be done by starting a modified $\textsc{dfs}$ for each $u \in A \cup B$.
 	
     \begin{algorithm}[h]
-    
     \small
     \DontPrintSemicolon
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
-    \Input{\ $G = (V,E, L)$ undirected labeled graph}
-    \Output{\ }
-    
+    \Input{\ $q = $ length of the paths,\\$A, B = $ set of nodes to compare}
+    \Output{\ $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R$}
     \BlankLine
-    
-    
-    %\textbf{parallel} \ForEach{$u \in V$}{
-    %    \ForEach{$v \in N(u)$}{
-    %        \ForEach{$\langle C, f \rangle \in M_{i-1,v}$ such that $\chi(u) \not \in C$}{
-    %            $f' \gets M_{i,u}\left(C \cup \{\chi(u)\}\right)$\;
-    %            $M_{i,u} \gets \langle C \cup \{\chi(u)\}, f' + f \rangle$\;
-    %        }
-    %    }
-    %}   
-
-    % \Return{$M$}
-    %\setcounter{AlgoLine}{0}
-    
+    $R \gets 0$\;
+	$\mathcal{W} \gets \emptyset$\;
+	$f_{A \cup B} \gets \emptyset$ \quad \;    
+	$f_{A} \gets \emptyset$\; 
+	$f_{B} \gets \emptyset$\; 
+	\BlankLine
+    \textbf{parallel} \ForEach{$u \in A \cup B$}{
+		$\mathcal{W}_{u}, f_{u}  \gets \textsc{DFS}(u, q)$\;
+		$\mathcal{W} \gets \mathcal{W} \cup \mathcal{W}_{u}$\;
+		$f_{A \cup B} = f_{A \cup B} \cup f_{u}$\;
+	}
+	\BlankLine    
+	\ForEach{$\langle u, x \rangle \in f_{A \cup B}$}{ 
+		$R \gets R + f_{A \cup B}[\langle u, x \rangle]$\;
+		\If{$u \in A$}{
+			$f_{A}[x] \gets f_{A}[x] + f_{A \cup B}[\langle u, x \rangle]$\;
+		}
+		\If{$u \in B$}{
+			$f_{B}[x] \gets f_{B}[x] + f_{A \cup B}[\langle u, x \rangle]$\;
+		}
+	}
+	\BlankLine
+    \Return{$\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R$}
     \caption{\textsc{brute-force}}
-    
     \label{alg:brute-force}
     \end{algorithm}
 
-	These are the real values for $FJ(A,B)$ and $BC(A,B)$ 
+	Note that, as we have to separate the frequencies between $f_{A}$ and $f_{B}$, the type of $f_{A \cup B}$ is not a map $ \Sigma^{q} \rightarrow \mathbb{N}$
+	but instead is a map $V \times \Sigma^{q} \rightarrow \mathbb{N}$, where the element in $V$ is the leading node of the $q$-path associated to the $q$-gram.\\ 
+	
+	The value of $FJ(A,B)$ and $BC(A,B)$ calculated using this method\\
+	
+	For completeness we also illustrate the $\textsc{DFS}$ algorithm.
 	
 % \clearpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Efficient computation}
 
 % \clearpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Color coding}
 
 \begin{algorithm}[h]
@@ -134,6 +155,8 @@ Defined this procedures, in the next algorithms we focus only to compute the val
 \end{algorithm}
 
 \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Colorful sampling}
 
 \begin{algorithm}[h]
@@ -180,6 +203,8 @@ Defined this procedures, in the next algorithms we focus only to compute the val
 \end{algorithm}
 
 \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Frequency count}
 
 \begin{algorithm}[h]
@@ -223,18 +248,24 @@ Defined this procedures, in the next algorithms we focus only to compute the val
 \end{algorithm}
 
 \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Frequency sampling}
 
 TODO 
 % \clearpage
 
 \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Estimating similarity indices}
 
 TODO 
 %  \clearpage
 
 \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Baseline algorithm}
 
 In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach .
