@@ -178,7 +178,7 @@ which is a significant benefit when $|\Sigma|$ or $q$ are large.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Color coding}
+\subsection*{$\textsc{preprocess}(G,q)$: Color coding of the $q$-paths}
 
 Now we illustrate how to preprocessing the input graph $G=(V,E)$ given an integer $q > 0$, in particular we restrict our attention to $q = O(\log |V|)$.
 
@@ -208,7 +208,7 @@ then reuse the dynamic programming table for different values of $A,B$ or even $
 		}   
 	}
 	\Return{$M$}	
-	\caption{preprocess: \textsc{color-coding}}
+	\caption{\textsc{preprocess}: \textsc{color-coding}}
 	\label{alg:color-coding}
 \end{algorithm}
 
@@ -233,14 +233,45 @@ Each pairs can be stored in $O(1)$ as they are simply $2$ integer, we have a tot
 	returns the dynamic programming table $M$ of color coding in $O(|E|\ 2^{q})$ time and $O(|V|\ 2^{q})$ space. 
 \end{lemma}
 
-Using the dynamic programming table $M$ 
+It is not difficult to modify the Algorithm 5 to list also the colorful $q$-grams, printing $L(\pi)$ for each colorful $q$-path $\pi$.
+This makes the algorithms inefficient, indeed we still have to face with the problem that $\mathcal{L} \sim \Sigma^{q}$. \\
 
+So we will pass to the next step.
 
-
-\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Colorful sampling}
+\subsection*{$\textsc{query}(A,B)$: Sampling and sketching colorful paths}
+
+Now using the dynamic programming table $M$, and given two set of nodes $A, B$, 
+we want to approximate the values of $BC(A,B)$ and $FJ(A,B)$.\\
+
+As already told, we can't explore all the colorful $q$-grams, so our idea is to 
+construct a sketch of $\mathcal{L}$, without explicitly calculate it, 
+by sampling $r$ $q$-paths from $M$, where $r < \mathcal{L}$ is a user-selectable parameter.
+
+We will use the method of the bottom-$k$ sketch by taking, without repetition, the first $r$ $q$-paths. \\
+
+Our algorithm for $\textsc{query}(A,B)$ consist of three phases as follows:
+
+\begin{itemize}
+	\item Compute a suitable sketch $W \subset \mathcal{L}$ such $\tau = |W|$ is at most $r$, by sampling colorful $q$-paths using $M$.
+	\item Compute $R$ and $f_{A}[x]$, $f_{B}[x]$ for each $x \in W$.
+	\item Approximate $BC(A,B)$ with $BC_{W}(A,B)$ and $FJ(A,B)$ with $FJ_{W}(A,B)$.
+\end{itemize}
+
+Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
+
+\begin{equation}		
+	BC_{W}(A,B) = \frac{ 2 \times \Sigma_{x \in W} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in W} f_{A}[x] + f_{B}[x] }
+\end{equation}
+
+\begin{equation}	
+	FJ_{W}(A,B) = \frac{ \Sigma_{x \in W} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in W} f_{A \cup B}[x] }
+\end{equation}
+
+\subsection*{Phase 1: Colorful sampler}
+\subsection*{Phase 2: Frequencies count}
+\subsection*{Phase 3: Indices estimation}
 
 \begin{algorithm}[h]
 	
@@ -248,11 +279,8 @@ Using the dynamic programming table $M$
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $X =$ array of nodes from graph $G$; $M =$ color coding table for $G$; $r =$ number of colorful paths to sample.}
-	\Output{\ $W = $ random sample set of colorful grams $x \in L(X)$ with probability $p_X(x)$.}
-	
-	%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
-	
+	\Input{$X =$ array of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
+	\Output{$W = $ random sample set of colorful grams $x \in L(X)$ with probability $p_X(x)$.}
 	$R \gets \{\}$\;
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
@@ -261,10 +289,7 @@ Using the dynamic programming table $M$
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
 	\Return{$W = \{ L(P) : P \in R \}$}
-	%\setcounter{AlgoLine}{0}
-	
 	\BlankLine
-	
 	\SetKwProg{myproc}{Function}{}{}
 	\myproc{\textsc{random-path-to}(u)}{
 		$P\gets \langle u \rangle$\;
@@ -278,8 +303,6 @@ Using the dynamic programming table $M$
 		}
 		\Return{P}   
 	}
-	
-	
 	\caption{query: \textsc{colorful-sampler}}
 	\label{alg:randomsample}
 	\label{alg:sample}
@@ -351,11 +374,8 @@ TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Baseline algorithm}
 
-In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach .
-
-
-
-the baseline algorithm BASELINE, 
+In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach,
+the baseline algorithm $\textsc{Base}$s,s 
 that finds random paths in a simple way,
 
 \begin{algorithm}[h]
