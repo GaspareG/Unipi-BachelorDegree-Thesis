@@ -110,7 +110,7 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	
 	\clearpage
 	
-	For completeness we also illustrate the modified $\textsc{DFS}$ algorithm that keeps track of the current $q$-path and the relative $q$-gram.
+	For completeness we also illustrate the modified $\textsc{DFS}$ algorithm that keeps track of the current $q$-path and its relative $q$-gram.
 	
     \begin{algorithm}[h]
 		\small
@@ -164,11 +164,27 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Efficient computation}
 
-% \clearpage
+The main hurdle of the problem is to compute the frequency map $f_{X}[\ ]$ for some sets $X \in V$,
+as it can grow up to have a size of $|\Sigma|^{q}$ and its definition requires to explore $|V|^{q}$ $q$-paths.\\
+
+We present a random estimator based on color coding and sketching with the property that it can be computed
+efficiently even on big networks and its expected value is the actual similarity index.\\
+
+As first thing using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)} * |V|$, 
+thus making it feasible for large value of $|V|$ and with $q = O(\log n)$.
+
+Second, instead of calculate the correct value of $f_{X}[\ ]$ we computing its sketch with a size small compared to $|\Sigma|^{q}$,
+which is a significant benefit when $|\Sigma|$ or $q$ are large.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Color coding}
+
+Now we illustrate how to preprocessing the input graph $G=(V,E)$ given an integer $q > 0$, in particular we restrict our attention to $q = O(\log |V|)$.
+
+Note that the preprocessing is independent from the labeling function $L$ and from the subsets $A,B$ to compare, 
+as it depends only from the graph $G$ and the value of $q$, so we can execute the preprocessing once and 
+then reuse the dynamic programming table for different values of $A,B$ or even $L$.\\
 
 \begin{algorithm}[h]
 	
@@ -176,15 +192,11 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $G = (V,E)$ undirected graph with $q$ random colors.}
-	\Output{\ $M = $ dynamic programming table for color coding.}
-	
-	% $M\in [q]\times V$ is the dynamic programming table of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
-	
+	\Input{$G = (V,E)$ undirected graph with $q$ random colors.}
+	\Output{$M = $ dynamic programming table for color coding.}
 	\BlankLine
-	
 	\textbf{parallel} \lForEach{$u \in V$}{$M_{1,u} = \langle \chi(u), 1 \rangle$}
-	
+	\BlankLine
 	\For{$i \in \{ 2, 3, \ldots, q\}$}{
 		\textbf{parallel} \ForEach{$u \in V$}{
 			\ForEach{$v \in N(u)$}{
@@ -195,12 +207,35 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 			}
 		}   
 	}
-	\Return{$M$}
-	%\setcounter{AlgoLine}{0}
-	
+	\Return{$M$}	
 	\caption{preprocess: \textsc{color-coding}}
 	\label{alg:color-coding}
 \end{algorithm}
+
+The goal is to list all the colorful $q$-paths in $G$ using a dynamic programming approach.\\
+
+First of all we assign a random coloring $\chi : V \rightarrow [q]$, so each node $u \in V$ has a color $\chi(u)$ independently and uniformly chosen from $[q]$.
+Algorithm 5 build and return a table $M$ of size $q \times |V|$ 
+where $M_{i,j}$ stores the collection of pairs $\langle C, f \rangle$ where  $C \subseteq [q]$ is a color set such $|C| = i$ and there are $f$ colorful $i$-paths leading to the node $j$.\\
+
+Our assumption that $q = O(\log |V|)$ allows us to implement, using bit manipulations, operations on color sets in $O(1)$ time as they fits in a machine words.\\
+
+Note that each entry $M_{i, j}$ contains at most $\binom{q}{i}$ sets, each with $i$ colors.
+Hence the computation of the row $i$ can be done in parallel as it depends only from the row $i-1$ and require $O(|E|\ \binom{q}{i-1})$ time (as we scan all the adjacency list).
+The entire computation requires thus $O(|E|\ \Sigma_{i=1}^{q}{\binom{q}{i-1}}) = O(|E|\ 2^{q})$ time.\\
+
+For what concern space, the table $M$, as we already told, have a total of $q \times |V|$ entry, each of which contains at most $\binom{q}{i}$ pairs $\langle C, f \rangle$.
+
+Each pairs can be stored in $O(1)$ as they are simply $2$ integer, we have a total size of $O(\Sigma_{i=1}^{q}{\Sigma_{j=1}^{|V|}{ \binom{q}{i}}}) = O(|V|\ \Sigma_{i=1}^{q}{\binom{q}{i}}) = O(|V|\ 2^{q})$.
+
+\begin{lemma}
+	Given an undirected graph $G=(V, E)$ random colored in $[q]$, where $q = O(\log |V|)$, Algorithm 5 (preprocess($G$,$q$))
+	returns the dynamic programming table $M$ of color coding in $O(|E|\ 2^{q})$ time and $O(|V|\ 2^{q})$ space. 
+\end{lemma}
+
+Using the dynamic programming table $M$ 
+
+
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -329,8 +364,8 @@ that finds random paths in a simple way,
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{\ $X =$ array of nodes from graph $G$; $ r =$ number of paths to sample.}
-	\Output{\ $f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
+	\Input{$X =$ array of nodes from graph $G$; $ r =$ number of paths to sample.}
+	\Output{$f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
 	
 	$R\gets\{\}$\;
 	\textbf{parallel} \For{$j\in [r]$}{
@@ -345,22 +380,29 @@ that finds random paths in a simple way,
 		$f_X[x] \gets f_X[x]+1$
 	}
 	\Return{$f_X$}
-	%\setcounter{AlgoLine}{0}
-	
-	\BlankLine
-	
-	\SetKwProg{myproc}{Function}{}{}
-	\myproc{\textsc{naive-random-path-to}(u)}{
-		$P\gets \langle u \rangle$\;
-		\For{$i \in \{q-1,\ldots, 1\}$}{
-			\lIf{$N(u) \setminus P = \emptyset$}{return $\mathtt{null}$}
-			$u\gets$ randomly chosen $v \in N(u) \setminus P$ with uniform prob.\;
-			$P\gets u \cdot P$\;
-		}
-		\Return{P}   
-	}
-	
 	\caption{\textsc{base}\xspace, the baseline sampler}
+	\label{alg:baseline}
+	%\setcounter{AlgoLine}{0}
+\end{algorithm}
+	
+	And the algorithm \textsc{naive-random-path-to}:
+	
+	\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$u =$ }
+	\Output{$\pi = $ random $q$-path leading to $u$ or $\mathtt{null}$ } 
+	$\pi\gets \langle u \rangle$\;
+	\For{$i \in \{q-1,\ldots, 1\}$}{
+		\lIf{$N(u) \setminus \pi = \emptyset$}{return $\mathtt{null}$}
+		$u\gets$ randomly chosen $v \in N(u) \setminus \pi$ with uniform prob.\;
+		$\pi\gets u \cdot \pi$\;
+	}
+	\Return{$\pi$}   
+	
+	\caption{\textsc{naive-random-path-to}}
 	\label{alg:baseline}
 \end{algorithm}
 
