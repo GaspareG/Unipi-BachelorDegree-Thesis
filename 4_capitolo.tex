@@ -2,10 +2,19 @@
 
 \chapter{Project development}
     
+    To confirm the validity, both in terms of correctness and performance, of our algorithms we implemented all the procedures previously illustrated. 
+    The most important parts of the code can found in appendix of this thesis.
+    
     \section{Implementation choices}
     
+    The algorithms have been implemented using the C++ programming language, 
+    as it provides good performance in practice and a lot of well-implemented data structures in the Standard Template Library.\\
     
+    The parallelization has been implemented using the OpenMP API, which defines a simple and flexible interface for developing parallel applications, in particular we use it to manage the parallel for-loops and the critical sections.\\
     
+    To make the tests repeatable we used random generators with fixed seed
+    
+    \clearpage
     \section{Dataset}
     
     For the experiments we use two different kind of dataset, a small one so we can easily brute-force the real indices and compare the relative errors, and a big one in order to benchmark the performance of the different approach.
@@ -48,31 +57,55 @@
     
 	\subsection*{Running time}
 	
-	In this experiment we compare the different running time, of all the parts, from all algorithms.
-	
-	Note that this is an important experiments, as in the real application time is crucial factor.\\
+	In this experiment we compare the different running time, of all the parts, from all algorithms. Note that this is an important experiments, as in the real application time is crucial factor.\\
 
+	First of all we test how much we can go up in \textsc{Brute-Force} with the value of $q$ and the sample size, as this is our bottleneck to analyze the relative errors for the approximated methods.\\ 
+	
 	\begin{table}[h]
 		\centering
 		\label{my-label}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|}
 			\hline
-			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+			$q$ & $|A \cup B|$ & \textsc{Brute-Force} \\ \hline
+			$4$ & $100$        & $1\,234$ \\ \hline
+			$4$ & $200$        & $1\,234$ \\ \hline
+			$4$ & $500$        & $1\,234$ \\ \hline
+			$5$ & $100$        & $1\,234$ \\ \hline
+			$5$ & $200$        & $1\,234$ \\ \hline
+			$5$ & $500$        & $1\,234$ \\ \hline
+			$6$ & $100$        & $1\,234$ \\ \hline
+			$6$ & $200$        & $1\,234$ \\ \hline
+			$6$ & $500$        & $1\,234$ \\ \hline
 		\end{tabular}
 		\caption{Time in milliseconds}
 	\end{table}
 	
+	\clearpage
+	
+	The second bottleneck for our algorithms is the preprocessing time for the dynamic programming table of color-coding, so we test for both the dataset how can we go up with the value of $q$. Always remembering from initial assumptions that the value of $q$ should not be to high. 
+
+	\begin{table}[h]
+		\centering
+		\label{my-label}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			$Dataset$       & $q$  & \textsc{Color-Coding} \\ \hline
+			\textsc{NetInf} & $7$  & $1\,234$ \\ \hline
+			\textsc{NetInf} & $9$  & $1\,234$ \\ \hline
+			\textsc{NetInf} & $11$ & $1\,234$ \\ \hline
+			\textsc{NetInf} & $13$ & $1\,234$ \\ \hline
+			\textsc{NetInf} & $15$ & $1\,234$ \\ \hline
+			\textsc{IMDb}   & $3$  & $1\,234$ \\ \hline
+			\textsc{IMDb}   & $4$  & $1\,234$ \\ \hline
+			\textsc{IMDb}   & $5$  & $1\,234$ \\ \hline
+			\textsc{IMDb}   & $6$  & $1\,234$ \\ \hline
+		\end{tabular}
+		\caption{Time in milliseconds}
+	\end{table}
+
 	\subsection*{Relative error and variance}
 	
-	In this experiment we will compare, for increasing value of $R$, how accurate are the different algorithms.\\
+%	In this experiment we will compare, for increasing value of $R$, how accurate are the different algorithms.\\
 		
 	TODO
 	\begin{table}[h]
