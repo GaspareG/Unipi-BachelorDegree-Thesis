@@ -271,7 +271,9 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-Now we present our sampling function:
+We are interested in sampling $r$ colorful $q$-paths , leading to nodes belonging to $X$, using the color coding table $M$, sampled .\\
+
+The number of the colorful $q$-paths in $G$ is $|W| = \Sigma_{x \in V}{ M_{q,x}([q])}$ of which $M_{q,i}([q])$ are leading to the node $i$. TODO 
 
 \begin{algorithm}[h]
 	\small
@@ -279,15 +281,15 @@ Now we present our sampling function:
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\Input{$X =$ array of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
-	\Output{$W = $ random sample set of colorful grams $x \in L(X)$ with probability $p_X(x)$.}
+	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$.}
 	$R \gets \{\}$\;
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
-		$P\gets \textsc{random-path-to}(u)$\;
-		\lIf{$P\not\in R$}{$R \gets R \cup \{ P \}$}
+		$\pi\gets \textsc{random-path-to}(u)$\;
+		\lIf{$\pi\not\in R$}{$R \gets R \cup \{ \pi \}$}
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
-	\Return{$W = \{ L(P) : P \in R \}$}
+	\Return{$W = \{ L(\pi) : \pi \in R \}$}
 	
 	\caption{\textsc{colorful-sampler}}
 	\label{alg:randomsample}
@@ -299,8 +301,8 @@ Now we present our sampling function:
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$M =$ color coding table for $G$\\ $u =$ }
-	\Output{$\pi = $ random colorful }	
+	\Input{$M =$ color coding table for $G$\\$u = $ leading node of the path }
+	\Output{$\pi = $ random colorful path }	
 	\BlankLine
 	\SetKwProg{myproc}{Function}{}{}
 	$P\gets \langle u \rangle$\;
@@ -318,74 +320,57 @@ Now we present our sampling function:
 	\label{alg:sample}
 \end{algorithm}
 
-
-\subsection*{Phase 2: Frequencies count}
-
-
-
-\subsection*{Phase 3: Indices estimation}
-
-
 \clearpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Frequency count}
+\subsection*{Phase 2: Frequency count}
+
+TODO 
 
 \begin{algorithm}[h]
-	
-	\small
-	\DontPrintSemicolon
-	\SetKwInOut{Input}{Input}
-	\SetKwInOut{Output}{Output}
-	\Input{\ $X =$ array of nodes from graph $G$; $W = $ sample of its colorful $q$-grams.}
-	\Output{\ $f_X[x] = $ frequency of each $x \in W$.}
-	
-	%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
-	
-	\BlankLine
-	$T\gets[\,]$ \quad // step~$i=1$\; 
-	\textbf{parallel} \ForEach{$u \in X$ such that $L(u)$ appears at the end of a $q$-gram in $W$}{
-		$T \gets T \cup [\langle u, L(u), \{\chi(u) \} \rangle]$\;
-	}
-	
-	\For{$i \in \{ 2, 3, \ldots, q\}$}{
-		$T' \gets [\,]$\;
-		\textbf{parallel} \ForEach{$\langle z, x, C \rangle \in T$}{
-			\ForEach{$v \in N(z)$ such that $\chi(v) \not \in C$}{
-				\If{$L(v) \cdot x$ is a suffix of a $q$-gram in $W$}{
-					$T' \gets T' \cup [\langle v, L(v) \cdot x, C \cup \{\chi(v)\} \rangle]$  \quad //critical s.\;
-				}
+
+\small
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+\Input{\ $X =$ array of nodes from graph $G$; $W = $ sample of its colorful $q$-grams.}
+\Output{\ $f_X[x] = $ frequency of each $x \in W$.}
+
+%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
+
+\BlankLine
+$T\gets[\,]$ \quad // step~$i=1$\; 
+\textbf{parallel} \ForEach{$u \in X$ such that $L(u)$ appears at the end of a $q$-gram in $W$}{
+	$T \gets T \cup [\langle u, L(u), \{\chi(u) \} \rangle]$\;
+}
+
+\For{$i \in \{ 2, 3, \ldots, q\}$}{
+	$T' \gets [\,]$\;
+	\textbf{parallel} \ForEach{$\langle z, x, C \rangle \in T$}{
+		\ForEach{$v \in N(z)$ such that $\chi(v) \not \in C$}{
+			\If{$L(v) \cdot x$ is a suffix of a $q$-gram in $W$}{
+				$T' \gets T' \cup [\langle v, L(v) \cdot x, C \cup \{\chi(v)\} \rangle]$  \quad //critical s.\;
 			}
-		}   
-		$T \gets T'$\;
-	}
-	$f_X \gets (0,\ldots,0)$\;
-	\lForEach{$\langle z, x, C \rangle \in T$}{
-		$f_X[x] \gets f_X[x]+1$
-	}
-	
-	\Return{$f_X$}
-	%\setcounter{AlgoLine}{0}
-	
-	\caption{f-count, exactly counting frequencies of sampled $q$-grams}
-	\label{alg:frequency}
+		}
+	}   
+	$T \gets T'$\;
+}
+$f_X \gets (0,\ldots,0)$\;
+\lForEach{$\langle z, x, C \rangle \in T$}{
+	$f_X[x] \gets f_X[x]+1$
+}
+
+\Return{$f_X$}
+%\setcounter{AlgoLine}{0}
+
+\caption{f-count, exactly counting frequencies of sampled $q$-grams}
+\label{alg:frequency}
 \end{algorithm}
 
-\clearpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Frequency sampling}
-
-TODO 
-% \clearpage
 
 \clearpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Estimating similarity indices}
+\subsection*{Phase 3: Indices estimation}
 
 TODO 
-%  \clearpage
+
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
