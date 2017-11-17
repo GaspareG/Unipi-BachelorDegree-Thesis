@@ -270,11 +270,10 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 \end{equation}
 
 \subsection*{Phase 1: Colorful sampler}
-\subsection*{Phase 2: Frequencies count}
-\subsection*{Phase 3: Indices estimation}
+
+Now we present our sampling function:
 
 \begin{algorithm}[h]
-	
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
@@ -285,28 +284,47 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
 		$P\gets \textsc{random-path-to}(u)$\;
-		\lIf{$P\not\in R$}{$R \gets R \cup \{ P \}$ \quad //critical section}
+		\lIf{$P\not\in R$}{$R \gets R \cup \{ P \}$}
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
 	\Return{$W = \{ L(P) : P \in R \}$}
-	\BlankLine
-	\SetKwProg{myproc}{Function}{}{}
-	\myproc{\textsc{random-path-to}(u)}{
-		$P\gets \langle u \rangle$\;
-		$D\gets [q] \setminus \{\chi(u)\}$\;
-		
-		\For{$i \in \{q-1,\ldots, 1\}$}{
-			%Let $N$ be the neighbors $v$ of $u$ s.t. $M[i][v]$ contains the set of colors $D$\;
-			$u\gets$ randomly chosen $v \in N(u)$ with probability~$p_{v} = \frac{M_{i,v}(D) }{ \sum_{z\in N(u)} M_{i,z}(D)}$\;
-			$P\gets u \cdot P$\;
-			$D\gets D\setminus \{\chi(u)\}$\;
-		}
-		\Return{P}   
-	}
-	\caption{query: \textsc{colorful-sampler}}
+	
+	\caption{\textsc{colorful-sampler}}
 	\label{alg:randomsample}
 	\label{alg:sample}
 \end{algorithm}
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$M =$ color coding table for $G$\\ $u =$ }
+	\Output{$\pi = $ random colorful }	
+	\BlankLine
+	\SetKwProg{myproc}{Function}{}{}
+	$P\gets \langle u \rangle$\;
+	$D\gets [q] \setminus \{\chi(u)\}$\;
+	
+	\For{$i \in \{q-1,\ldots, 1\}$}{
+		%Let $N$ be the neighbors $v$ of $u$ s.t. $M[i][v]$ contains the set of colors $D$\;
+		$u\gets$ randomly chosen $v \in N(u)$ with probability~$p_{v} = \frac{M_{i,v}(D) }{ \sum_{z\in N(u)} M_{i,z}(D)}$\;
+		$P\gets u \cdot P$\;
+		$D\gets D\setminus \{\chi(u)\}$\;
+	}
+	\Return{P}   
+	\caption{\textsc{random-path-to}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
+
+
+\subsection*{Phase 2: Frequencies count}
+
+
+
+\subsection*{Phase 3: Indices estimation}
+
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,8 +393,7 @@ TODO
 \section{Baseline algorithm}
 
 In order to validate the effectiveness of our approach, we compare the previously seen algorithms against a naive randomized approach,
-the baseline algorithm $\textsc{Base}$s,s 
-that finds random paths in a simple way,
+the baseline algorithm $\textsc{base}$ that find random paths in a simple way.
 
 \begin{algorithm}[h]
 	
@@ -384,22 +401,27 @@ that finds random paths in a simple way,
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ array of nodes from graph $G$; $ r =$ number of paths to sample.}
-	\Output{$f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
-	
+	\Input{$X =$ array of nodes from graph $G$\\$r =$ number of paths to sample}
+	\Output{$W =$ dictionary of $q$-grams sampled\\$f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
+	\BlankLine
 	$R\gets\{\}$\;
+	\BlankLine
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with uniform probability\;
 		$P\gets \textsc{naive-random-path-to}(u)$\;
-		\lIf{$P \neq \mathtt{null}$ and $P\not\in R$}{$R \gets R \cup \{ P \}$ \quad //critical section}
+		\lIf{$P \neq \mathtt{null}$ and $P\not\in R$}{$R \gets R \cup \{ P \}$}
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
+	\BlankLine
 	$W \gets [ L(P) : P \in R ]$\;
 	$f_X \gets (0,\ldots,0)$\;
+	\BlankLine
 	\lForEach{$x \in W$}{
 		$f_X[x] \gets f_X[x]+1$
 	}
-	\Return{$f_X$}
+	\BlankLine
+	\Return{$\langle W, f_X \rangle$}
+	\BlankLine
 	\caption{\textsc{base}\xspace, the baseline sampler}
 	\label{alg:baseline}
 	%\setcounter{AlgoLine}{0}
@@ -412,7 +434,7 @@ that finds random paths in a simple way,
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$u =$ }
+	\Input{$u = $ leading node of the path }
 	\Output{$\pi = $ random $q$-path leading to $u$ or $\mathtt{null}$ } 
 	$\pi\gets \langle u \rangle$\;
 	\For{$i \in \{q-1,\ldots, 1\}$}{
@@ -425,5 +447,10 @@ that finds random paths in a simple way,
 	\caption{\textsc{naive-random-path-to}}
 	\label{alg:baseline}
 \end{algorithm}
+
+Note that, because this is a naive approach, the \textsc{naive-random-path-to}
+may fail to find a $q$-path leading to $u$ as it go to explore dead-end paths.
+
+Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $R = \Sigma_{x \in W} f_{X}[x]$.
 
 \clearpage
