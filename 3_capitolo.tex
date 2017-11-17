@@ -271,7 +271,7 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-We are interested in sampling $r$ colorful $q$-paths , leading to nodes belonging to $X$, using the color coding table $M$, sampled .\\
+We are interested in sampling $r$ colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$, sampled .\\
 
 The number of the colorful $q$-paths in $G$ is $|W| = \Sigma_{x \in V}{ M_{q,x}([q])}$ of which $M_{q,i}([q])$ are leading to the node $i$. TODO 
 
@@ -323,7 +323,19 @@ The number of the colorful $q$-paths in $G$ is $|W| = \Sigma_{x \in V}{ M_{q,x}(
 \clearpage
 \subsection*{Phase 2: Frequency count}
 
-TODO 
+Now that we have a sample $W$ composed by colorful $q$-grams, of a suitable size, 
+we are interested, for a multiset of nodes $X$, in calculate $f_{X}[x]$ for each $x \in W$.
+Algorithm 8, for steps $i = 1, 2, \ldots, q$, proceed by expanding in $BFS$ order only the
+$i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$
+(this operation can be made more space efficient by using tries or by a binary search in a set of strings).\\
+
+We maintain a multiset $T$ of these $i$-grams, each represented by a triple $\langle z, x, C \rangle$
+to indicate that exists a $i$-path starting from z and leading to a node $u \in X$ whose $i$-gram is $x$
+and its colorset is $C$ (note that the same triple triple $\langle z, x, C \rangle$ can appear more times in $T$ 
+as there might exist multiple path from $z$ to $u$ labeled with the same $i$-gram $x$).\\
+
+Also in this case, considering that the computation for the $i$-grams depends only by the $(i-1)$-grams,
+we can parallelize the operations for the triple with same length $i$.
 
 \begin{algorithm}[h]
 
@@ -331,42 +343,92 @@ TODO
 \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
 \SetKwInOut{Output}{Output}
-\Input{\ $X =$ array of nodes from graph $G$; $W = $ sample of its colorful $q$-grams.}
-\Output{\ $f_X[x] = $ frequency of each $x \in W$.}
-
-%Let $M\in [q]\times V$ be the dynamic programming matrix of color coding, where $M[i][u]$ is the set of pairs $C,f$ with $C\subseteq [q]$, $|C|=i$, and $f\in \mathds{N}$ such that $f$ is the number of paths having color set $C$ ending in $u$\;
-
+\Input{$X =$ array of nodes from graph $G$\\$W = $ sample of its colorful $q$-grams}
+\Output{$f_X[x] = $ frequency of each $x \in W$}
 \BlankLine
 $T\gets[\,]$ \quad // step~$i=1$\; 
+\BlankLine
 \textbf{parallel} \ForEach{$u \in X$ such that $L(u)$ appears at the end of a $q$-gram in $W$}{
 	$T \gets T \cup [\langle u, L(u), \{\chi(u) \} \rangle]$\;
 }
-
+\BlankLine
 \For{$i \in \{ 2, 3, \ldots, q\}$}{
 	$T' \gets [\,]$\;
 	\textbf{parallel} \ForEach{$\langle z, x, C \rangle \in T$}{
 		\ForEach{$v \in N(z)$ such that $\chi(v) \not \in C$}{
 			\If{$L(v) \cdot x$ is a suffix of a $q$-gram in $W$}{
-				$T' \gets T' \cup [\langle v, L(v) \cdot x, C \cup \{\chi(v)\} \rangle]$  \quad //critical s.\;
+				$T' \gets T' \cup [\langle v, L(v) \cdot x, C \cup \{\chi(v)\} \rangle]$\;
 			}
 		}
 	}   
 	$T \gets T'$\;
 }
+\BlankLine
 $f_X \gets (0,\ldots,0)$\;
 \lForEach{$\langle z, x, C \rangle \in T$}{
 	$f_X[x] \gets f_X[x]+1$
 }
-
+\BlankLine
 \Return{$f_X$}
-%\setcounter{AlgoLine}{0}
-
-\caption{f-count, exactly counting frequencies of sampled $q$-grams}
+\BlankLine
+\caption{\textsc{f-count}: exactly counting frequencies of sampled $q$-grams}
 \label{alg:frequency}
 \end{algorithm}
 
+\clearpage
+
+It may happen that, in some big instance, Algorithm 8 
+can explore many colorful paths as it expands the paths in the $X \cup N^{<q}(X)$ nodes.
+
+To alleviate this issue we present a modified version of the Algorithm 6,
+that we call $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having sketches.\\
+
+In Algorithms 9 replace both Algorithm 6 and 8 by simply add the lines $8$ and $9$ to the Algorithm 6
+to compute the frequency map $f_{X}[x]$ based on sampled $q$-paths $R$.\\
+
+Of course this speed up the computation time, 
+on the other hand, as we will see in the next chapter, 
+the accuracy will be affected and we will need a greater value of $r$ 
+to have a better estimation of the similarity indices.
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$X =$ array of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[x] =$ frequency of each $x \in W$}
+	$R \gets \{\}$\;
+	\BlankLine
+	\textbf{parallel} \For{$j\in [r]$}{
+		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
+		$\pi\gets \textsc{random-path-to}(u)$\;
+		\lIf{$\pi\not\in R$}{$R \gets R \cup \{ \pi \}$}
+		\lElse{$j\gets j-1$ \quad //repeat the step}
+	}
+	\BlankLine
+	$W \gets \{ L(\pi) : \pi \in R \}$\;
+	\BlankLine
+	$f_X \gets (0,\ldots,0)$\;
+	\lForEach{$\pi \in R$}{
+		$f_X[L(\pi)] \gets f_X[L(\pi)]+1$
+	}
+	\BlankLine
+	\Return{$\langle W, f_{X} \rangle$}
+	\caption{\textsc{f-samp}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
+
+\begin{lemma}
+	For any multiset of nodes $X$, 
+	Algorithm 9 ($\textsc{f-samp}(X, M, r)$) return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
+	in $O(rq)$ both in time and space, 
+	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
+\end{lemma}
 
 \clearpage
+
 \subsection*{Phase 3: Indices estimation}
 
 TODO 
