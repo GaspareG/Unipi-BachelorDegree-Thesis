@@ -58,6 +58,10 @@ So we define the following procedures:\\
 	\label{alg:jaccard}
 \end{algorithm}
 
+\begin{lemma}
+	The execution of \textsc{Bray-Curtis} or \textsc{Frequency-Jaccard} require $O(|W|)$ time and $O(1)$ space. 	
+\end{lemma}
+
 In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$ and $R$.
 
 \clearpage 
@@ -106,8 +110,8 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	Note that, as we have to separate the frequencies between $f_{A}$ and $f_{B}$, the type of $f_{A \cup B}$ is not a map $ \Sigma^{q} \rightarrow \mathbb{N}$
 	but instead is a map $V \times \Sigma^{q} \rightarrow \mathbb{N}$, where the element in $V$ is the leading node of the $q$-path associated to the $q$-gram.\\ 
 	
-	The values of $FJ(A,B)$ and $BC(A,B)$ calculated using this method are exact, we will use it only to compare the precision of the following approaches as it found all the possibile $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\\
-	
+	The values of $FJ(A,B)$ and $BC(A,B)$ calculated using this method are exact, we will use it only to compare the precision of the following approaches as it found all the possible $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\\
+		
 	\clearpage
 	
 	For completeness we also illustrate the modified $\textsc{DFS}$ algorithm that keeps track of the current $q$-path and its relative $q$-gram.
@@ -144,15 +148,19 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	
 	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already present in the path $\pi$, so we restrict to the simple $q$-paths.\\
 	
+	\begin{lemma}
+		For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} is $O(|V|^{q})$ time and require $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.
+	\end{lemma}
+
 	\begin{minipage}{0.6\textwidth}\raggedright
 		\begin{esempio}
 		\end{esempio}
 		The call to the method $\textsc{DFS}(0, 3)$ return:\\
 		
 		$\mathcal{W} = \{ abc, acb, acc \}$\\
-		$f_{u}[\langle 0, abc \rangle] = 4$ ($\textsc{0-1-3}$ $\textsc{0-1-4}$ $\textsc{0-2-3}$ $\textsc{0-2-4}$)\\
-		$f_{u}[\langle 0, acb \rangle] = 2$ ($\textsc{0-4-1}$ $\textsc{0-4-2}$)\\
-		$f_{u}[\langle 0, acc \rangle] = 1$ ($\textsc{0-4-3}$)\\
+		$f_{u}[\langle 0, abc \rangle] = 4$ ($\textsc{3-1-0}$ $\textsc{4-1-0}$ $\textsc{3-2-0}$ $\textsc{4-2-0}$)\\
+		$f_{u}[\langle 0, acb \rangle] = 2$ ($\textsc{1-4-0}$ $\textsc{2-4-0}$)\\
+		$f_{u}[\langle 0, acc \rangle] = 1$ ($\textsc{3-4-0}$)\\
 	\end{minipage}
 	\begin{minipage}{0.35\textwidth}
 		\includegraphics[width=\linewidth]{figure/figure-3-2}
@@ -247,7 +255,7 @@ we want to approximate the values of $BC(A,B)$ and $FJ(A,B)$.\\
 
 As already told, we can't explore all the colorful $q$-grams, so our idea is to 
 construct a sketch of $\mathcal{L}$, without explicitly calculate it, 
-by sampling $r$ $q$-paths from $M$, where $r < \mathcal{L}$ is a user-selectable parameter.
+by sampling $r$ $q$-paths from $M$, where $r < |\mathcal{L}|$ is a user-selectable parameter.
 
 We will use the method of the bottom-$k$ sketch by taking, without repetition, the first $r$ $q$-paths. \\
 
@@ -271,30 +279,52 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-We are interested in sampling $r$ colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$, sampled .\\
+We are interested in sampling $r$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\\
 
-The number of the colorful $q$-paths in $G$ is $|W| = \Sigma_{x \in V}{ M_{q,x}([q])}$ of which $M_{q,i}([q])$ are leading to the node $i$. TODO 
+In particular the sample depends on the frequencies of the $q$-grams ending in $x \in X$,
+as in the case of consistent weighted sampling, where more frequent $q$-grams need to be sampled more ofter.\\
+
+As we don't know a priori the frequency of $q$-grams before sampling, 
+we can extract the $q$-paths by looking the frequencies of colorful $q$-paths in $M$. 
+We know that the number of colorful $q$-paths ending in $v$ is $M_{q,v}([q])$, 
+so we extract the starting node $x \in X$ of our weighted random $q$-paths with a probability:
+
+\begin{equation}
+	p_{X}(v) = \frac{ M_{q,v}([q]) }{ \Sigma_{x \in X}{M_{q, x}([q])} }
+\end{equation}
+
+And then generating a random $q$-path by scanning the color coding table $M$ 
+backward from $q-1$ to $1$, choosing nodes with a probability similar to $p_{X}(v)$
+(except that during step $i$ we look at row $i$ and in the complementary of the color set of the current $i$-path )\\
+
+So our sampling algorithm is defined as:
+\clearpage
 
 \begin{algorithm}[h]
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ array of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
-	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$.}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
+	\Output{$W = $ random sample set of colorful $q$-grams of $q$-paths leading to $x \in X$ with probability $p_X(x)$.}
+	\BlankLine
 	$R \gets \{\}$\;
+	\BlankLine
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
 		$\pi\gets \textsc{random-path-to}(u)$\;
 		\lIf{$\pi\not\in R$}{$R \gets R \cup \{ \pi \}$}
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
+	\BlankLine
 	\Return{$W = \{ L(\pi) : \pi \in R \}$}
-	
+	\BlankLine
 	\caption{\textsc{colorful-sampler}}
 	\label{alg:randomsample}
 	\label{alg:sample}
 \end{algorithm}
+
+And \textsc{random-path-to} is defined as:
 
 \begin{algorithm}[h]
 	\small
@@ -305,20 +335,35 @@ The number of the colorful $q$-paths in $G$ is $|W| = \Sigma_{x \in V}{ M_{q,x}(
 	\Output{$\pi = $ random colorful path }	
 	\BlankLine
 	\SetKwProg{myproc}{Function}{}{}
+	\BlankLine
 	$P\gets \langle u \rangle$\;
 	$D\gets [q] \setminus \{\chi(u)\}$\;
-	
+	\BlankLine
 	\For{$i \in \{q-1,\ldots, 1\}$}{
 		%Let $N$ be the neighbors $v$ of $u$ s.t. $M[i][v]$ contains the set of colors $D$\;
 		$u\gets$ randomly chosen $v \in N(u)$ with probability~$p_{v} = \frac{M_{i,v}(D) }{ \sum_{z\in N(u)} M_{i,z}(D)}$\;
 		$P\gets u \cdot P$\;
 		$D\gets D\setminus \{\chi(u)\}$\;
 	}
+	\BlankLine
 	\Return{P}   
+	\BlankLine
 	\caption{\textsc{random-path-to}}
 	\label{alg:randomsample}
 	\label{alg:sample}
 \end{algorithm}
+
+Note that the method $\textsc{random-path-to}$ always find a colorful $q$-path,
+as we at each step select only between the nodes that lead us to a colorful $q$-path
+(i.e. the probability $p_{v}$ is $0$ for nodes that don't lead to a colorful $q$-path).
+This property is guaranteed by the way the color coding table $M$ is generated by Algorithm 5.
+
+\begin{lemma}
+	For any multiset of nodes $X$, 
+	Algorithm 6 return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
+	with a complexity of $O(rq)$ both in time and space, 
+	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
+\end{lemma}
 
 \clearpage
 \subsection*{Phase 2: Frequency count}
@@ -343,7 +388,7 @@ we can parallelize the operations for the triple with same length $i$.
 \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
 \SetKwInOut{Output}{Output}
-\Input{$X =$ array of nodes from graph $G$\\$W = $ sample of its colorful $q$-grams}
+\Input{$X =$ multiset of nodes from graph $G$\\$W = $ sample of its colorful $q$-grams}
 \Output{$f_X[x] = $ frequency of each $x \in W$}
 \BlankLine
 $T\gets[\,]$ \quad // step~$i=1$\; 
@@ -396,7 +441,7 @@ to have a better estimation of the similarity indices.
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ array of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
 	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[x] =$ frequency of each $x \in W$}
 	$R \gets \{\}$\;
 	\BlankLine
@@ -423,7 +468,7 @@ to have a better estimation of the similarity indices.
 \begin{lemma}
 	For any multiset of nodes $X$, 
 	Algorithm 9 ($\textsc{f-samp}(X, M, r)$) return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
-	in $O(rq)$ both in time and space, 
+	with a complexity of $O(rq)$ both in time and space, 
 	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
 \end{lemma}
 
