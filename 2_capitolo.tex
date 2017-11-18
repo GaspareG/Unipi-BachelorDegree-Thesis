@@ -45,26 +45,26 @@ In the last sections we present two different techniques we will use afterwards 
 
 Note that when $A = B$ we have $J(A,B) = BC(A,B) = 1$ and when $A \cap B = \emptyset$ we have $J(A,B) = BC(A,B) = 0$.
 
-Using set may be limiting as we consider only once the repeated values, we can easily extended the two previous definition to multiset.\\
+Using sets may be limiting as we consider only once the repeated values, we can easily extended the two previous definition to the multisets.\\
 
 \begin{definizione}
-	A multiset is a generalization of set that allows multiple instances of elements.
+	A \textbf{multiset} is a generalization of set that allows multiple instances of elements.
 \end{definizione}
 
 To avoid confusion afterwards we use square brackets $[\ ]$ to indicate multiset and curly brackets $\{\ \}$ to indicate set.\\
 
 Multiset can also be seen as an array of frequencies of its object (e.g. we indicate with $A = (2, 0, 3)$ the multiset with $2$ elements of first type, $0$ elements of second type and $3$ elements of third type, this notation is equivalent to write $A = [1, 1, 3, 3, 3]$).\\
 
- Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the following operations:
+Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the following operations:
 
 \begin{itemize}
   \item intersection $C = A \cap B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \min(a_{i}, b_{i})$
   \item union $C = A \cup B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \max(a_{i}, b_{i})$
-  \item multiset union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
+  \item multisets union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
 \end{itemize}
 
 \begin{definizione}\label{def:wjaccard}
-    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
+    Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
     
     \begin{equation}
     FJ(A,B) = \frac{\sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n { max(a_{i}, b_{i}) }}
@@ -74,7 +74,7 @@ Multiset can also be seen as an array of frequencies of its object (e.g. we indi
 
 
 \begin{definizione}\label{def:wbray}
-    Given two multiset $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis index on multiset} as:
+    Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis index on multiset} as:
     
     \begin{equation}
     BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {a_{i} + b_{i}}}
@@ -82,7 +82,7 @@ Multiset can also be seen as an array of frequencies of its object (e.g. we indi
     
 \end{definizione}
 
-As a side note, Bray-Curtis is a relevant index for multisets, and is also known as Steinhaus similarity, Pielou's Similarity, Sorensen's quantitative, and Czekanowski's similarity.
+As a side note, Bray-Curtis is a relevant index for multisets, and is also known as Steinhaus similarity, Pielou's Similarity, Sorensen's quantitative, and Czekanowski's similarity.\cite{legendre1998numerical}
 
 \begin{esempio}
 	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have:
@@ -99,7 +99,7 @@ As a side note, Bray-Curtis is a relevant index for multisets, and is also known
 Both indices are widely used in practical application, Bray-Curtis index gives a greater weight to the intersection, on the other side the Frequency Jaccard Index is a metric and may be preferred to Bray-Curtis index since it is only a semi-metric (as it does not satisfy the triangle inequality). 
 
 \begin{definizione}
-	A function $f : A \times A \rightarrow \mathbb{R}^{+} $ is called metric (or simply distance) if satisfy for all $x, y, z \in A$ the following conditions:
+	A function $f : A \times A \rightarrow \mathbb{R}^{+} $ is called \textbf{metric} (or simply \textbf{distance}) if satisfy, for all $x, y, z \in A$, the following conditions:
 	\begin{itemize}
 		\item Non-negativity: $f(x,y) \geq 0$ and $f(x,y) = 0$ iff $x = y$
 		\item Symmetry: $f(x, y) = f(y, x)$
@@ -112,12 +112,12 @@ Both indices are widely used in practical application, Bray-Curtis index gives a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Documents similarity}
 
-Documents similarity is an hot topic in Information Retrieval, as it can be seen as the problem of duplicate detection or, from another point of view, plagiarism detection.\\
+Documents similarity is an hot topic in Information Retrieval, as it can be seen as the problem of duplicate detection\cite{Broder2000} or, from another point of view, plagiarism detection.\\
 
 To define documents similarity we need the notion of \textit{$q$-gram}:
 
 \begin{definizione}
-	A $q$-gram is a contiguous subsequence of $q$ items from a sequence.
+	A \textbf{$q$-gram} is a contiguous subsequence of $q$ items from a sequence.
 \end{definizione}
 
 In this case the sequence is a document and the items can be words, characters or even syllables. If the elements used are words, $q$-gram may also be called shingles.
@@ -165,18 +165,21 @@ Considering that the number of $q$-grams in a document is linear in its number o
 The definition of similarity between graphs is more complex, as we have to introduce the concept of graph isomorphism.
 
 \begin{definizione}
-	An isomorphism between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is a bijective function from vertices of $G$ to vertices of $H$ that preserve the edge structure, i.e.  $f : V_{G} \rightarrow V_{H}$ s.t. $(v, u) \in E_{G} \implies (f(v), f(u)) \in E_{H}$.
+	A \textbf{graph isomorphism} between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is a bijective function from vertices of $G$ to vertices of $H$ that preserve the edge structure, i.e.  
+	\begin{equation*}
+		f : V_{G} \rightarrow V_{H} \text{ s.t. } (v, u) \in E_{G} \implies (f(v), f(u)) \in E_{H}
+	\end{equation*}
 \end{definizione}
 
 If such isomorphism exists, the graphs are called isomorphic and we denote it with $G \simeq H$.\\ 
 
-With the notion of graph similarity we can define a similarity between graph:
+With the notion of graph similarity we can define a similarity between graph\cite{Bunke:1998:GDM:289720.289729}.
 
 \begin{definizione}
 	The similarity between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is the size of the largest graph isomorphism between a subgraph $G' \subseteq G$ and a subgraph $H' \subseteq H$ (seen as number of vertex of $G'$).
 \end{definizione}
 
-Unfortunately subgraphs isomorphism is a NP-complete problem, so the only way to solve it is by using heuristic or approximated methods.
+Unfortunately subgraphs isomorphism is a NP-complete problem\cite{GareyJohnson:1979}, so the only way to solve it is by using heuristic or approximated methods.
 
 % \clearpage 
 \begin{esempio}
@@ -315,7 +318,8 @@ More difficult to manage becomes when we have to consider thousands or millions 
 (e.g. the set of Internet web pages), each one of them has thousands of shingles.\\
 
 To solve this problem it is no longer possible to handle all the shingles for all the documents, 
-instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}.
+instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}\cite{Broder2000}.
+
 The computation of the sketches is linear in the size of the documents and can be used to calculate
 the similarity in linear time in the size of the sketches.\\
 
@@ -330,7 +334,7 @@ in practice we will use a ranking function to define a sorting to the elements i
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Min-wise permutation}
+\subsection*{Min-wise permutation\cite{Broder:1998:MIP:276698.276781}}
 
 Given a document $A = \{1, \ldots, n\}$, to calculate its sketch $S_{A}$ of size $k$ 
 we choose $k$ random independent permutation $\pi_{i} : \{1, \ldots, n\} \rightarrow \{1, \ldots, n\}$ and define the sketch as:
@@ -343,9 +347,9 @@ Note that using the min-wise permutation we can take multiple times the same num
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Bottom-k sketches}
+\subsection*{Bottom-k sketches\cite{Cohen:2007:SDU:1281100.1281133}}
 
-Another approach that works best in terms of performance is the bottom-k sketches.
+Another approach that works best in terms of performance is the bottom-k sketches.\\
 
 Instead of using $k$ random permutation $\pi_{1}, \ldots, \pi_{k}$ and take the minimum for each of them,
 like we did before in the min-wise permutation, we choose only one random permutation $\pi$ and take the bottom $k$ elements with lower value in permutation.
@@ -389,25 +393,25 @@ Note that, unlike the min-wise permutation, in the bottom-k sketches we don't ha
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Color Coding}
 
-The color-coding is a method proposed in 1994 by Alon, Yuster and Zwick that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only to finds $q$-simple paths.\\
+The color coding is a method proposed in 1994 by Alon, Yuster and Zwick\cite{Alon:1995:COL:210332.210337} that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only to finds $q$-simple paths.\\
 
 The idea behind this method, which gives it the name, is to randomly coloring each node of $V$ with one of the $q$ possible color.
 
-We restrict our attention to $q = O(log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Where $[q] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ have a color $\chi(u) \in [q]$.\\
+We restrict our attention to $q = O(\log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Where $[q] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ have a color $\chi(u) \in [q]$.\\
 
-After assigning a color to each node, we will focus to find only the colorful $q$-path. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\\
+After assigning a color to each node, we will focus to find only the colorful $q$-paths. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\\
 
 The main advantage of this method is that reduce the number of $q$-paths by roughly a factor of $q! / q^{q} \geq 1/e^{q}$, as a colorful $q$-path can use $q!$ colorings of its nodes out of $q^{q}$ possible ones. So the number of $q$-paths exponentially decrease as the value of $q$ increases, when $q = 3$ we look only for the $\sim22\%$ colorful $q$-paths and only for $\sim4\%$ when $q = 5$.\\
 
 As we will show in the next chapter, all the colorful $q$-paths can be easily found using a dynamic programming approach.\\
 
-An interesting fact is that the method of color coding can be derandomized using a $k$-perfect hash family, that enumerating all the possible $k$-colorings of $V$.
-This makes the method exponential in the value of $q$, as if we set $q = |V|$ the problem became to find an Hamiltonian path, which is NP-complete.\\
+An interesting fact is that the method of color coding can be derandomized using a $k$-perfect hash family\cite{Alon:1995:COL:210332.210337}, that enumerating all the possible $k$-colorings of $V$.
+This makes the method exponential in the value of $q$, as if we set $q = |V|$ the problem became to find an Hamiltonian path, which is NP-complete\cite{GareyJohnson:1979}.\\
 
 To improve precision we can repeat the random coloring of nodes for $e^{q}\ t$ times, 
 so that success probability becomes $\geq 1-e^{-t}$. 
 Another way is to random coloring nodes using a greater number of colors $q'$ and then, instead of looking for the colorful $q'$-paths,
-we search the color-diversified $q$-paths (i.e. $q$-paths without color repetition in $[q']$).\\
+we search the color-diversified $q$-paths (i.e. $q$-paths without color repetition in $[q']$)\cite{deshpande2007randomized}.\\
 
 In practice, choosing a simple random coloring is working pretty well on complex networks, 
 so for don't add overhead to our algorithms we won't utilize the previous optimizations .\\
