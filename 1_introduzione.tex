@@ -5,7 +5,7 @@
 \chapter{Introduction}
 
 With the spread of the Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important.
-Graphs are a powerful data structure that model in a natural way the interactions between objects.
+Graphs are a powerful data structure that natural model the interactions between objects.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,14 +26,13 @@ We denote by $N(u) = \{ v : (u,v) \in E \}$ the set of neighbors of the vertex $
 
 With $N^{<k}(u)$ we indicate the set of vertex connected to $u$ by a simple path of length less than $k$ (note that $N(u)$ = $N^{<2}(u)$).
 
-
 \begin{definizione}\label{def:subgraph}
     A graph $G' = (V', E')$ is called \textbf{subgraph} of $G=(V,E)$ if $V' \subset V$ and $E' \subset E$. A subgraph is called \textbf{induced subgraph} if $E' = (V' \times V') \cap E$.
 \end{definizione}
 
-We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is a induced subgraph of $G$.
+We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is a induced subgraph of $G$.\\
 
-Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the set of its vertex $V'$.\\
+Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the set of its vertex $V'$.
 
 \begin{definizione}\label{def:labeledgraph}
 	A \textbf{labeled graph} is a triple $(V,E,L)$ where $(V,E)$ is a graph and $L : V \rightarrow \Sigma$
@@ -45,7 +44,7 @@ Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and 
 In this thesis we mainly focus to analyze complex network: special graphs with a non-trivial topology like random graphs. Complex network occur in graphs modeling real system like social networks or computer networks and are characterized by a specific structural feature:
 
 \begin{definizione}\label{def:power-law-graph}
-	We define as \textbf{power-law degree distribution} a networks where the degree of a node $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability:
+	We define as \textbf{power-law degree distribution} a networks where the degree of a node $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability distribution:
 	\begin{equation}
 		P(deg(u) = k) \sim k^{-\gamma}  
 	\end{equation}
@@ -89,29 +88,39 @@ Given an undirected labeled graph $G=(V,E,L)$ over an alphabet $\Sigma$, an inte
 and two set of nodes $V_{1}, V_{2} \subset V$, we want to estimate the similarity between the two induced subgraphs $V_{1}, V_{2} < G$ based on the labels frequency of simple paths with nodes in $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$.
 \end{problema}
 
-Will discuss about a more formal and rigorous definition of subgraphs similarity in chapter 2.\\
+We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\\
 
-In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because in a complex graph we also want to keep in mind of the interaction between the subgraph and the external graph.\\
+In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between the subgraph and the external graph.\\
 
-The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of q and $|\Sigma|$ to $|\Sigma|^{q} \gg |V|$ and, even worse, the number of simple paths can exponentially explode to $|V|^{q}$. 
-
-For the simple reason that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\\
+The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of q and $|\Sigma|$ to $|\Sigma|^{q} \gg |V|$ and, even worse, the number of simple paths can exponentially explode to $|V|^{q}$. For the simple reason that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\\
 
 In this thesis we exploit the problem using randomized techniques and parallelization, which makes the problem suitable even for big networks. 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Practical applications}
 
-The problem can be applied to a lot of context.
-That is why it is very important to choose the right domains for the values of the $V, E, L, \Sigma, q$:
-\begin{itemize}
-\item $V$ are out object we want to modeling.
-\item $E$ represent the set of interactions, two vertices are connected if exists a relation among them.
-\item $L$ and $\Sigma$ are the category that partition $V$, $|\Sigma|$ should not be too high or to low, note that if $|\Sigma| = 1$ the labeling is useless as $V$ is not really partitioned.
-\item $q$ should be low as $N^{<q}(u)$ could be a large portion of $G$, (e.g. in Facebook for $q \simeq 4$ we have $N^{<q}(u) \simeq G$)\cite{Facebook}.
-\end{itemize}
+The problem presented can be applied to a lot of contexts. 
+We illustrate some examples of practical application by referring to famous websites,
+in order to better understand.
+In all the examples we assume to work on a \textit{friendship graph} where the nodes are the registered users and 
+the edges are the friendship relations between two users.
 
-Furthermore, we have to choose $G1$ and $G2$ in a way that similarity between two groups answer use some real question, like compare to each other two ego networks or two connected components.\\
+\paragraph*{Netflix} In order to produce and translate the right television series, we want to estimate the similarity between two geographical groups of viewers, where each viewer is labeled with its favorite film genre.
+  
+\paragraph*{Amazon} In order to improve advertising campaigns, we want to estimate the similarity between two sets of clients of the same age group, where each client is labeled with the category of objects he buys more frequently.
+
+\paragraph*{Facebook} In order to suggest new friends, we want to estimate the similarity between two users, where each user is labeled with its favorite musical genres.  
+
+
+% The problem can be applied to a lot of context.
+% That is why it is very important to choose the right domains for the values of the $V, E, L, \Sigma, q$:
+% \begin{itemize}
+% \item $V$ are out object we want to modeling.
+% \item $E$ represent the set of interactions, two vertices are connected if exists a relation among them.
+% \item $L$ and $\Sigma$ are the category that partition $V$, $|\Sigma|$ should not be too high or to low, note that if $|\Sigma| = 1$ the labeling is useless as $V$ is not really partitioned.
+% \item $q$ should be low as $N^{<q}(u)$ could be a large portion of $G$, (e.g. in Facebook for $q \simeq 4$ we have $N^{<q}(u) \simeq G$)\cite{Facebook}.
+% \end{itemize}
+
+% Furthermore, we have to choose $G1$ and $G2$ in a way that similarity between two groups answer use some real question, like compare to each other two ego networks or two connected components.\\
 
 % A pratical example: given a social network of people connected by friendship relation, where every people are labeled with their favorite musical genre, estimate the similary, in terms of musical tastes, of two different geographic regions.

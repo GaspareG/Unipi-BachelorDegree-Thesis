@@ -21,6 +21,20 @@
     to better test the various algorithms, in the results we explicitly show the parameter used to execute the tests.
     
     \clearpage
+    
+    \section{Tuning the parameters in practice}
+    
+    The problem can be applied to a lot of context.
+    That is why it is very important to choose the right domains for the values of the $V, E, L, \Sigma, q$:
+    \begin{itemize}
+	    \item $V$ are out object we want to modeling.
+	    \item $E$ represent the set of interactions, two vertices are connected if exists a relation among them.
+	    \item $L$ and $\Sigma$ are the category that partition $V$, $|\Sigma|$ should not be too high or to low, note that if $|\Sigma| = 1$ the labeling is useless as $V$ is not really partitioned.
+	    \item $q$ should be low as $N^{<q}(u)$ could be a large portion of $G$, (e.g. in Facebook for $q \simeq 4$ we have $N^{<q}(u) \simeq G$)\cite{Facebook}.
+    \end{itemize}
+    
+%    Furthermore, we have to choose $G1$ and $G2$ in a way that similarity between two groups answer use some real question, like compare to each other two ego networks or two connected components.
+    
     \section{Dataset}
     
     For the experiments we use two different kind of dataset, a small one so we can easily brute-force the real indices and compare the relative errors, and a big one in order to benchmark the performance of the different approaches on a real world complex network.
@@ -52,7 +66,10 @@
     \textsl{Considered query:} similarity of actors' ego-networks. Given two actors $a$ and $b$, let $A$ and $B$ be their ego-networks, i.e., the sets of nodes corresponding to movies in which respectively $a$ and $b$ starred, compute the similarity of $A$ and $B$.\\
     %Compute $BC(A,B)$, $J(A,B)$, $FJ(A,B)$, and random $q$-walks.
     
-    The way we generate the $\textsc{IMDb}$ graph is an example of collaboration graph and is known in literature as Co-stardom network.
+    The way we generate the $\textsc{IMDb}$ graph is an example of collaboration graph and is known in literature as Co-stardom network. 
+    
+    Another famous example is the collaboration graph of mathematicians, where two mathematicians are connected if they have co-authored a paper. 
+    This collaboration graph is also known as Erdős collaboration graph\cite{BATAGELJ2000173}, in honor of the famous mathematician Paul Erdős, in this graph is defined also the \textit{Erdős number} as the distance in term of collaboration between Paul Erdős and another person.
     
     \section{Experimental results}
 
@@ -87,8 +104,6 @@
 		\end{tabular}
 		\caption{Time in milliseconds}
 	\end{table}
-	
-	\clearpage
 	
 	The second bottleneck for our algorithms is the preprocessing time for the dynamic programming table of color-coding, so we test for both the dataset how can we go up with the value of $q$. Always remembering from initial assumptions that the value of $q$ should not be to high. 
 

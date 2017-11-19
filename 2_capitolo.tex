@@ -63,14 +63,13 @@ Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n}
   \item multisets union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
 \end{itemize}
 
-\begin{definizione}\label{def:wjaccard}
-    Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
-    
-    \begin{equation}
-    FJ(A,B) = \frac{\sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n { max(a_{i}, b_{i}) }}
-    \end{equation}
-    
-\end{definizione}
+% \begin{definizione}\label{def:wjaccard}
+%     Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Frequency Jaccard index} as:
+%     
+%     \begin{equation}
+%     FJ(A,B) = \frac{\sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n { max(a_{i}, b_{i}) }}
+%     \end{equation}  
+% \end{definizione}
 
 
 \begin{definizione}\label{def:wbray}
@@ -88,7 +87,7 @@ As a side note, Bray-Curtis is a relevant index for multisets, and is also known
 	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have:
 	
 	\begin{equation}
-	FJ(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 2} = \frac{4}{13} 
+	J(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 2} = \frac{4}{13} 
 	\end{equation}
 	
 	\begin{equation}
@@ -96,7 +95,7 @@ As a side note, Bray-Curtis is a relevant index for multisets, and is also known
 	\end{equation}
 \end{esempio}
 
-Both indices are widely used in practical application, Bray-Curtis index gives a greater weight to the intersection, on the other side the Frequency Jaccard Index is a metric and may be preferred to Bray-Curtis index since it is only a semi-metric (as it does not satisfy the triangle inequality). 
+Both indices are widely used in practical application, Bray-Curtis index gives a greater weight to the intersection, on the other side the Jaccard Index is a metric and may be preferred to Bray-Curtis index since it is only a semi-metric (as it does not satisfy the triangle inequality). 
 
 \begin{definizione}
 	A function $f : A \times A \rightarrow \mathbb{R}^{+} $ is called \textbf{metric} (or simply \textbf{distance}) if satisfy, for all $x, y, z \in A$, the following conditions:
@@ -148,9 +147,9 @@ Considering that the number of $q$-grams in a document is linear in its number o
 	\begin{equation*}
 	S_{B} = (\textit{You work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Livorno})
 	\end{equation*}
-	The similarity using both Frequency Jaccard and Bray-Curtis are:\\
+	The similarity using both Jaccard and Bray-Curtis are:\\
 	\begin{equation*}
-		FJ(S_{A},S_{B}) = \frac{|S_{A} \cap S_{B} |}{|S_{A} \cup S_{B} |} = \frac{3}{8}
+		J(S_{A},S_{B}) = \frac{|S_{A} \cap S_{B} |}{|S_{A} \cup S_{B} |} = \frac{3}{8}
 	\end{equation*}
 	\begin{equation*}
 		BC(S_{A},S_{B}) = \frac{2 \times |S_{A} \cap S_{B} |}{|S_{A}| +|S_{B}|} = \frac{6}{11}
@@ -158,7 +157,7 @@ Considering that the number of $q$-grams in a document is linear in its number o
 \end{esempio}
 
 % \clearpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Frequency%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Graphs similarity}
 
@@ -261,8 +260,7 @@ In general $BC(A,B) \geq FJ(A,B)$. When $A \cap B = \emptyset$ we have that $f_{
 
 %  \clearpage
 
-Now we present a little example to better understand.
-
+Now we present a little example to better understand.\\
 
 % \begin{figure}[h]
 % % 	\centering
@@ -273,37 +271,38 @@ Now we present a little example to better understand.
 % 	\end{minipage}\hfill
 % \end{figure}
 
-\begin{esempio}
-	We want to calculate the similarity between the two set $S_{1} = \{0,1\}$ and $S_{2} = \{1, 3\}$ using their $3$-grams of this graph:
-		
-	
-	\begin{minipage}[t]{1\textwidth}
-	\centering
-	\includegraphics[width=4.6cm,height=6cm]{figure/figure-2-1}
-	%	\caption{Labeled graph}
-	\end{minipage}\hfill
 
-	\begin{equation*}
-		L(S_{1}) = [aab, acb, baa, bca, bca, bcb, cab, cba]
-	\end{equation*}
-	\begin{equation*}
-		L(S_{2}) = [baa, baa, bca, bca, caa, cba, cba]
-	\end{equation*}
-	
-	Their union and intersection:
-	\begin{equation*}
-	L(S_{1}) \cup L(S_{2}) = [aab, acb, baa, baa, bca, bca, bcb, caa, cab, cba, cba]
-	\end{equation*}
-	\begin{equation*}
-	L(S_{1}) \cap L(S_{2}) = [baa, bca, bca, cba]
-	\end{equation*}
+			\begin{minipage}{0.65\textwidth}\raggedright
+			\begin{esempio}
+			\end{esempio}
 		
-	So we have that:
+			We want to calculate the similarity between the two set $S_{1} = \{0,1\}$ and $S_{2} = \{1, 3\}$ using their $3$-grams of this graph:
+		
 	\begin{equation*}
-		FJ(S_{1}, S_{2}) = \frac{4}{11} \text{  and  } BC(S_{1}, S_{2}) = \frac{8}{15}
-	\end{equation*}
+L(S_{1}) = [aab, acb, baa, bca, bca, bcb, cab, cba]
+\end{equation*}
+\begin{equation*}
+L(S_{2}) = [baa, baa, bca, bca, caa, cba, cba]
+\end{equation*}
+
+% Their union and intersection:
+% \begin{equation*}
+% L(S_{1}) \cup L(S_{2}) = [aab, acb, baa, baa, bca, bca, bcb, caa, cab, cba, cba]
+% \end{equation*}
+% \begin{equation*}
+% L(S_{1}) \cap L(S_{2}) = [baa, bca, bca, cba]
+% \end{equation*}
+
+So we have that:
+\begin{equation*}
+FJ(S_{1}, S_{2}) = \frac{4}{11} \text{  and  } BC(S_{1}, S_{2}) = \frac{8}{15}
+\end{equation*}
+			
+\end{minipage}
+\begin{minipage}{0.30\textwidth}
+	\includegraphics[width=\linewidth]{figure/figure-2-1}
+\end{minipage}
 	
-\end{esempio}
 
 % \clearpage
 
@@ -334,7 +333,9 @@ in practice we will use a ranking function to define a sorting to the elements i
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Min-wise permutation\cite{Broder:1998:MIP:276698.276781}}
+\subsection*{Min-wise permutation}
+
+The first approach to compute a sketch of a document is the min-wise permutation\cite{Broder:1998:MIP:276698.276781}.\\
 
 Given a document $A = \{1, \ldots, n\}$, to calculate its sketch $S_{A}$ of size $k$ 
 we choose $k$ random independent permutation $\pi_{i} : \{1, \ldots, n\} \rightarrow \{1, \ldots, n\}$ and define the sketch as:
@@ -345,11 +346,12 @@ we choose $k$ random independent permutation $\pi_{i} : \{1, \ldots, n\} \righta
 
 Note that using the min-wise permutation we can take multiple times the same number, as the permutation are independent.
 
+\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Bottom-k sketches\cite{Cohen:2007:SDU:1281100.1281133}}
+\subsection*{Bottom-k sketches}
 
-Another approach that works best in terms of performance is the bottom-k sketches.\\
+Another approach that works best in terms of performance is the bottom-k sketches\cite{Cohen:2007:SDU:1281100.1281133}.\\
 
 Instead of using $k$ random permutation $\pi_{1}, \ldots, \pi_{k}$ and take the minimum for each of them,
 like we did before in the min-wise permutation, we choose only one random permutation $\pi$ and take the bottom $k$ elements with lower value in permutation.

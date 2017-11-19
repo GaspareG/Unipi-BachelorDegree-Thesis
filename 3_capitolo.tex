@@ -156,7 +156,9 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	Where the symbol $\cdot$ is the concatenation of paths, note that we put the node $v$ before the path $\pi$ as we are interested to find all the $q$-path leading to the original calling node $u$.\\
 	
 	In Algorithm 4, when path $\pi$ is a complete $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, 
-	the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.\\
+	the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
+	
+	When the path $\pi$ is not completed we visit all its neighbor.\\
 	
 	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already in the path $\pi$, in this way we restrict the searching only on the simple $q$-paths.\\
 	
@@ -164,17 +166,32 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 		For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} requires $O(|V|^{q})$ time and $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.
 	\end{lemma}
 
-	\begin{minipage}{0.6\textwidth}\raggedright
+	\begin{minipage}{0.7\textwidth}\raggedright
 		\begin{esempio}
 		\end{esempio}
-		The call to the method $\textsc{DFS}(0, 3)$ return:\\
+		We want to compute the similarity between the two nodes $4$ and $3$.\\
+
+		The call to the method $\textsc{DFS}(4, 3)$ return:\\
+		$\mathcal{W}_{4} = \{ abc, bac, bbc, cbc \}$\\
+		$f_{4}[\langle 4, abc \rangle] = 2$ ($\textsc{3-1-0}$ $\textsc{4-1-0}$ $\textsc{3-2-0}$ $\textsc{4-2-0}$)\\
+		$f_{4}[\langle 4, bac \rangle] = 2$ ($\textsc{1-4-0}$ $\textsc{2-4-0}$)\\
+		$f_{4}[\langle 4, bbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
+		$f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
+		The call to the method $\textsc{DFS}(3, 3)$ return:\\
 		
-		$\mathcal{W} = \{ abc, acb, acc \}$\\
-		$f_{u}[\langle 0, abc \rangle] = 4$ ($\textsc{3-1-0}$ $\textsc{4-1-0}$ $\textsc{3-2-0}$ $\textsc{4-2-0}$)\\
-		$f_{u}[\langle 0, acb \rangle] = 2$ ($\textsc{1-4-0}$ $\textsc{2-4-0}$)\\
-		$f_{u}[\langle 0, acc \rangle] = 1$ ($\textsc{3-4-0}$)\\
+		$\mathcal{W}_{3} = \{ abc, acc, bcc, cbc \}$\\
+		$f_{3}[\langle 3, abc \rangle] = 2$ ($\textsc{0-1-3}$, $\textsc{0-2-3}$)\\
+		$f_{3}[\langle 3, acc \rangle] = 1$ ($\textsc{0-4-3}$)\\
+		$f_{3}[\langle 3, bcc \rangle] = 2$ ($\textsc{1-4-3}$, $\textsc{2-4-3}$)\\
+		$f_{3}[\langle 3, cbc \rangle] = 2$ ($\textsc{4-1-3}$, $\textsc{4-2-3}$)\\
+		
+		So we have $\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bbc, bcc, cbc \}$
+		And the similarity according to the two indices are:\\
+		$BC(\{3\}, \{4\}) = $\\
+		$FJ(\{3\}, \{4\}) = $\\
+		
 	\end{minipage}
-	\begin{minipage}{0.35\textwidth}
+	\begin{minipage}{0.30\textwidth}
 		\includegraphics[width=\linewidth]{figure/figure-3-2}
 	\end{minipage}
 			
@@ -525,7 +542,7 @@ Finally we estimate the real value $BC(A,B)$ with $BC_{ \mathcal{W} }(A,B)$, i.e
 	\label{alg:sample}
 \end{algorithm}
 
-For estimating the Frequency Jaccard index, we create the sketch $\mathcal{W}$ using $X = A \cup B$,
+For estimating the Frequency Jaccard index, we create the sketch $\mathcal{W}$ with $X = A \cup B$,
 always using the $\textsc{Colorful-sampler}$ algorithm. 
 
 Then the values of $f_{A}[x]$ and $f_{B}[x]$ are calculated in a different way, as we also want to calculate the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$.
