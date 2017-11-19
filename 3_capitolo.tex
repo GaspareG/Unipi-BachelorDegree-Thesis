@@ -281,11 +281,11 @@ Our algorithm for $\textsc{query}(A,B)$ consist of three phases as follows:
 
 Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
-\begin{equation}		
+\begin{equation}\label{bc-w}
 	BC_{W}(A,B) = \frac{ 2 \times \Sigma_{x \in W} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in W} f_{A}[x] + f_{B}[x] }
 \end{equation}
 
-\begin{equation}	
+\begin{equation}\label{fj-w}
 	FJ_{W}(A,B) = \frac{ \Sigma_{x \in W} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in W} f_{A \cup B}[x] }
 \end{equation}
 
@@ -493,19 +493,84 @@ we will use them to estimate both the Bray-Curtis index and the Frequency Jaccar
 
 The sampling algorithms, $\textsc{colorful-sampler}$ and \fsamp, can be used for estimating both the Bray-Curtis index ($X = A \uplus B$) and
 the Frequency Jaccard Index ($X = A \cup B$).
-
 In this way, in the Bray-Curtis index, we give more weight of being extracted to the $q$-paths leading to $u \in A \cap B$,
 as in the multisets union ($\uplus$) we sum the frequency of the elements that belong to the intersection.\\
 
-We now present the two final algorithms \fcount and \fsamp
+We now present the four final algorithms for estimating both Bray-Curtis index and Frequency Jaccard index, using both approaches
+\fcount and \fsamp.
 
 \subsection*{\fcount}
 
-TODO
+For estimating the Bray-Curtis index, using the \fcount approach, we first create the sketch $\mathcal{W}$ by sampling $r$ $q$-grams leading to $X = A \uplus B$,
+using the $\textsc{Colorful-sampler}$ algorithm. Then we calculate the exact values of $f_{A}[x]$ and $f_{B}[x]$, for each $x \in \mathcal{W}$,
+using the \fcount algorithm.
+
+Finally we estimate the real value $BC(A,B)$ with $BC_{ \mathcal{W} }(A,B)$, i.e. the Bray-Curtis index restricted to the strings in $\mathcal{W}$ as defined it in \eqref{bc-w}.
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$A,B =$ sets of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Output{$BC_{W}(A,B) = $ estimation of the Bray-Curtis index between $A$ and $B$ according to the \fcount algorithm  }
+	\BlankLine
+	$\mathcal{W} \gets \textsc{Colorful-sampler}(A \uplus B, M, r)$ \;
+	$f_{A} \gets \textsc{F-count}(A, W)$ \;
+	$f_{B} \gets \textsc{F-count}(B, W)$ \;
+	\BlankLine
+	\Return{$\textsc{Bray-Curtis}(\mathcal{W}, f_{A}, f_{B})$}
+	\caption{\textsc{f-count-bc}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
+
+For estimating the Frequency Jaccard index, we create the sketch $\mathcal{W}$ using $X = A \cup B$,
+always using the $\textsc{Colorful-sampler}$ algorithm. 
+
+Then the values of $f_{A}[x]$ and $f_{B}[x]$ are calculated in a different way, as we also want to calculate the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$.
+
+Using the property $R = \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$,  the exact value $f_{u}$: frequency of each $q$-gram leading to $u$, which $q$-gram belong to the sampled dictionary $\mathcal{W}$.
+We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally merge $f_{u}$ to $f_A$, if $u \in A$, and $f_B$, if $u \in B$.
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$A,B =$ sets of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Output{$FJ_{W}(A,B) = $ estimation of the Frequency Jaccard index between $A$ and $B$ according to the \fcount algorithm  }
+	\BlankLine
+	$\mathcal{W} \gets \textsc{Colorful-sampler}(A \cup B, M, r)$ \;
+	$f_A \gets (0,\ldots,0)$\;
+	$f_B \gets (0,\ldots,0)$\;
+	$R \gets 0$\;
+	\BlankLine
+	\ForEach{$u \in A \cup B$}{
+		$f_{u} \gets \textsc{F-count}([u], \mathcal{W})$\;
+		\BlankLine
+		\ForEach{$ x \in \mathcal{W}$}{
+			$R \gets R + f_{u}[x]$\;
+		}
+		\BlankLine
+		\If{$u \in A$}{
+			$f_A \gets f_A \cup f_{u} $\;
+		}
+		\BlankLine
+		\If{$u \in B$}{
+			$f_B \gets f_B \cup f_{u} $\;
+		}
+	}
+	\BlankLine
+	\Return{$\textsc{Frequency-Jaccard}(\mathcal{W}, f_{A}[x], f_{B}[x], R)$}
+	\caption{\textsc{f-count-fj}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
 
 \subsection*{\fsamp}
 
-TODO 
+The \fsamp algorithm TODO
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
