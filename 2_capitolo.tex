@@ -233,14 +233,14 @@ With the property that $f_{A}[x] = \sum_{u \in A}{f_{\{u\}}[x]}$.
 
 \begin{definizione}
 	Given an undirected labeled graph $G = (V,E,L)$ over an alphabet $\Sigma$ and an integer $q > 0$, the Bray-Curtis similarity index between two set of nodes $A, B \subset V$ is:
-	\begin{equation}	
+	\begin{equation}\label{bray-sub}
 		BC(A,B) = \frac{ 2 \times \Sigma_{x \in \Sigma^{q}} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in \Sigma^{q}} f_{A}[x] + f_{B}[x] }
 	\end{equation}
 \end{definizione}
 
 \begin{definizione}
 	Given an undirected labeled graph $G = (V,E,L)$ over an alphabet $\Sigma$ and an integer $q > 0$, the Frequency Jaccard similarity index between two set of nodes $A, B \subset V$ is:
-	\begin{equation}	
+	\begin{equation}\label{jaccard-sub}	
 	FJ(A,B) = \frac{ \Sigma_{x \in \Sigma^{q}} \min(f_{A}[x], f_{B}[x]) }{ \Sigma_{x \in \Sigma^{q}} f_{A \cup B}[x] }
 	\end{equation}
 \end{definizione}
