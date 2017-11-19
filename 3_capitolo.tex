@@ -63,7 +63,7 @@ Algorithm 1 and 2 calculate the values of $BC(A,B)$ and $FJ(A,B)$, as previously
 	The execution of \textsc{Bray-Curtis} or \textsc{Frequency-Jaccard} requires $O(|W|)$ time and $O(1)$ space. 	
 \end{lemma}
 
-In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$ and $R$.
+In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_{A}$, $f_{B}$ and $R$.
 
 \clearpage 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -103,7 +103,7 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 		}
 	}
 	\BlankLine
-    \Return{$\langle \mathcal{W}$, $f_{A}[x]$, $f_{B}[x]$, $R \rangle$}
+    \Return{$\langle \mathcal{W}$, $f_{A}$, $f_{B}$, $R \rangle$}
     \caption{\textsc{brute-force}}
     \label{alg:brute-force}
     \end{algorithm}
@@ -158,42 +158,69 @@ In the next algorithms we focus only to compute the values of $\mathcal{W}$, $f_
 	In Algorithm 4, when path $\pi$ is a complete $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, 
 	the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
 	
-	When the path $\pi$ is not completed we visit all its neighbor.\\
+	When the path $\pi$ is not completed we recursively visit all its neighbor, with the new path obtained by prepending the node $v$ to the current path $\pi$.\\
 	
-	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already in the path $\pi$, in this way we restrict the searching only on the simple $q$-paths.\\
+	\clearpage
+	
+	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already in the path $\pi$, in this way we restrict the searching only on the simple $q$-paths.
 	
 	\begin{lemma}
 		For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} requires $O(|V|^{q})$ time and $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.
 	\end{lemma}
 
-	\begin{minipage}{0.7\textwidth}\raggedright
-		\begin{esempio}
-		\end{esempio}
-		We want to compute the similarity between the two nodes $4$ and $3$.\\
+	\begin{esempio}
+		We want to compute the similarity between the two nodes $4$ and $3$ in the following graph.	
+	\end{esempio}
 
-		The call to the method $\textsc{DFS}(4, 3)$ return:\\
-		$\mathcal{W}_{4} = \{ abc, bac, bbc, cbc \}$\\
+
+%	\includegraphics[width=0.30\textwidth]{figure/figure-3-2}
+
+%	\begin{minipage}{0.95\textwidth}\raggedright
+	
+%		\begin{wrapfigure}{R}{0.3\textwidth}
+		% \centering
+%		\includegraphics[width=0.40\textwidth]{figure/figure-3-2}
+%		\end{wrapfigure}
+
+		The call to the method $\textsc{DFS}(4, 3)$ return:
+		
+		\begin{wrapfigure}{R}{0\textwidth}
+		%	\centering
+			\includegraphics[width=0.35\textwidth]{figure/figure-3-2}
+		\end{wrapfigure}
+	
+		\begin{equation*}
+		\mathcal{W}_{4} = \{ abc, bac, bbc, cbc \} 
+		\end{equation*}
 		$f_{4}[\langle 4, abc \rangle] = 2$ ($\textsc{3-1-0}$ $\textsc{4-1-0}$ $\textsc{3-2-0}$ $\textsc{4-2-0}$)\\
 		$f_{4}[\langle 4, bac \rangle] = 2$ ($\textsc{1-4-0}$ $\textsc{2-4-0}$)\\
 		$f_{4}[\langle 4, bbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
 		$f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
-		The call to the method $\textsc{DFS}(3, 3)$ return:\\
 		
-		$\mathcal{W}_{3} = \{ abc, acc, bcc, cbc \}$\\
+		The call to the method $\textsc{DFS}(3, 3)$ return:\\
+		\begin{equation*}
+		\mathcal{W}_{3} = \{ abc, acc, bcc, cbc \}
+		\end{equation*}
 		$f_{3}[\langle 3, abc \rangle] = 2$ ($\textsc{0-1-3}$, $\textsc{0-2-3}$)\\
 		$f_{3}[\langle 3, acc \rangle] = 1$ ($\textsc{0-4-3}$)\\
 		$f_{3}[\langle 3, bcc \rangle] = 2$ ($\textsc{1-4-3}$, $\textsc{2-4-3}$)\\
 		$f_{3}[\langle 3, cbc \rangle] = 2$ ($\textsc{4-1-3}$, $\textsc{4-2-3}$)\\
 		
-		So we have $\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bbc, bcc, cbc \}$
-		And the similarity according to the two indices are:\\
-		$BC(\{3\}, \{4\}) = $\\
-		$FJ(\{3\}, \{4\}) = $\\
+		So we have $\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bbc, bcc, cbc \}$\\
 		
-	\end{minipage}
-	\begin{minipage}{0.30\textwidth}
-		\includegraphics[width=\linewidth]{figure/figure-3-2}
-	\end{minipage}
+		The similarity according to the two indices is:
+		\begin{equation*}
+		BC(\{3\}, \{4\}) = \frac{2 \times ( 2 + 0 + 0 + 0 + 0 + 2 ) }{ 4 + 1 + 2 + 2 + 2 + 4 } = \frac{8}{15}
+		\end{equation*}
+		
+		\begin{equation*}
+		FJ(\{3\}, \{4\}) = \frac{ 2 + 0 + 0 + 0 + 0 + 2 }{ 4 + 1 + 2 + 2 + 2 + 4 } = \frac{4}{15}
+		\end{equation*}
+		
+%	\end{minipage}
+%	\begin{minipage}{0.30\textwidth}
+%		\includegraphics[width=\linewidth]{figure/figure-3-2}
+%	\end{minipage}
 			
 \clearpage
 
@@ -455,10 +482,12 @@ It may happen that, in some big instance, Algorithm 8
 can explore many colorful paths as it expands the paths in the $X \cup N^{<q}(X)$ nodes.
 
 To alleviate this issue we present a modified version of the Algorithm 6,
-that we call $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having sketches.\\
+that we call $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\\
 
-In Algorithms 9 replace both Algorithm 6 and 8 by simply add the lines $8$ and $9$ to the Algorithm 6
-to compute the frequency map $f_{X}[x]$ based on sampled $q$-paths $R$.\\
+In Algorithms 9 TODO 
+
+% replace both Algorithm 6 and 8 by simply add the lines $8$ and $9$ to the Algorithm 6
+to compute the frequency map $f_{X}[\langle u_{q}, x \rangle]$ based on sampled $q$-paths $R$.\\
 
 Of course this speed up the computation time, 
 on the other hand, as we will see in the next chapter, 
@@ -471,8 +500,9 @@ to have a better estimation of the similarity indices.
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
-	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[x] =$ frequency of each $x \in W$}
+	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[\langle u_{q}, x \rangle] = $ frequency of each $x \in \mathcal{W}$ leading to $u_{q}$}
 	$R \gets \{\}$\;
+	
 	\BlankLine
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with probability~$p_v = \frac{M_{q,v}([q])}{\sum_{z\in X} M_{q,z}([q])}$\label{line:sample}\;
@@ -484,8 +514,9 @@ to have a better estimation of the similarity indices.
 	$W \gets \{ L(\pi) : \pi \in R \}$\;
 	\BlankLine
 	$f_X \gets (0,\ldots,0)$\;
-	\lForEach{$\pi \in R$}{
-		$f_X[L(\pi)] \gets f_X[L(\pi)]+1$
+	\lForEach{$\pi = \langle u_{1}, \ldots, u_{q} \rangle \in R$}
+	{
+		$f_X[\langle u_{q}, L(\pi) \rangle ] \gets f_X[\langle u_{q}, L(\pi) \rangle]+1$
 	}
 	\BlankLine
 	\Return{$\langle W, f_{X} \rangle$}
@@ -548,6 +579,7 @@ always using the $\textsc{Colorful-sampler}$ algorithm.
 Then the values of $f_{A}[x]$ and $f_{B}[x]$ are calculated in a different way, as we also want to calculate the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$.
 
 Using the property $R = \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$,  the exact value $f_{u}$: frequency of each $q$-gram leading to $u$, which $q$-gram belong to the sampled dictionary $\mathcal{W}$.
+
 We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally merge $f_{u}$ to $f_A$, if $u \in A$, and $f_B$, if $u \in B$.
 
 \begin{algorithm}[h]
@@ -587,7 +619,61 @@ We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally
 
 \subsection*{\fsamp}
 
-The \fsamp algorithm TODO
+Estimating the two indices using the \fsamp algorithm is easier that using \fcount, 
+as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.
+
+To estimate the Bray-Curtis index we call \fsamp with $X = A \uplus B$.
+
+\clearpage
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$A,B =$ sets of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Output{$BC_{W}(A,B) = $ estimation of the Bray-Curtis index between $A$ and $B$ according to the \fsamp algorithm  }
+	$\langle \mathcal{W}, f_X \rangle \gets \textsc{f-samp}(A \uplus B, M, r)$ \;
+	$f_A \gets (0,\ldots,0)$\;
+	$f_B \gets (0,\ldots,0)$\;
+	\ForEach{$\langle u, x \rangle \in f_X$}{
+		\lIf{$u \in A$}{$f_A[x] \gets f_A[x] + f_X[\langle u, x \rangle]$}
+		\lIf{$u \in B$}{$f_B[x] \gets f_B[x] + f_X[\langle u, x \rangle]$}
+	}
+	\Return{$\textsc{Bray-Curtis}(\mathcal{W}, f_{A}, f_{B})$}
+	\caption{\textsc{f-samp-bc}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
+And in a similar way we estimate the Frequency Jaccard index by setting $X = A \cup B$ and calculate $R$ with the property $R = \Sigma_{x \in \mathcal{W}}{f_X[x]}$.
+
+\begin{algorithm}[h]
+	\small
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$A,B =$ sets of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Output{$FJ_{W}(A,B) = $ estimation of the Frequency Jaccard index between $A$ and $B$ according to the \fsamp algorithm  }
+	$\langle \mathcal{W}, f_X \rangle \gets \textsc{f-samp}(A \cup B, M, r)$ \;
+	$f_A \gets (0,\ldots,0)$\;
+	$f_B \gets (0,\ldots,0)$\;
+	$R \gets 0$\;
+	\ForEach{$\langle u, x \rangle \in f_X$}{
+		$R \gets R + f_X[\langle u, x \rangle]$\;
+		\lIf{$u \in A$}{$f_A[x] \gets f_A[x] + f_X[\langle u, x \rangle]$}
+		\lIf{$u \in B$}{$f_B[x] \gets f_B[x] + f_X[\langle u, x \rangle]$;}
+	}
+	\Return{$\textsc{Frequency-Jaccard}(\mathcal{W}, f_{A}, f_{B}, R)$}
+	\caption{\textsc{f-samp-fj}}
+	\label{alg:randomsample}
+	\label{alg:sample}
+\end{algorithm}
+
+\subsection*{Conclusion}
+
+We have shown how to estimate the two similarity indices seen using the two approaches \fcont and \fsamp,
+in particular as demonstrated in \cite{SubSim} both $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are, respectively,  unbiased estimators for $BC(A,B)$ and $FJ(A,B)$ 
+(i.e. $BC(A,B) = \mathbb{E}[BC_{W}(A,B)]$ and $FJ(A,B) = \mathbb{E}[FJ_{W}(A,B)]$ for every possible choices of $|W| = 1$).
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
