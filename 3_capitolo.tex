@@ -484,10 +484,9 @@ can explore many colorful paths as it expands the paths in the $X \cup N^{<q}(X)
 To alleviate this issue we present a modified version of the Algorithm 6,
 that we call $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\\
 
-In Algorithms 9 TODO 
-
-% replace both Algorithm 6 and 8 by simply add the lines $8$ and $9$ to the Algorithm 6
-to compute the frequency map $f_{X}[\langle u_{q}, x \rangle]$ based on sampled $q$-paths $R$.\\
+In Algorithms 9, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, 
+in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $R$. In addition we estimate, with the lines $8$ and $9$,
+the value of $f_X$ using the sampled $q$-paths $R$.\\
 
 Of course this speed up the computation time, 
 on the other hand, as we will see in the next chapter, 
