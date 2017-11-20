@@ -339,7 +339,15 @@
 	
 	
 	We can clearly see that \fcount performed very well, as it needs to sample a very little amount of $q$-paths to reach $\epsilon$.
-	Instead \fsamp and \base needs many more $q$-paths to reach the precision of \fcount, in particular note that in the last test \base cannot reach the preestablished relative error.
+	Instead \fsamp and \base needs many more $q$-paths to reach the precision of \fcount, in particular note that in the last test \base cannot reach the preestablished relative error.\\
+	
+	a.
+	
+	a.
+	
+	a.
+	
+	a.
 	
 %	\subsection*{Fixed time precision}
 
@@ -390,3 +398,27 @@
 	
 	One last observation about the couple Meryl Streep and Roberto Benigni: we have a big difference between the Bray-Curtis and the Frequency Jaccard, this can be due from the fact they are both famous actors (both won the Oscar Prize) who starred with a lot of other famous actor but they haven't starred together.
 	
+	\subsection*{Parallelization efficiency}
+	
+	As last test we show the parallelization efficiency in the computational time of the color coding table for different number of cores used.
+	
+
+\begin{table}[h]
+	\centering
+	\label{my-label}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\cline{3-6}
+		\multicolumn{2}{c}{} & \multicolumn{4}{|c|}{ Core } \\ 
+		\hline
+		Dataset         & $q$ & $24$ & $12$ & $6$ & $3$  \\ \hline\hline
+		
+		$\textsc{NetInf}$ & $11$ & $185$ & $199$ & $220$ & $358$  \\  \hline
+		$\textsc{NetInf}$ & $13$ & $340$ & $503$ & $948$ & $1753$  \\  \hline
+		$\textsc{NetInf}$ & $15$ & $1\,433$ & $2\,235$ & $4\,296$ & $7\,654$  \\  \hline  \hline
+		
+		$\textsc{IMDb}$ & $3$ & $48\,220$ & $83\,271$ & $139\,107$ & $224\,815$  \\  \hline
+		$\textsc{IMDb}$ & $4$ & $105\,943$ & $0$ & $0$ & $0$  \\  \hline
+
+	\end{tabular}
+%  	\caption{ On $\textsc{IMDb}$, assuming $|A| = |B| = 100$ }	
+\end{table}
