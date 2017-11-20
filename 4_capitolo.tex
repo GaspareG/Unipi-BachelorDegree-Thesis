@@ -249,7 +249,7 @@
 			\caption{Variance of \fsamp and \base}	
 		\end{table}
 	
-		Now we can see that, for both indices, that the variance of \fsamp is one, or in some case two, orders of magnitude fewer compared to \base.
+		Now we can see that, for both indices, the variance of \fsamp is one, or in some case two, orders of magnitude fewer compared to \base.
 		
 		A last test, always comparing \fsamp and \base on $\textsc{IMDb}$, we show some real values of the two indices comparing the ego-networks of the famous comic duo Laurel and Hardy
 		($q=3$, $R=1\,000$, $|A| = 186$ and $|B| = 415$).
@@ -284,30 +284,33 @@
 		 \end{table}
 	\subsection*{Fixed relative error}
 	
-	In this experiment we set the relative error $\epsilon_{r}$ and compare how many paths $R$ we need to reach such relative error.\\
+	In this experiment we set the relative error and compare how many paths $R$ we need to reach such relative error for each approach.\\
 	
-	TODO
 	\begin{table}[h]
 		\centering
 		\label{my-label}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
 			\hline
-			Dataset 		& $q$ & \textsc{Color-Coding} 	& \textsc{BruteForce} \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{NetInf}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $3$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $4$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $5$ & $1234$					& $1234$ \\ \hline
-			\textsc{IMDb}	& $6$ & $1234$					& $1234$ \\ \hline
+			Dataset 		& $q$ & $|A|$ & $|B|$ & $\epsilon$ & \fcount & \fsamp    & \base    \\ \hline
+			\textsc{NetInf}	& $3$ & $100$ & $100$ & $0.20$     & $2$	 & $400$     & $420$    \\ \hline
+			\textsc{NetInf}	& $3$ & $100$ & $100$ & $0.10$     & $3$	 & $1\,000$  & $900$    \\ \hline
+			\textsc{NetInf}	& $3$ & $100$ & $100$ & $0.05$     & $4$	 & $3\,200$  & $1\,500$ \\ \hline
+			\textsc{NetInf}	& $4$ & $100$ & $100$ & $0.20$     & $3$	 & $1\,300$  & $1\,300$ \\ \hline
+			\textsc{NetInf}	& $4$ & $100$ & $100$ & $0.10$     & $5$	 & $3\,200$  & $2\,500$ \\ \hline
+			\textsc{NetInf}	& $4$ & $100$ & $100$ & $0.05$     & $10$	 & $8\,000$  & $7\,900$ \\ \hline
+			\textsc{NetInf}	& $5$ & $100$ & $100$ & $0.20$     & $5$	 & $5\,000$  & $6\,000$ \\ \hline
+			\textsc{NetInf}	& $5$ & $100$ & $100$ & $0.10$     & $10$	 & $20\,000$ & $30\,000$ \\ \hline
+			\textsc{NetInf}	& $5$ & $100$ & $100$ & $0.05$     & $20$	 & $80\,000$ & $/$ \\ \hline
 		\end{tabular}
-		\caption{TODO Time in milliseconds}
 	\end{table}
 	
-	\subsection*{Fixed time precision}
+	In this test \fcount performed very well, as it needs to sample a very little amount of $q$-paths to reach a.
+	Instead \fsamp and \base needs many more $q$-paths to reach the precision of \fcount, in particular note that in the last test \base cannot reach the preestablished relative error.
 	
-	In this experiment we set the computing time and compare how many path.\\
+	\subsection*{Fixed time precision}
+
+	In this experiment we set the computing time and compare how many path the different algorithms can sample,
+	this test combined with the previous tests can lead us to make some conclusions about.\\
 	
 	TODO
 	\begin{table}[h]
