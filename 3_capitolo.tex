@@ -335,11 +335,11 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-We are interested in sampling $r$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\\
+Sampling uniformly using a dynamic programming approach is a topic already covered in literature, e..g Martin Dyer in \cite{Dyer:2003:ACD:780542.780643} or Eric Vigoda in \cite{Vigoda2010LectureNO},
+in particular we are interested in sampling $r$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\\
 
 In particular the sample depends on the frequencies of the $q$-grams ending in $x \in X$,
-as in the case of consistent weighted sampling, where more frequent $q$-grams need to be sampled more ofter.\\
-
+as in the case of consistent weighted sampling, where more frequent $q$-grams need to be sampled more ofter.
 As we don't know a priori the frequency of $q$-grams before sampling, 
 we can extract the $q$-paths by looking the frequencies of colorful $q$-paths in $M$. 
 We know that the number of colorful $q$-paths ending in $v$ is $M_{q,v}([q])$, 
@@ -351,10 +351,9 @@ so we extract the starting node $x \in X$ of our weighted random $q$-paths with 
 
 And then generating a random $q$-path by scanning the color coding table $M$ 
 backward from $q-1$ to $1$, choosing nodes with a probability similar to $p_{X}(v)$
-(except that during step $i$ we look at row $i$ and in the complementary of the color set of the current $i$-path )\\
+(except that during step $i$ we look at row $i$ and in the complementary of the color set of the current $i$-path).
 
-So our sampling algorithm is defined as:
-\clearpage
+We define out sampling algorithm as: \clearpage
 
 \begin{algorithm}[h]
 	\small
@@ -389,21 +388,16 @@ And \textsc{random-path-to} is defined as:
 	\SetKwInOut{Output}{Output}
 	\Input{$M =$ color coding table for $G$\\$u = $ leading node of the path }
 	\Output{$\pi = $ random colorful path }	
-	\BlankLine
 	\SetKwProg{myproc}{Function}{}{}
-	\BlankLine
 	$P\gets \langle u \rangle$\;
 	$D\gets [q] \setminus \{\chi(u)\}$\;
-	\BlankLine
 	\For{$i \in \{q-1,\ldots, 1\}$}{
 		%Let $N$ be the neighbors $v$ of $u$ s.t. $M[i][v]$ contains the set of colors $D$\;
 		$u\gets$ randomly chosen $v \in N(u)$ with probability~$p_{v} = \frac{M_{i,v}(D) }{ \sum_{z\in N(u)} M_{i,z}(D)}$\;
 		$P\gets u \cdot P$\;
 		$D\gets D\setminus \{\chi(u)\}$\;
 	}
-	\BlankLine
 	\Return{P}   
-	\BlankLine
 	\caption{\textsc{random-path-to}}
 	\label{alg:randomsample}
 	\label{alg:sample}
@@ -619,9 +613,10 @@ We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally
 \subsection*{\fsamp}
 
 Estimating the two indices using the \fsamp algorithm is easier that using \fcount, 
-as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.
+as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.\\
 
-To estimate the Bray-Curtis index we call \fsamp with $X = A \uplus B$.
+To estimate the Bray-Curtis index we first call \fsamp with $X = A \uplus B$, then 
+we compute the values of $f_A$ and $f_B$ from $f_X$ by looking if the leading nodes of the $q$-paths belongs to $A$, $B$ or both.
 
 \clearpage
 
@@ -670,8 +665,8 @@ And in a similar way we estimate the Frequency Jaccard index by setting $X = A \
 
 \subsection*{Conclusion}
 
-We have shown how to estimate the two similarity indices seen using the two approaches \fcont and \fsamp,
-in particular as demonstrated in \cite{SubSim} both $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are, respectively,  unbiased estimators for $BC(A,B)$ and $FJ(A,B)$ 
+We have shown how to estimate the two Bray-Curtis and Frequency Jaccard similarity indices using the two approaches \fcount and \fsamp,
+in particular, as demonstrated in \cite{SubSim}, both $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are, respectively,  unbiased estimators for $BC(A,B)$ and $FJ(A,B)$ 
 (i.e. $BC(A,B) = \mathbb{E}[BC_{W}(A,B)]$ and $FJ(A,B) = \mathbb{E}[FJ_{W}(A,B)]$ for every possible choices of $|W| = 1$).
 
 \clearpage

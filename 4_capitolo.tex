@@ -75,7 +75,7 @@
 
     We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux v.4.4.0-22-generic. Code written in C++17, compiled with g++ v.5.4.1 and OpenMP 4.5.\\
     
-    To better analyze the different approaches described, we take several kinds of experiment in each of them .\footnote{Unless otherwise stated all the results are the average of $100$ identical experiment, in order to reduce the possible errors randomly caused by the machine.}\\
+    To better analyze the different approaches described, we take several kinds of experiment in each of them .\footnote{Unless otherwise stated all the results are the average of $100$ identical experiment, in order to reduce the possible errors randomly caused by the machine.}, all times are expressed in milliseconds.\\
      
     An important fact of which to take into account is that we make large use of parallelization, 
     so all the running times scale (approximately) linearly on the number of cores used.
@@ -102,8 +102,9 @@
 			$6$ & $200$        & $49\,828$ \\ \hline
 			$6$ & $500$        & $104\,129$ \\ \hline
 		\end{tabular}
-		\caption{Time in milliseconds}
 	\end{table}
+
+	As expected, we can see that the running time for the bruteforce approach is linear in the size of $|A \cup B|$ and exponential in the value of $q$.\\
 	
 	The second bottleneck for our algorithms is the preprocessing time for the dynamic programming table of color-coding, so we test for both the dataset how can we go up with the value of $q$. Always remembering from initial assumptions that the value of $q$ should not be to high. 
 
@@ -123,12 +124,11 @@
 			\textsc{IMDb}   & $5$  & $241\,224$ \\ \hline
 			\textsc{IMDb}   & $6$  & $557\,481$ \\ \hline
 		\end{tabular}
-		\caption{Time in milliseconds}
 	\end{table}
 
-	We can observe that, even in \textsc{IMDb} dataset, the value of $q$ could go high as we expected . 
+	We can observe that, even in \textsc{IMDb} dataset, the value of $q$ could go high as we expected, always remaining under $10$ minutes of running time. 
 	
-	To better understand these values, the official \textsc{IMDb} statistic\cite{imdbstat} told us that, out of $1\,837\,357$ actors analyzed, $1\,579\,193$ ($\sim86\%$) are distant $q=3$ from the actor \textit{Kevin Bacon} and $1\,795\,352$ ($\sim98\%$) are distant $q=6$ ().\\
+	To better understand these values, the official \textsc{IMDb} statistic\cite{imdbstat} told us that, out of $1\,837\,357$ actors analyzed, $1\,579\,193$ ($\sim86\%$) are distant $q=3$ from the actor \textit{Kevin Bacon} and $1\,795\,352$ ($\sim98\%$) are distant $q=6$.\\
 	
 	Finally we test the running time for the different approaches for different value of $q$ and number $R$ of $q$-paths sampled.
 	
@@ -138,27 +138,29 @@
 		\begin{tabular}{|c|c|c|c|c|c|c|c|}
 			\hline
 			$Dataset$       & $q$  & $|A|$ & $|B|$ & $R$ & \textsc{F-Count} & \textsc{F-Sample} & \textsc{Base} \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{NetInf} & $7$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{IMDb}   & $3$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{IMDb}   & $3$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{IMDb}   & $3$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
-			\textsc{IMDb}   & $3$  & $100$ & $100$ & $1\,000$ & $1\,000$ & $1\,000$ & $1\,000$ \\ \hline
+			\textsc{NetInf} & $3$  & $100$ & $100$ & $1\,000$ & $20$ & $4$ & $2$ \\ \hline
+			\textsc{NetInf} & $3$  & $100$ & $100$ & $5\,000$ & $60$ & $30$ & $15$ \\ \hline
+			\textsc{NetInf} & $5$  & $100$ & $100$ & $1\,000$ & $2\,682$ & $426$ & $3$ \\ \hline
+			\textsc{NetInf} & $5$  & $100$ & $100$ & $5\,000$ & $4\,767$ & $784$ & $20$ \\ \hline
+			\textsc{NetInf} & $7$  & $100$ & $100$ & $100$ & $5\,455$ & $4$ & $2$ \\ \hline
+			\textsc{NetInf} & $7$  & $100$ & $100$ & $200$ & $16\,634$ & $197$ & $2$ \\ \hline
+			\textsc{IMDb}   & $3$  & $10$ & $10$ & $100$ & $5\,035$ & $66$ & $1$ \\ \hline
+			\textsc{IMDb}   & $4$  & $10$ & $10$ & $1000$ & $/$ & $2\,829$ & $14$ \\ \hline
+			\textsc{IMDb}   & $5$  & $10$ & $10$ & $1000$ & $/$ & $4\,739$ & $20$ \\ \hline
+			\textsc{IMDb}   & $6$  & $10$ & $10$ & $1000$ & $/$ & $9\,783$ & $36$ \\ \hline
 			
 		\end{tabular}
-		\caption{TODO Time in milliseconds}
 	\end{table}
 	
-	
+	The running time of \base is always extremely low, 
+	unlike \fcount that, as we already anticipated, is not suitable for sampling to many $q$-spaths .
+	Instead the running time \fsamp results affordable for all the instance. 
+	 
 	
 	\subsection*{Relative error and variance}
 	
-%	In this experiment we will compare, for increasing value of $R$, how accurate are the different algorithms.\\
-		
+	In this experiment we will compare, for increasing value of $R$, how accurate and stable are the different algorithms (explicitly excluding $\textsc{brute}$ as it calculate the exact value).\\
+	
 	TODO
 	\begin{table}[h]
 		\centering
