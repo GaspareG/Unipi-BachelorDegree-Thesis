@@ -81,7 +81,7 @@ Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n}
     
 \end{definizione}
 
-As a side note, Bray-Curtis is a relevant index for multisets, and is also known as Steinhaus similarity, Pielou's Similarity, Sorensen's quantitative, and Czekanowski's similarity.\cite{legendre1998numerical}
+As a side note, Bray-Curtis is a relevant index for multisets, and is also known as Steinhaus similarity, Pielou's Similarity, Sorensen's quantitative, and Czekanowski's similarity~\cite{legendre1998numerical}.
 
 \begin{esempio}
 	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have:
@@ -111,7 +111,7 @@ Both indices are widely used in practical application, Bray-Curtis index gives a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Documents similarity}
 
-Documents similarity is an hot topic in Information Retrieval, as it can be seen as the problem of duplicate detection\cite{Broder2000} or, from another point of view, plagiarism detection.\\
+Documents similarity is an hot topic in Information Retrieval, as it can be seen as the problem of duplicate detection~\cite{Broder2000} or, from another point of view, plagiarism detection.\\
 
 To define documents similarity we need the notion of \textit{$q$-gram}:
 
@@ -172,13 +172,13 @@ The definition of similarity between graphs is more complex, as we have to intro
 
 If such isomorphism exists, the graphs are called isomorphic and we denote it with $G \simeq H$.\\ 
 
-With the notion of graph similarity we can define a similarity between graph\cite{Bunke:1998:GDM:289720.289729}.
+With the notion of graph similarity we can define a similarity between graph~\cite{Bunke:1998:GDM:289720.289729}.
 
 \begin{definizione}
 	The similarity between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is the size of the largest graph isomorphism between a subgraph $G' \subseteq G$ and a subgraph $H' \subseteq H$ (seen as number of vertex of $G'$).
 \end{definizione}
 
-Unfortunately subgraphs isomorphism is a NP-complete problem\cite{GareyJohnson:1979}, so the only way to solve it is by using heuristic or approximated methods.
+Unfortunately subgraphs isomorphism is a NP-complete problem~\cite{GareyJohnson:1979}, so the only way to solve it is by using heuristic or approximated methods.
 
 % \clearpage 
 \begin{esempio}
@@ -317,7 +317,7 @@ More difficult to manage becomes when we have to consider thousands or millions 
 (e.g. the set of Internet web pages), each one of them has thousands of shingles.\\
 
 To solve this problem it is no longer possible to handle all the shingles for all the documents, 
-instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}\cite{Broder2000}.
+instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}~\cite{Broder2000}.
 
 The computation of the sketches is linear in the size of the documents and can be used to calculate
 the similarity in linear time in the size of the sketches.\\
@@ -335,7 +335,7 @@ in practice we will use a ranking function to define a sorting to the elements i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Min-wise permutation}
 
-The first approach to compute a sketch of a document is the min-wise permutation\cite{Broder:1998:MIP:276698.276781}.\\
+The first approach to compute a sketch of a document is the min-wise permutation~\cite{Broder:1998:MIP:276698.276781}.\\
 
 Given a document $A = \{1, \ldots, n\}$, to calculate its sketch $S_{A}$ of size $k$ 
 we choose $k$ random independent permutation $\pi_{i} : \{1, \ldots, n\} \rightarrow \{1, \ldots, n\}$ and define the sketch as:
@@ -351,7 +351,7 @@ Note that using the min-wise permutation we can take multiple times the same num
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Bottom-k sketches}
 
-Another approach that works best in terms of performance is the bottom-k sketches\cite{Cohen:2007:SDU:1281100.1281133}.\\
+Another approach that works best in terms of performance is the bottom-k sketches~\cite{Cohen:2007:SDU:1281100.1281133}.\\
 
 Instead of using $k$ random permutation $\pi_{1}, \ldots, \pi_{k}$ and take the minimum for each of them,
 like we did before in the min-wise permutation, we choose only one random permutation $\pi$ and take the bottom $k$ elements with lower value in permutation.
@@ -395,7 +395,7 @@ Note that, unlike the min-wise permutation, in the bottom-k sketches we don't ha
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Color Coding}
 
-The color coding is a method proposed in 1994 by Alon, Yuster and Zwick\cite{Alon:1995:COL:210332.210337} that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only to finds $q$-simple paths.\\
+The color coding is a method proposed in 1994 by Alon, Yuster and Zwick~\cite{Alon:1995:COL:210332.210337} that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only to finds $q$-simple paths.\\
 
 The idea behind this method, which gives it the name, is to randomly coloring each node of $V$ with one of the $q$ possible color.
 
@@ -407,13 +407,13 @@ The main advantage of this method is that reduce the number of $q$-paths by roug
 
 As we will show in the next chapter, all the colorful $q$-paths can be easily found using a dynamic programming approach.\\
 
-An interesting fact is that the method of color coding can be derandomized using a $k$-perfect hash family\cite{Alon:1995:COL:210332.210337}, that enumerating all the possible $k$-colorings of $V$.
-This makes the method exponential in the value of $q$, as if we set $q = |V|$ the problem became to find an Hamiltonian path, which is NP-complete\cite{GareyJohnson:1979}.\\
+An interesting fact is that the method of color coding can be derandomized using a $k$-perfect hash family~\cite{Alon:1995:COL:210332.210337}, that enumerating all the possible $k$-colorings of $V$.
+This makes the method exponential in the value of $q$, as if we set $q = |V|$ the problem became to find an Hamiltonian path, which is NP-complete~\cite{GareyJohnson:1979}.\\
 
 To improve precision we can repeat the random coloring of nodes for $e^{q}\ t$ times, 
 so that success probability becomes $\geq 1-e^{-t}$. 
 Another way is to random coloring nodes using a greater number of colors $q'$ and then, instead of looking for the colorful $q'$-paths,
-we search the color-diversified $q$-paths (i.e. $q$-paths without color repetition in $[q']$)\cite{deshpande2007randomized}.\\
+we search the color-diversified $q$-paths (i.e. $q$-paths without color repetition in $[q']$)~\cite{deshpande2007randomized}.\\
 
 In practice, choosing a simple random coloring is working pretty well on complex networks, 
 so for don't add overhead to our algorithms we won't utilize the previous optimizations .\\

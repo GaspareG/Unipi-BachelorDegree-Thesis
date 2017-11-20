@@ -71,7 +71,7 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 \section{Naive approach}
 
 	The naive approach consists in enumerate all the possible $q$-grams of simple $q$-paths leading to $u \in A \cup B$. 
-	This can be done by starting a modified $\textsc{dfs}$ for each $u \in A \cup B$.
+	This can be done by starting an exhaustive search for each $u \in A \cup B$.
 	
     \begin{algorithm}[h]
     \small
@@ -88,7 +88,7 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 	$f_{B} \gets \emptyset$\; 
 	\BlankLine
     \textbf{parallel} \ForEach{$u \in A \cup B$}{
-		$\langle \mathcal{W}_{u}, f_{u} \rangle \gets \textsc{DFS}(\langle u \rangle, q)$\;
+		$\langle \mathcal{W}_{u}, f_{u} \rangle \gets \textsc{ExhaustiveSearch}(\langle u \rangle, q)$\;
 		$\mathcal{W} \gets \mathcal{W} \cup \mathcal{W}_{u}$\;
 		$f_{A \cup B} \gets f_{A \cup B} \cup f_{u}$\;
 	}
@@ -123,7 +123,7 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 	
 	The values of $FJ(A,B)$ and $BC(A,B)$ calculated using this method are exact, we will use it only to compare the precision of the following approaches as it found all the possible $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\\
 	
-	For completeness we also illustrate the modified $\textsc{DFS}$ algorithm that keeps track of the current $q$-path and its relative $q$-gram.
+	For completeness we also illustrate the $\textsc{ExhaustiveSearch}$ algorithm that keeps track of the current $q$-path and its relative $q$-gram.
 	
     \begin{algorithm}[h]
 		\small
@@ -142,14 +142,14 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 		}
 		\Else{
 			\ForEach{$v \in N(u_{1}) \setminus \pi$}{
-				$\langle \mathcal{W}_{v}, f_{v} \rangle \gets \textsc{DFS}(\langle v \rangle \cdot \pi, q)$\;
+				$\langle \mathcal{W}_{v}, f_{v} \rangle \gets \textsc{ExhaustiveSearch}(\langle v \rangle \cdot \pi, q)$\;
 				$\mathcal{W} \gets \mathcal{W} \cup \mathcal{W}_{v}$\;
 				$f_{u} \gets f_{u} \cup f_{v}$\;
 			}	
 		}
 		\BlankLine
 		\Return{$\langle \mathcal{W}$, $f_{u} \rangle$}
-		\caption{\textsc{DFS}}
+		\caption{\textsc{ExhaustiveSearch}}
 		\label{alg:brute-force}
 	\end{algorithm}
 
@@ -165,9 +165,11 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 	As last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisit the nodes already in the path $\pi$, in this way we restrict the searching only on the simple $q$-paths.
 	
 	\begin{lemma}
-		For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} requires $O(|V|^{q})$ time and $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.
+		For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} requires $O(|V|^{q})$ time and $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.\\
 	\end{lemma}
 
+	Now we present a little example to better understand:
+	
 	\begin{esempio}
 		We want to compute the similarity between the two nodes $4$ and $3$ in the following graph.	
 	\end{esempio}
@@ -182,7 +184,7 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 %		\includegraphics[width=0.40\textwidth]{figure/figure-3-2}
 %		\end{wrapfigure}
 
-		The call to the method $\textsc{DFS}(4, 3)$ return:
+		$\textsc{ExhaustiveSearch}(4, 3)$ return:
 		
 		\begin{wrapfigure}{R}{0\textwidth}
 		%	\centering
@@ -197,7 +199,7 @@ In the next algorithms we will focus to compute the values of $\mathcal{W}$, $f_
 		$f_{4}[\langle 4, bbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
 		$f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-4-0}$)\\
 		
-		The call to the method $\textsc{DFS}(3, 3)$ return:\\
+		$\textsc{ExhaustiveSearch}(3, 3)$ return:\\
 		\begin{equation*}
 		\mathcal{W}_{3} = \{ abc, acc, bcc, cbc \}
 		\end{equation*}
@@ -232,7 +234,7 @@ The main hurdle of the problem is to compute the frequency map $f_{X}[\ ]$ for s
 as it can grow up to have a size of $|\Sigma|^{q}$ and its definition requires to explore $|V|^{q}$ $q$-paths.\\
 
 We present a random estimator based on color coding and sketching with the property that it can be computed
-efficiently even on big networks and its expected value is the actual similarity index\cite{SubSim}.\\
+efficiently even on big networks and its expected value is the actual similarity index~\cite{SubSim}.\\
 
 As first thing using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)}|V|$, 
 thus making it feasible for large value of $|V|$ and with $q = O(\log |V|)$.
@@ -335,7 +337,7 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-Sampling uniformly using a dynamic programming approach is a topic already covered in literature, e..g Martin Dyer in \cite{Dyer:2003:ACD:780542.780643} or Eric Vigoda in \cite{Vigoda2010LectureNO},
+Sampling uniformly using a dynamic programming approach is a topic already covered in literature, e..g Martin Dyer in ~\cite{Dyer:2003:ACD:780542.780643} or Eric Vigoda in ~\cite{Vigoda2010LectureNO},
 in particular we are interested in sampling $r$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\\
 
 In particular the sample depends on the frequencies of the $q$-grams ending in $x \in X$,
