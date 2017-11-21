@@ -4,7 +4,8 @@
 
 \chapter{Introduction}
 
-With the spread of the Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important.
+With the spread of the Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important. 
+
 Graphs are a powerful data structure that natural model the interactions between objects.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,7 +31,7 @@ With $N^{<k}(u)$ we indicate the set of vertex connected to $u$ by a simple path
     A graph $G' = (V', E')$ is called \textbf{subgraph} of $G=(V,E)$ if $V' \subset V$ and $E' \subset E$. A subgraph is called \textbf{induced subgraph} if $E' = (V' \times V') \cap E$.
 \end{definizione}
 
-We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is a induced subgraph of $G$.\\
+We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is a induced subgraph of $G$.\medskip
 
 Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the set of its vertex $V'$.
 
@@ -39,12 +40,12 @@ Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the 
 	is a function that assign for every node $v$ a symbol of the alphabet $\Sigma$. We call $L(u) \in \Sigma$ label of the node $u$.
 \end{definizione}
 
-Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and we indicate with $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ the string obtained by the concatenation of the labels of the nodes in the path.\\
+Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and we indicate with $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ the string obtained by the concatenation of the labels of the nodes in the path.\medskip
 
 In this thesis we mainly focus to analyze complex network: special graphs with a non-trivial topology like random graphs. Complex network occur in graphs modeling real system like social networks or computer networks and are characterized by a specific structural feature:
 
 \begin{definizione}\label{def:power-law-graph}
-	We define as \textbf{power-law degree distribution} a networks where the degree of a node $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability distribution:
+	We define as \textbf{power-law degree distribution} a network where the degree of a node $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability distribution:
 	\begin{equation}
 		P(deg(u) = k) \sim k^{-\gamma}  
 	\end{equation}
@@ -88,11 +89,11 @@ Given an undirected labeled graph $G=(V,E,L)$ over an alphabet $\Sigma$, an inte
 and two set of nodes $V_{1}, V_{2} \subset V$, we want to estimate the similarity between the two induced subgraphs $V_{1}, V_{2} < G$ based on the labels frequency of simple paths with nodes in $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$.
 \end{problema}
 
-We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\\
+We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\medskip
 
-In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between the subgraph and the external graph.\\
+In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between the subgraph and the external graph.\medskip
 
-The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of q and $|\Sigma|$ to $|\Sigma|^{q} \gg |V|$ and, even worse, the number of simple paths can exponentially explode to $|V|^{q}$. For the simple reason that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\\
+The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of q and $|\Sigma|$ to $|\Sigma|^{q} \gg |V|$ and, even worse, the number of simple paths can exponentially explode to $|V|^{q}$. For the simple reason that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\medskip
 
 In this thesis we exploit the problem using randomized techniques and parallelization, which makes the problem suitable even for big networks. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

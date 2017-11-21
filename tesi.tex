@@ -121,12 +121,16 @@
                 morecomment=[l][\color{magenta}]{\#}
 }
 
-\usepackage[none]{hyphenat}
+% \usepackage[none]{hyphenat}
+
+\usepackage{bold-extra}
+\usepackage{lmodern}
+
 
 \begin{document}
 
-\renewcommand{\theequation}{\thechapter.\arabic{equation}}%si torna alle formule numerate come da default
-\renewcommand{\thesection}{\thechapter.\arabic{section}}%si torna alle sezioni numerate come da default
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\renewcommand{\thesection}{\thechapter.\arabic{section}}
 
 \frontmatter
 

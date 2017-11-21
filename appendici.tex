@@ -6,7 +6,7 @@
 
 \chapter{Code snippets}
   
- All the code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/ColorCoding}}.\\
+The code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/ColorCoding}}.\medskip
 
 Snippet of common definition used in all the algorithms:
 
@@ -94,7 +94,8 @@ vector<int> randomPathTo(int u) {
 		for (int v : G[u]) 
 			freq.push_back(M[i][v][D]);
 		discrete_distribution<int> 
-			distr(freq.begin(), freq.end());
+			distr(freq.begin(), 
+			      freq.end());
 		u = G[u][distr(eng)];
 		P.push_back(u);
 		D = clearBit(D, color[u]);
@@ -160,7 +161,11 @@ map<string, ll> processFrequency(set<string> W,
           string LPv = LP + label[v];
           if (!isPrefix(WR, LPv)) continue;
           #pragma omp critical
-          { current.push_back(make_tuple(v, LPv, CPv)); }
+          { 
+            current.push_back(
+	          make_tuple(v, LPv, CPv)
+	        ); 
+          }
         }
       }
     old = current;
