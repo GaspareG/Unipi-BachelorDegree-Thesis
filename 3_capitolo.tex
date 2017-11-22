@@ -322,7 +322,7 @@ We define out sampling algorithm as shown in Algorithm~\ref{alg:colorful-sampler
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$\tau =$ number of colorful paths to sample.}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r$ number of colorful paths to sample.}
 	\Output{$W = $ random sample composed by $q$-grams of $q$-paths leading to $x \in X$}
 	\BlankLine
 	$R \gets \{\}$\;
@@ -424,14 +424,14 @@ To alleviate this issue we present a modified version of the Algorithm \ref{alg:
 
 In Algorithms \ref{alg:f-samp}, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
 
-Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $\tau$ to have a better estimation of the similarity indices.
+Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $r$ to have a better estimation of the similarity indices.
 
 \begin{algorithm}[h]
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$\tau =$ number of colorful paths to sample}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
 	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[\langle u_{q}, x \rangle] = $ frequency of each $x \in \mathcal{W}$ leading to $u_{q}$}
 	$R \gets \{\}$\;
 		

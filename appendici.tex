@@ -238,12 +238,12 @@ map<pair<int, string>, ll> FSamp(vector<int> X, int r) {
 
 Implementation of Algorithm \ref{alg:f-count-bc}
 \begin{lstlisting}
-double FCountBrayCurtis(set<int> A, set<int> B, int tau) {
+double FCountBrayCurtis(set<int> A, set<int> B, int r) {
 	multiset<int> mA(A.begin(), A.end());
 	multiset<int> mB(B.begin(), B.end());
 	multiset<int> X(A.begin(), A.end());
 	X.insert(B.begin(), B.end());
-	set<string> W = colorfulSampler(X, tau);
+	set<string> W = colorfulSampler(X, r);
 	map<string, ll> freqA = FCount(W, mA);
 	map<string, ll> freqB = FCount(W, mB);
 	return BCW(W, freqA, freqB);
@@ -254,12 +254,12 @@ double FCountBrayCurtis(set<int> A, set<int> B, int tau) {
 
 Implementation of Algorithm \ref{alg:f-count-fj}
 \begin{lstlisting}
-double FCountFrequencyJaccard(set<int> A, set<int> B, int tau) {
+double FCountFrequencyJaccard(set<int> A, set<int> B, int r) {
 	map<string, ll> freqA, freqB;
 	set<int> AB(A.begin(), A.end());
 	AB.insert(B.begin(), B.end());
 	multiset<int> X(AB.begin(), AB.end());
-	set<string> W = colorfulSampler(X, tau);
+	set<string> W = colorfulSampler(X, r);
 	ll R = 0;
 	for(int x : X)
 	{
@@ -284,10 +284,10 @@ double FCountFrequencyJaccard(set<int> A, set<int> B, int tau) {
 
 Implementation of Algorithm \ref{alg:f-samp-bc}
 \begin{lstlisting}
-double FSampleBrayCurtis(set<int> A, set<int> B, int tau) {
+double FSampleBrayCurtis(set<int> A, set<int> B, int r) {
 	multiset<int> X(A.begin(), A.end());
 	X.insert(B.begin(), B.end());
-	map<pair<int, string>, ll> freqX = FSamp(X, tau);
+	map<pair<int, string>, ll> freqX = FSamp(X, r);
 	map<string, ll> freqA, freqB;
 	set<string> W;
 	for (auto w : freqX) {
@@ -307,11 +307,11 @@ double FSampleBrayCurtis(set<int> A, set<int> B, int tau) {
 Implementation of Algorithm \ref{alg:f-samp-fj}
 \begin{lstlisting}
 double FSampleFrequencyJaccard(set<int> A, 
-                               set<int> B, int tau) {
+                               set<int> B, int r) {
 	set<int> AB(A.begin(), A.end());
 	AB.insert(B.begin(), B.end());
 	vector<int> X(AB.begin(), AB.end());
-	map<pair<int, string>, ll>  freqX = FSample(X, tau);
+	map<pair<int, string>, ll>  freqX = FSample(X, r);
 	map<string, ll> freqA, freqB;
 	set<string> W;
 	ll R = 0;

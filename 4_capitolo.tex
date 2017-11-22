@@ -120,13 +120,13 @@ We can observe that, even in \textsc{IMDb} dataset, the value of $q$ could go hi
 
 To better understand these values, the official \textsc{IMDb} statistic~\cite{imdbstat} told us that, out of $1\,837\,357$ actors analyzed, $1\,579\,193$ ($\sim86\%$) are distant $q=3$ from the actor \textit{Kevin Bacon} and $1\,795\,352$ ($\sim98\%$) are distant $q=6$.\medskip
 
-Finally, we test the running time for the different approaches for different value of $q$ and number $\tau$ of $q$-paths sampled. 
+Finally, we test the running time for the different approaches for different value of $q$ and number $r$ of $q$-paths sampled. 
 
 \begin{table}[h]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
-		\textsc{Dataset} & $q$ & $|A|$ & $|B|$ & $\tau$      & \textsc{F-Count} & \textsc{F-Sample} & \textsc{Base} \\ \hline \hline
+		\textsc{Dataset} & $q$ & $|A|$ & $|B|$ & $r$      & \textsc{F-Count} & \textsc{F-Sample} & \textsc{Base} \\ \hline \hline
 		\textsc{NetInf}  & $3$ & $100$ & $100$ & $1\,000$ & $20$             & $4$               & $2$           \\ \hline
 		\textsc{NetInf}  & $3$ & $100$ & $100$ & $5\,000$ & $60$             & $30$              & $15$          \\ \hline
 		\textsc{NetInf}  & $5$ & $100$ & $100$ & $1\,000$ & $2\,682$         & $426$             & $3$           \\ \hline
@@ -149,7 +149,7 @@ This is because both the \fsamp and the \base algorithms have a complexity of $O
 
 \subsection*{Relative error and variance}
 
-In this experiment we will compare, for increasing value of $\tau$, how accurate and stable are the different algorithms using the $\textsc{NetInfo}$ dataset.\medskip
+In this experiment we will compare, for increasing value of $r$, how accurate and stable are the different algorithms using the $\textsc{NetInfo}$ dataset.\medskip
 
 The accuracy is calculated with the average of the relative error between the exact solution of $\textsc{brute}$ and the analyzed algorithms \fcount, \fsamp or \base, while the stability is calculated as the variance of the results, considering $100$ experiments for each combination of parameters.
 
@@ -157,7 +157,7 @@ The accuracy is calculated with the average of the relative error between the ex
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
-		$q$ & $|A|$ & $|B|$ & $\tau$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
+		$q$ & $|A|$ & $|B|$ & $r$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
 		$3$ & $100$ & $100$ & $10$     & $0.02617187$    & $0.00082663$        & $0.02431909$    & $0.000190515$       \\ \hline
 		$3$ & $100$ & $100$ & $100$    & $0.02258048$    & $0.00003059$        & $0.02324100$    & $0.000007628$       \\ \hline
 		$3$ & $100$ & $100$ & $1\,000$ & $0.03952676$    & $0.00000070$        & $0.04030510$    & $0.000000132$       \\ \hline \hline
@@ -176,7 +176,7 @@ The accuracy is calculated with the average of the relative error between the ex
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
-		$q$ & $|A|$ & $|B|$ & $\tau$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
+		$q$ & $|A|$ & $|B|$ & $r$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
 		$3$ & $100$ & $100$ & $10$     & $0.53290243$    & $0.02463258$        & $0.64549929$    & $0.01098586$        \\ \hline
 		$3$ & $100$ & $100$ & $100$    & $0.26679417$    & $0.00291718$        & $0.35897713$    & $0.00141635$        \\ \hline
 		$3$ & $100$ & $100$ & $1\,000$ & $0.05437719$    & $0.00023471$        & $0.12111130$    & $0.00015040$        \\ \hline \hline
@@ -194,7 +194,7 @@ The accuracy is calculated with the average of the relative error between the ex
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
-		$q$ & $|A|$ & $|B|$ & $\tau$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
+		$q$ & $|A|$ & $|B|$ & $r$      & $\epsilon_{BC}$ & $\textsc{VAR}_{BC}$ & $\epsilon_{FJ}$ & $\textsc{VAR}_{FJ}$ \\ \hline \hline
 		$3$ & $100$ & $100$ & $10$     & $0.79011542$    & $0.023361286$       & $0.83428722$    & $0.00522323$        \\ \hline
 		$3$ & $100$ & $100$ & $100$    & $0.38049732$    & $0.003518397$       & $0.40706656$    & $0.00123490$        \\ \hline
 		$3$ & $100$ & $100$ & $1\,000$ & $0.10418507$    & $0.000494349$       & $0.10331303$    & $0.00011619$        \\ \hline \hline
@@ -223,7 +223,7 @@ in order to study the stability in a real application.
 		\cline{5-8}
 		\multicolumn{4}{c|}{} & \multicolumn{2}{c|}{\fsamp} & \multicolumn{2}{c|}{\base}\\
 		\hline
-		$q$ & $|A|$ & $|B|$ & $\tau$      & $\textsc{VAR}_{BC}$ & $\textsc{VAR}_{FJ}$ & $\textsc{VAR}_{BC}$ & $\textsc{VAR}_{FJ}$ \\ \hline 
+		$q$ & $|A|$ & $|B|$ & $r$      & $\textsc{VAR}_{BC}$ & $\textsc{VAR}_{FJ}$ & $\textsc{VAR}_{BC}$ & $\textsc{VAR}_{FJ}$ \\ \hline 
 		$3$ & $100$ & $100$ & $1\,000$ & $0.00000971$        & $0.00001004$        & $0.00011746$        & $0.00019368$        \\ \hline
 		$4$ & $100$ & $100$ & $1\,000$ & $0.00000114$        & $0.00000736$        & $0.00012097$        & $0.00002175$        \\ \hline
 		$5$ & $100$ & $100$ & $1\,000$ & $0.00000594$        & $0.00000085$        & $0.00004424$        & $0.00000624$        \\ \hline
@@ -265,7 +265,7 @@ Finally, in the last test, to compare \fsamp and \base on $\textsc{IMDb}$, we sh
 \end{table}
 \subsection*{Fixed relative error}
 
-In this experiment we set the relative error and compare, for each approach, how many paths $\tau$ we need to sample in order to get this relative error.\medskip
+In this experiment we set the relative error and compare, for each approach, how many paths $r$ we need to sample in order to get this relative error.\medskip
 
 \begin{table}[h]
 	\centering
@@ -273,7 +273,7 @@ In this experiment we set the relative error and compare, for each approach, how
 		\cline{3-11}
 		\multicolumn{2}{c|}{} & \multicolumn{3}{c|}{\fcount} & \multicolumn{3}{c|}{\fsamp} & \multicolumn{3}{c|}{\base}\\
 		\hline	
-		$q$ & $\epsilon$ & $\tau$ & T    & VAR      & $\tau$ & T    & VAR      & $\tau$ & T   & VAR      \\ \hline
+		$q$ & $\epsilon$ & $r$ & T    & VAR      & $r$ & T    & VAR      & $r$ & T   & VAR      \\ \hline
 		$3$ & $0.20$     & $2$  & $1$  & $0.0725$ & $400$     & $1$  & $0.1194$ & $420$     & $1$ & $0.1150$ \\ \hline
 		$3$ & $0.10$     & $3$  & $1$  & $0.0692$ & $1\,000$  & $1$  & $0.0601$ & $900$     & $1$ & $0.1338$ \\ \hline
 		$3$ & $0.05$     & $4$  & $1$  & $0.0535$ & $3\,200$  & $1$  & $0.0273$ & $1\,500$  & $1$ & $0.1025$ \\ \hline
@@ -286,7 +286,7 @@ In this experiment we set the relative error and compare, for each approach, how
 		$5$ & $0.10$     & $10$ & $18$ & $0.0370$ & $20\,000$ & $12$ & $0.0745$ & $30\,000$ & $8$ & $0.1234$ \\ \hline
 		$5$ & $0.05$     & $20$ & $58$ & $0.0204$ & $80\,000$ & $30$ & $0.0376$ & $/$       & $/$ & $/$      \\ \hline
 	\end{tabular}
-	\caption{Dataset $\textsc{NetInf}$, $|A| = |B| = 100$}
+	\caption{Dataset $\textsc{NetInf}$, $|A| = |B| = 100$, $T = $ average running time, VAR $ = $ variance of solutions}
 \end{table}
 \medskip
 
