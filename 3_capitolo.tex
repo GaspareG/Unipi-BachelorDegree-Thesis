@@ -54,7 +54,7 @@ So we define the following procedures based on \eqref{bray-sub} and \eqref{jacca
 	\label{alg:jaccard}
 \end{algorithm}
 
-Algorithm 1 and 2 compute the values of $BC(A,B)$ and $FJ(A,B)$, as previously defined, by ranging over the given dictionary of $q$-grams $\mathcal{W}$.
+Algorithm \ref{alg:bray-curtis} and \ref{alg:jaccard} compute the values of $BC(A,B)$ and $FJ(A,B)$, as previously defined, by ranging over the given dictionary of $q$-grams $\mathcal{W}$.
 
 \begin{lemma}
 	The execution of \textsc{Bray-Curtis} or \textsc{Frequency-Jaccard} requires $O(|W|)$ time and $O(1)$ space. 	
@@ -147,7 +147,7 @@ For completeness, we also illustrate the $\textsc{ExhaustiveSearch}$ algorithm t
 
 Here the symbol $\cdot$ is the concatenation of the paths. Note that we put the node $v$ before the path $\pi$ as we are interested to find all the $q$-paths leading to the node $u$.\medskip
 	
-In Algorithm 4, when $\pi$ is a $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, which is the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
+In Algorithm \ref{alg:exhaustive-search}, when $\pi$ is a $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, which is the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
 	
 When the path $\pi$ is shorted than $q$, we recursively visit all its neighbors, with the new path obtained by prepending the node $v$ to the current path $\pi$.\medskip
 	
@@ -249,7 +249,7 @@ Note that the preprocessing task is performed independently from the choice of t
 
 The next goal is to list all the colorful $q$-paths in $G$ using a dynamic programming approach.\medskip
 
-First of all we assign a random coloring $\chi : V \rightarrow [q]$, so that each node $u \in V$ has a color $\chi(u)$ independently and uniformly chosen from $[q]$. Algorithm 5 build and return a table $M$ of size $q \times |V|$ where $M_{i,j}$ stores the collection of pairs $\langle C, f \rangle$ where  $C \subseteq [q]$ is a color set such that $|C| = i$ and there are $f$ colorful $i$-paths leading to the node $j$.\medskip
+First of all we assign a random coloring $\chi : V \rightarrow [q]$, so that each node $u \in V$ has a color $\chi(u)$ independently and uniformly chosen from $[q]$. Algorithm \ref{alg:color-coding} build and return a table $M$ of size $q \times |V|$ where $M_{i,j}$ stores the collection of pairs $\langle C, f \rangle$ where  $C \subseteq [q]$ is a color set such that $|C| = i$ and there are $f$ colorful $i$-paths leading to the node $j$.\medskip
 
 Our assumption that $q = O(\log |V|)$ allows us to implement, using bit manipulations, operations on color sets in $O(1)$ time as they fit in a machine words.\medskip
 
@@ -260,12 +260,12 @@ For what concern space, the table $M$, as we already said, has a total of $q \ti
 Each pair can be stored in $O(1)$ as they are simply $2$ integer, we have a total size of $O(\Sigma_{i=1}^{q}{\Sigma_{j=1}^{|V|}{ \binom{q}{i}}}) = O(|V|\ \Sigma_{i=1}^{q}{\binom{q}{i}}) = O(|V|\ 2^{q})$.\bigskip
 
 \begin{lemma}
-	Given an undirected graph $G=(V, E)$ random colored in $[q]$, where $q = O(\log |V|)$, Algorithm 5 (preprocess($G$,$q$)) returns the dynamic programming table $M$ of color coding in $O(|E|\ 2^{q})$ time and $O(|V|\ 2^{q})$ space. 
+	Given an undirected graph $G=(V, E)$ random colored in $[q]$, where $q = O(\log |V|)$, Algorithm \ref{alg:color-coding} (preprocess($G$,$q$)) returns the dynamic programming table $M$ of color coding in $O(|E|\ 2^{q})$ time and $O(|V|\ 2^{q})$ space. 
 \end{lemma}
 
 \bigskip
 
-It is not difficult to modify the Algorithm 5 to list also the colorful $q$-grams, printing $L(\pi)$ for each colorful $q$-path $\pi$. This makes the algorithms inefficient, indeed we still have to face with the problem that $\mathcal{L} \sim \Sigma^{q}$.\bigskip
+It is not difficult to modify the Algorithm \ref{alg:color-coding} to list also the colorful $q$-grams, printing $L(\pi)$ for each colorful $q$-path $\pi$. This makes the algorithms inefficient, indeed we still have to face with the problem that $\mathcal{L} \sim \Sigma^{q}$.\bigskip
 
 So we will pass to the next step.
 
@@ -273,7 +273,7 @@ So we will pass to the next step.
 
 Now using the color coding table $M$, and given two set of nodes $A, B$, we want to approximate the values of $BC(A,B)$ and $FJ(A,B)$.\bigskip
 
-As already said, we cannnot explore all the colorful $q$-grams, so our idea is to construct a sample of $\mathcal{L}$, without explicitly calculate it, by sampling $r$ $q$-paths from $M$, where $r < |\mathcal{L}|$ is a user-selectable parameter.
+As already said, we cannot explore all the colorful $q$-grams, so our idea is to construct a sample of $\mathcal{L}$, without explicitly calculate it, by sampling $r$ $q$-paths from $M$, where $r < |\mathcal{L}|$ is a user-selectable parameter.
 
 We will use as a sample $r$ $q$-paths  without repetition. This can be also seen as a bottom-r sketch of all the $q$-paths.\bigskip 
 
@@ -322,7 +322,7 @@ We define out sampling algorithm as shown in Algorithm~\ref{alg:colorful-sampler
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$\tau =$ number of colorful paths to sample.}
 	\Output{$W = $ random sample composed by $q$-grams of $q$-paths leading to $x \in X$}
 	\BlankLine
 	$R \gets \{\}$\;
@@ -361,22 +361,22 @@ The procedure $\textsc{random-path-to}$ is defined in Algorithm~\ref{alg:random-
 	\label{alg:random-path-to}
 \end{algorithm}
 
-Note that the method $\textsc{random-path-to}$ always finds a colorful $q$-path, as at each step we choose nodes only among the ones that will lead to a colorful $q$-path (i.e. the probability $p_{v}$ is $0$ for nodes that don't lead to a colorful $q$-path). This property is guaranteed by the way the color coding table $M$ is generated by Algorithm 5.
+Note that the method $\textsc{random-path-to}$ always finds a colorful $q$-path, as at each step we choose nodes only among the ones that will lead to a colorful $q$-path (i.e. the probability $p_{v}$ is $0$ for nodes that don't lead to a colorful $q$-path). This property is guaranteed by the way the color coding table $M$ is generated by Algorithm \ref{alg:color-coding}.
 
 \begin{lemma}
 	For any multiset of nodes $X$, 
-	Algorithm 6 returns a random sample $W \subset |\Sigma^{q}|$ with a complexity of $O(rq)$ both in time and space, 
+	Algorithm \ref{alg:colorful-sampler} returns a random sample $W \subset |\Sigma^{q}|$ with a complexity of $O(rq)$ both in time and space, 
 	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
 \end{lemma}
 
 \clearpage
 \subsection*{Phase 2: Frequency count}
 
-Now that we have a sample $W$, of suitable size, composed by $q$-grams, we are interested, for a multiset of nodes $X$, in calculating $f_{X}[x]$ for each $x \in W$. Algorithm~\ref{alg:f-count}, for steps $i = 1, 2, \ldots, q$, proceeds by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by a binary search in a set of strings).\medskip
+Now that we have a sample $W$, of suitable size, composed by $q$-grams, we are interested, for a multiset of nodes $X$, in calculating $f_{X}[x]$ for each $x \in W$. Algorithm~\ref{alg:f-count}, for steps $i = 1, 2, \ldots, q$, proceeds by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by performing a binary search in a set of strings).\medskip
 
-We maintain a multiset $T$ of these $i$-grams, each represented by a triple $\langle z, x, C \rangle$ to indicate that exists a $i$-path starting from z and leading to a node $u \in X$ whose $i$-gram is $x$ and its colorset is $C$ (note that the same triple triple $\langle z, x, C \rangle$ can appear more times in $T$ as there might exist multiple paths from $z$ to $u$ labeled with the same $i$-gram $x$).\medskip
+We maintain a multiset $T$ of these $i$-grams, each represented by a triple $\langle z, x, C \rangle$ to indicate that there exists a $i$-path starting from z and leading to a node $u \in X$ whose $i$-gram is $x$ and its colorset is $C$ (note that the same triple $\langle z, x, C \rangle$ can appear more times in $T$ as there might exist multiple paths from $z$ to $u$ labeled with the same $i$-gram $x$).\medskip
 
-Also in this case, considering that the computation for the $i$-grams depends only by the $(i-1)$-grams, we can parallelize the operations for the triple with same length $i$.
+Also in this case, considering that the computation for the $i$-gram depends only on the $(i-1)$-grams, we can parallelize the operations for the triple with same length $i$.
 
 \begin{algorithm}[h]
 	
@@ -418,20 +418,20 @@ Also in this case, considering that the computation for the $i$-grams depends on
 
 \clearpage
 
-It may happen that, in some big instance, Algorithm 8 explore many colorful paths as it expands the paths in $X \cup N^{<q}(X)$ .
+It may happen that, in some big instance, Algorithm \ref{alg:f-count} explores many colorful paths as it expands the paths in $X \cup N^{<q}(X)$ .
 
-To alleviate this issue we present a modified version of the Algorithm 6, called $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\medskip
+To alleviate this issue we present a modified version of the Algorithm \ref{alg:colorful-sampler}, called $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\medskip
 
-In Algorithms 9, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
+In Algorithms \ref{alg:f-samp}, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
 
-Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $r$ to have a better estimation of the similarity indices.
+Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $\tau$ to have a better estimation of the similarity indices.
 
 \begin{algorithm}[h]
 	\small
 	\DontPrintSemicolon
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample}
+	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$\tau =$ number of colorful paths to sample}
 	\Output{$W = $ random sample set of colorful $q$-grams $x \in L(X)$ with probability $p_X(x)$\\$f_{X}[\langle u_{q}, x \rangle] = $ frequency of each $x \in \mathcal{W}$ leading to $u_{q}$}
 	$R \gets \{\}$\;
 		
@@ -458,7 +458,7 @@ Of course, this speed up the computation time, on the other hand, as we will see
 
 \begin{lemma}
 	For any multiset of nodes $X$, 
-	Algorithm 9 ($\textsc{f-samp}(X, M, r)$) return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
+	Algorithm~\ref{alg:f-samp} ($\textsc{f-samp}(X, M, r)$) return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
 	with a complexity of $O(rq)$ both in time and space, 
 	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
 \end{lemma}
@@ -471,7 +471,7 @@ Now that we have defined all the generic algorithms, we will use them to estimat
 
 The sampling algorithms, $\textsc{colorful-sampler}$ and \fsamp, can be used for estimating both the Bray-Curtis index ($X = A \uplus B$) and the Frequency Jaccard Index ($X = A \cup B$).
 
-In this way, in the Bray-Curtis index, we give more weight of being extracted to the $q$-paths leading to $u \in A \cap B$, as in the multisets union ($\uplus$) we sum the frequency of the elements that belong to the intersection.\medskip
+In this way, in the Bray-Curtis index, we give more weight of being extracted to the $q$-paths leading to $u \in A \cap B$, as in the multisets union ($\uplus$) we count the frequency of the elements that belong to the intersection twice.\medskip
 
 We now present the four final algorithms for estimating both Bray-Curtis index and Frequency Jaccard index, using both \fcount and \fsamp.
 
@@ -479,7 +479,7 @@ We now present the four final algorithms for estimating both Bray-Curtis index a
 
 For estimating the Bray-Curtis index, using the \fcount approach, we first create the sketch $\mathcal{W}$ by sampling $r$ $q$-grams leading to $X = A \uplus B$, using the $\textsc{Colorful-sampler}$ algorithm. Then we calculate the exact values of $f_{A}[x]$ and $f_{B}[x]$, for each $x \in \mathcal{W}$, using the \fcount algorithm.
 
-Finally, we estimate the real value $BC(A,B)$ with $BC_{ \mathcal{W} }(A,B)$, i.e. the Bray-Curtis index restricted to the strings in $\mathcal{W}$ as defined it in \eqref{bc-w}.
+Finally, we estimate the real value $BC(A,B)$ with $BC_{ \mathcal{W} }(A,B)$, i.e. the Bray-Curtis index restricted to the strings in $\mathcal{W}$ as defined in \eqref{bc-w}.
 
 \begin{algorithm}[h]
 	\small
@@ -502,7 +502,7 @@ For estimating the Frequency Jaccard index, we create the sketch $\mathcal{W}$ w
 
 Then the values of $f_{A}[x]$ and $f_{B}[x]$ are calculated in a different way, as we also want to calculate the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$.
 
-Using the property $R = \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$, the exact value $f_{u}$: frequency of each $q$-gram leading to $u$, which $q$-gram belong to the sampled dictionary $\mathcal{W}$.
+Using the property $|R|= \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$, the exact value $f_{u}$, which is the frequency of each $q$-gram leading to $u$, for $q$-grams belonging to the sampled dictionary $\mathcal{W}$.
 
 We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally merge $f_{u}$ to $f_A$, if $u \in A$, and $f_B$, if $u \in B$.
 
@@ -544,7 +544,7 @@ We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally
 
 Estimating the two indices using the \fsamp algorithm is easier than using \fcount, as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.\medskip
 
-To estimate the Bray-Curtis index we first call \fsamp with $X = A \uplus B$, then we compute the values of $f_A$ and $f_B$ from $f_X$ by looking if the leading nodes of the $q$-paths belongs to $A$, $B$ or both.
+To estimate the Bray-Curtis index we first call \fsamp with $X = A \uplus B$, then we approximate the values of $f_A$ and $f_B$ from $f_X$ by looking if the leading nodes of the $q$-paths belongs to $A$, $B$ or both.
 
 To estimate the Frequency Jaccard index we set $X = A \cup B$ and calculate $R$ using the property $R = \Sigma_{x \in \mathcal{W}}{f_X[x]}$.
 
@@ -591,13 +591,13 @@ To estimate the Frequency Jaccard index we set $X = A \cup B$ and calculate $R$ 
 \end{algorithm}
 
 \subsection*{Conclusion}
-We have shown how to estimate the two Bray-Curtis and Frequency Jaccard similarity indices using the two approaches \fcount and \fsamp, in particular, as demonstrated in \cite{SubSim}, both $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are, respectively, unbiased estimators for $BC(A,B)$ and $FJ(A,B)$, i.e. the following definitions shall apply: $BC(A,B) = \mathbb{E}[BC_{W}(A,B)]$ and $FJ(A,B) = \mathbb{E}[FJ_{W}(A,B)]$ for every possible choice of $|W| = 1$.
+We have shown how to estimate the two Bray-Curtis and Frequency Jaccard similarity indices using the two approaches \fcount and \fsamp. In particular, as demonstrated in \cite{SubSim}, for \fcount, both $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are, respectively, unbiased estimators for $BC(A,B)$ and $FJ(A,B)$, meaning that $BC(A,B) = \mathbb{E}[BC_{W}(A,B)]$ and $FJ(A,B) = \mathbb{E}[FJ_{W}(A,B)]$ for every possible choice of $|W| = 1$. On the other hand, it has been proved that the estimation done by \fsamp for $f_A[x]$ and $f_B[x]$, for each $x\in W$, is unbiased.
 
 \clearpage
 
 \section{Baseline algorithm}
 
-In order to validate the effectiveness of our approaches, we compare the previously seen algorithms against a naive randomized approach, the baseline algorithm $\textsc{base}$ that find random paths in a simple way.
+In order to validate the effectiveness of our approaches, we compare the previously seen algorithms against a naive randomized approach, which is the following baseline algorithm $\textsc{base}$ that find random paths by simply performing random walks.
 
 \begin{algorithm}[h]
 		
@@ -653,6 +653,6 @@ And the algorithm \textsc{naive-random-path-to}:
 
 Note that, because this is a naive approach, the \textsc{naive-random-path-to} may fail to find a $q$-path leading to $u$ as it goes to explore dead-end paths.
 
-Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $R = \Sigma_{x \in W} f_{X}[x]$.
+Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $|R| = \Sigma_{x \in W} f_{X}[x]$.
 
 \clearpage

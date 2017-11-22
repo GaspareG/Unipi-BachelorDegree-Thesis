@@ -269,7 +269,7 @@ as we have only to compute the union and the intersection between the two sets o
 This task becomes more difficult to handle when we have to consider thousands or millions of documents
 (e.g. the set of Internet web pages), each one of them has thousands of shingles.\medskip
 
-To solve this problem, it is no longer possible to handle all the shingles for all the documents, 
+To solve this problem, it is no longer possible to handle all the shingles for all the documents,  
 instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}~\cite{Broder2000}.
 
 The computation of the sketches is linear in the size of the documents and can be used to calculate the similarity in linear time in the size of the sketches only.\medskip
