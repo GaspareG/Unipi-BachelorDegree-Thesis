@@ -1,7 +1,3 @@
-%!TEX TS-program = pdflatex
-%!TEX root = tesi.tex
-%!TEX encoding = UTF-8 Unicode
-
 \chapter{Introduction}
 
 With the spread of the Internet and more importantly of the social networks, efficient data analysis on graphs becomes increasingly important. 
@@ -37,7 +33,7 @@ Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the 
 	is a function that assigns a symbol of the alphabet $\Sigma$ to every node $v$. We call $L(u) \in \Sigma$ the label of the node $u$.
 \end{definizione}
 
-Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and indicate with $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ the string obtained by the concatenation of the labels of the nodes in the path.\medskip
+Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and define the label sequence of $\pi$ the string $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ obtained by the concatenation of the labels of the nodes in the path.\medskip
 
 In this thesis, we mainly focus on analyzing complex networks: special graphs with a non-trivial topology, different from random graphs. Complex networks occurs in graphs that model real system like social networks or computer networks, and are characterized by a specific structural feature:
 
@@ -80,7 +76,7 @@ In this thesis, we mainly focus on analyzing complex networks: special graphs wi
 
 \begin{problema}
 	Given an undirected labeled graph $G=(V,E,L)$ over an alphabet $\Sigma$, an integer $q$
-	and two set of nodes $V_{1}, V_{2} \subset V$, we want to estimate the similarity between the two induced subgraphs $V_{1}, V_{2} < G$ based on the labels frequency of simple paths with nodes in $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$.
+	and two set of nodes $V_{1}, V_{2} \subset V$, we want to estimate the similarity between the two induced subgraphs $V_{1}, V_{2} < G$, based on the labels frequency of simple paths with nodes in $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ that ends in $V_1$ and $V_2$.
 \end{problema}
 
 We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\medskip
@@ -105,10 +101,12 @@ the edges are the friendship relations between two users.
 
 \paragraph*{Facebook} In order to suggest new friends, we want to estimate the similarity between two users, where each user is labeled with its favorite musical genres.  
 
+\clearpage
+
 \section{Thesis organization}
 
 The thesis is divided into five chapters and one appendix, where
-the topics covered are respectively the following ones.
+the topics covered are respectively the following ones.\medskip
 
 \begin{itemize}
 	\item Chapter 1: \textbf{Introduction},  where we present some basic definitions in order to introduce the problem we are analyzing.
@@ -124,4 +122,4 @@ the topics covered are respectively the following ones.
 	\item Appendix A: \textbf{Code snippets}, where we give some important code snippets of the project used for the experimental results.
 \end{itemize}
 
-The results in this thesis are joint work with Alessio Conte, Roberto Grossi, Andrea Marino, Kunihiko Sadakane and Takeaki Uno~\cite{SubSim}.
+The results in this thesis are joint work with Alessio Conte, Roberto Grossi, Andrea Marino, Kunihiko Sadakane and Takeaki Uno~\cite{SubSim}.\medskip

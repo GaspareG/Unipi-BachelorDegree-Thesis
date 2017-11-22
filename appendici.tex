@@ -8,236 +8,327 @@
   
 The code written for this thesis can be found in the personal GitHub page\footnote{\url{https://github.com/GaspareG/SubgraphSimilarity}}.\medskip
 
-Snippet of common definition used in all the algorithms:
+\subsection*{Definitions}
+
+Global definitions of some utilities.
 
 \begin{lstlisting}
 typedef long long ll;
 
-// We define COLORSET as a bitset of 32 bit
-typedef COLORSET uint32_t
+typedef COLORSET uint32_t  // COLORSET is a bitset of 32 bit
+unsigned int N, Q;         // Numer of nodes and length of paths
+int color[N];              // Random coloring of nodes
+char label[N];             // Labels of nodes
+vector<int> G[N];          // Adjacency list for every node in G
+map<COLORSET, ll> M[Q][N]; // Color coding table
 
-// Number of nodes and number of edge
-unsigned int N, E;
+// Get p-th bit of colorset n
+bool getBit(COLORSET n, int p){ return ((n >> p) & 1) == 1; }
 
-// Random coloring of nodes
-int color[N];
+// Set p-th bit of colorset n to 1
+COLORSET setBit(COLORSET n, int p){ return n |= 1 << p; }
 
-// Labeled of nodes
-char label[N];
-
-// Adjacency list for every node in G
-vector<int> G[N];
-
-// Dynamic Programming table
-map<COLORSET, ll> M[Q][N];
-\end{lstlisting}
-
-\clearpage
-
-
-\section*{Color Coding}
-
-\begin{lstlisting}
-// Get pos-th bit of n
-inline bool getBit(COLORSET n, int pos) { 
-	return ((n >> pos) & 1) == 1; 
-}
-
-// Set pos-th bit of n to 1
-inline COLORSET setBit(COLORSET n, int pos) { 
-	return n |= 1 << pos; 
-}
-
-// Reset pos-th bit of n to 0
-inline COLORSET clearBit(COLORSET n, int pos) { 
-	return n &= ~(1 << pos); 
-}
+// Reset p-th bit of colorset n to 0
+COLORSET clearBit(COLORSET n, int p){ return n &= ~(1 << p); }
 
 // Complementary colorset of n
-inline COLORSET getCompl(COLORSET n) { 
-	return ((1 << q) - 1) & (~n); 
-}
+COLORSET getCompl(COLORSET n){ return ((1 << q) - 1) & (~n); }
+\end{lstlisting}
 
-void ColorCoding() {
-  #pragma omp parallel for schedule(static)
-  for (int u = 0; u < N; u++) 
-	  M[0][u][setBit(0, color[u])] = 1;
-  for (int i = 1; i < q; i++) {
-    #pragma omp parallel for schedule(static)
-    for (int u = 0; u < V; u++) {
-      for (int v : G[u]) {
-        for (auto d : M[i-1][v]) {
-          COLORSET s = d.first;
-          long long f = d.second;
-          if (!getBit(s, color[u]))
-            M[i][u][setBit(s, color[u])] += f;
-        }
-      }
-    }
-  }
+\clearpage
+\subsection*{Similarity Indices}
+
+Algorithms \ref{alg:bray-curtis} and \ref{alg:jaccard}
+
+\begin{lstlisting}
+double BCW(set<string> W, map<string, ll> freqA, 
+                          map<string, ll> freqB) {
+	ll num = 0ll;
+	ll den = 0ll;
+	for (string x : W) {
+		ll fax = freqA[x];
+		ll fbx = freqB[x];
+		num += 2 * min(fax, fbx);
+		den += fax + fbx;
+	}
+	return (double)num / (double)den;
 }
 \end{lstlisting}
 
+\begin{lstlisting}
+double FJW(set<string> W, map<string, ll> freqA,
+                          map<string, ll> freqB, ll R) {
+	ll num = 0ll;
+	for (string x : W) {
+		ll fax = freqA[x];
+		ll fbx = freqB[x];
+		num += min(fax, fbx);
+	}
+	return (double)num / (double) R;
+}
+\end{lstlisting}
 
 \clearpage
+\subsection*{Color coding}
 
-\section*{Colorful sampling}
+Implementation of Algorithm \ref{alg:color-coding}
+
+\begin{lstlisting}
+void preprocess() {
+	#pragma omp parallel for schedule(guided)
+	for (unsigned int u = 0; u < N; u++)
+		M[1][u][setBit(0, color[u])] = 1ll;
+	
+	for (unsigned int i = 2; i <= q; i++) {
+		#pragma omp parallel for schedule(guided)
+		for (unsigned int u = 0; u < N; u++) {
+			for (int v : G[u]) {
+				for (auto d : M[i - 1][v]) {
+					COLORSET s = d.first;
+					ll f = d.second;
+					if (getBit(s, color[u])) continue;
+					ll fp = M[i][u][setBit(s, color[u])];
+					M[i][u][setBit(s, color[u])] = f + fp;
+				}
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\clearpage
+\subsection*{Colorful sampling}
+
+Implementation of Algorithms \ref{alg:colorful-sampler} and \ref{alg:random-path-to}
+
+\begin{lstlisting}
+set<string> colorfulSampler(vector<int> X, int r) {
+	set<string> W;
+	set<vector<int>> R;
+	vector<ll> freqX;
+	for (int x : X) 
+		freqX.push_back(M[q][x][getCompl(0)]);
+	discrete_distribution<int> distr(freqX.begin(), freqX.end());
+	while (R.size() < (size_t)r) {
+		int u = X[distr(eng)];
+		vector<int> P = randomPathTo(u);
+		if (R.find(P) == R.end()) R.insert(P);
+	}
+	for (auto r : R) {
+		reverse(r.begin(), r.end());
+		W.insert(L(r));
+	}
+	return W;
+}
+\end{lstlisting}
 
 \begin{lstlisting}
 vector<int> randomPathTo(int u) {
 	vector<int> P;
 	P.push_back(u);
 	COLORSET D = getCompl(setBit(0l, color[u]));
-	
-	for (int i = q - 2; i >= 0; i--) {
+	for (int i = q - 1; i > 0; i--) {
 		vector<ll> freq;
 		for (int v : G[u]) 
 			freq.push_back(M[i][v][D]);
-		discrete_distribution<int> 
-			distr(freq.begin(), 
-			      freq.end());
-		u = G[u][distr(eng)];
+		discrete_distribution<int> distr(freq.begin(), freq.end());
+		#pragma omp critical
+		{
+			u = G[u][distr(eng)];
+		}
 		P.push_back(u);
 		D = clearBit(D, color[u]);
 	}
-	
 	reverse(P.begin(), P.end());
-	return P;
+	return ret;
 }
+\end{lstlisting}
+\clearpage
+\subsection*{Frequency count}
 
-set<string> colorfulSampling(vector<int> X, int r) {
-  set<string> W;
-  set<vector<int>> R;
-  vector<ll> freqX;
-  for (int x : X) 
-  freqX.push_back(M[q-1][x][getCompl(0)]);
-  discrete_distribution<int> 
-  distr(freqX.begin(), freqX.end());
+Implementation of Algorithm \ref{alg:f-count}
 
-  while (R.size() < (size_t)r) {
-    int u = X[distr(eng)];
-    vector<int> P = randomPathTo(u);
-if (R.find(P) == R.end()) R.insert(P);
-}
-for (auto r : R)
-W.insert(L(r));
-return W;
+\begin{lstlisting}
+map<string, ll> FCount(set<string> W, multiset<int> X) {
+	set<string> WR;
+	for (string w : W) {
+		reverse(w.begin(), w.end());
+		WR.insert(w);
+	}
+	
+	vector<tuple<int, string, COLORSET>> old;
+	for (int x : X)
+		if (isPrefix(WR, string(&label[x], 1)))
+			old.push_back(make_tuple(x, string(&label[x], 1),
+                                  setBit(0, color[x])));
+	
+	for (int i = q - 1; i > 0; i--) {
+		vector<tuple<int, string, COLORSET>> current;
+		current.clear();
+		#pragma omp parallel for schedule(guided)
+		for (int j = 0; j < (int)old.size(); j++) {
+			auto o = old[j];
+			int u = get<0>(o);
+			string LP = get<1>(o);
+			COLORSET CP = get<2>(o);
+			for (int v : G[u]) {
+				if (getBit(CP, color[v])) continue;
+				COLORSET CPv = setBit(CP, color[v]);
+				string LPv = LP + label[v];
+				if (!isPrefix(WR, LPv)) continue;
+				#pragma omp critical
+				{ 
+					current.push_back(make_tuple(v, LPv, CPv)); 
+				}
+			}
+		}
+		old = current;
+	}
+	
+	map<string, ll> frequency;
+	for (auto c : old) {
+		string s = get<1>(c);
+		reverse(s.begin(), s.end());
+		frequency[s]++;
+	}
+	return frequency;
 }
 \end{lstlisting}
 
 \clearpage
-\section*{Frequency count}
+\subsection*{Frequency sampling}
+
+Implementation of Algorithm \ref{alg:f-samp}
 
 \begin{lstlisting}
-map<string, ll> processFrequency(set<string> W, 
-                                 multiset<int> X) {
-  set<string> WR;
-  for (string w : W) {
-    reverse(w.begin(), w.end());
-    WR.insert(w);
-  }
-
-  vector<tuple<int, string, COLORSET>> old;
-
-  for (int x : X)
-    if (isPrefix(WR, string(&label[x], 1)))
-      old.push_back(
-	      make_tuple(x, 
-	                 string(&label[x], 1), 
-	                 setBit(0ll, color[x])));
-
-  for (int i = q - 1; i > 0; i--) {
-    vector<tuple<int, string, COLORSET>> current;
-    current.clear();
-    #pragma omp parallel for schedule(static)
-      for (int j = 0; j < (int)old.size(); j++) {
-        auto o = old[j];
-        int u = get<0>(o);
-        string LP = get<1>(o);
-        COLORSET CP = get<2>(o);
-        for (int v : G[u]) {
-          if (getBit(CP, color[v])) continue;
-          COLORSET CPv = setBit(CP, color[v]);
-          string LPv = LP + label[v];
-          if (!isPrefix(WR, LPv)) continue;
-          #pragma omp critical
-          { 
-            current.push_back(
-	          make_tuple(v, LPv, CPv)
-	        ); 
-          }
-        }
-      }
-    old = current;
-  }
-
-  map<string, ll> frequency;
-  for (auto c : old) {
-    string s = get<1>(c);
-    reverse(s.begin(), s.end());
-    frequency[s]++;
-  }
-  return frequency;
+map<pair<int, string>, ll> FSamp(vector<int> X, int r) {
+	map<pair<int, string>, ll> W;
+	set<vector<int>> R;
+	vector<ll> freqX;
+	freqX.clear();
+	for (int x : X) 
+		freqX.push_back(M[q][x][getCompl(0)]);
+	discrete_distribution<int> distr(freqX.begin(), freqX.end());
+	while( R.size() < (size_t)r) {
+		int rem = r - R.size();
+		#pragma omp parallel for schedule(guided)
+		for(int i=0; i<rem; i++) {
+			int u;
+			#pragma omp critical
+			{
+				u = X[distr(eng)];
+			}
+			vector<int> P = randomPathTo(u);
+			#pragma omp critical
+			{
+				R.insert(P);
+			}
+		}
+	}
+	for (auto r : R) {
+		reverse(r.begin(), r.end());
+		W[make_pair(*r.begin(), L(r))]++;
+	}
+	return W;
 }
 \end{lstlisting}
 
 \clearpage
-\section*{Frequency sampling}
+\subsection*{F-Count Bray-Curtis}
 
+Implementation of Algorithm \ref{alg:f-count-bc}
 \begin{lstlisting}
-map<pair<int, string>, ll> 
-  randomColorfulSamplePlus(vector<int> X, int r) {
-    map<pair<int, string>, ll> W;
-    set<vector<int>> R;
-    vector<ll> freqX;
-    freqX.clear();
-    for (int x : X) 
-      freqX.push_back(M[q][x][getCompl(0ll)]);
-    discrete_distribution<int> 
-      distr(freqX.begin(), freqX.end());
-    while (R.size() < (size_t)r) {
-      int u = X[distribution(eng)];
-      vector<int> P = randomPathTo(u);
-      if (R.find(P) == R.end()) R.insert(P);
-    }
-    for (auto r : R) {
-      reverse(r.begin(), r.end());
-      W[make_pair(*r.begin(), L(r))]++;
-    }
-    return W;
+double FCountBrayCurtis(set<int> A, set<int> B, int tau) {
+	multiset<int> mA(A.begin(), A.end());
+	multiset<int> mB(B.begin(), B.end());
+	multiset<int> X(A.begin(), A.end());
+	X.insert(B.begin(), B.end());
+	set<string> W = colorfulSampler(X, tau);
+	map<string, ll> freqA = FCount(W, mA);
+	map<string, ll> freqB = FCount(W, mB);
+	return BCW(W, freqA, freqB);
+}
+\end{lstlisting}
+
+\subsection*{F-Count Frequency Jaccard}
+
+Implementation of Algorithm \ref{alg:f-count-fj}
+\begin{lstlisting}
+double FCountFrequencyJaccard(set<int> A, set<int> B, int tau) {
+	map<string, ll> freqA, freqB;
+	set<int> AB(A.begin(), A.end());
+	AB.insert(B.begin(), B.end());
+	multiset<int> X(AB.begin(), AB.end());
+	set<string> W = colorfulSampler(X, tau);
+	ll R = 0;
+	for(int x : X)
+	{
+		multiset<int> ma(&x,&x+1);
+		map<string, ll> freqAB = processFrequency(W, ma);
+		bool inA = A.find(x) != A.end();
+		bool inB = B.find(x) != B.end();
+		for (auto w : freqAB) {
+			string s = w.first;
+			ll f = w.second;
+			R += f;
+			if (inA) freqA[s] += f;
+			if (inB) freqB[s] += f;
+		}
+	}
+	return FJW(W, freqA, freqB, R);
 }
 \end{lstlisting}
 
 \clearpage
-\section*{Similarity indices}
+\subsection*{F-Sample Bray-Curtis}
 
+Implementation of Algorithm \ref{alg:f-samp-bc}
 \begin{lstlisting}
-double BCW(set<string> W, 
-           map<string, ll> freqA, 
-           map<string, ll> freqB) {
-  ll num = 0ll;
-  ll den = 0ll;
-  for (string x : W) {
-    ll fax = freqA[x];
-    ll fbx = freqB[x];
-    num += 2 * min(fax, fbx);
-    den += fax + fbx;
-  }
-  return (double)num / (double)den;
+double FSampleBrayCurtis(set<int> A, set<int> B, int tau) {
+	multiset<int> X(A.begin(), A.end());
+	X.insert(B.begin(), B.end());
+	map<pair<int, string>, ll> freqX = FSamp(X, tau);
+	map<string, ll> freqA, freqB;
+	set<string> W;
+	for (auto w : freqX) {
+		int u = w.first.first;
+		int s = w.first.second;
+		ll f = w.second;
+		W.insert(s);
+		if (A.find(u) != A.end()) freqA[s] += f;
+		if (B.find(u) != B.end()) freqB[s] += f;
+	}
+	return BCW(W, freqA, freqB);
 }
+\end{lstlisting}
 
-double FJW(set<string> W,
-           map<string, ll> freqA, 
-           map<string, ll> freqB,
-           long long R) {
-  ll num = 0ll;
-  for (string x : W) {
-    ll fax = freqA[x];
-    ll fbx = freqB[x];
-    num += min(fax, fbx);
-  }
-  return (double)num / (double)R;
+\subsection*{F-Sample Frequency Jaccard}
+
+Implementation of Algorithm \ref{alg:f-samp-fj}
+\begin{lstlisting}
+double FSampleFrequencyJaccard(set<int> A, 
+                               set<int> B, int tau) {
+	set<int> AB(A.begin(), A.end());
+	AB.insert(B.begin(), B.end());
+	vector<int> X(AB.begin(), AB.end());
+	map<pair<int, string>, ll>  freqX = FSample(X, tau);
+	map<string, ll> freqA, freqB;
+	set<string> W;
+	ll R = 0;
+	for (auto w : freqX) {
+		int u = w.first.first;
+		int s = w.first.second;
+		int f = w.second;
+		W.insert(s);
+		R += f;
+		if (A.find(u) != A.end()) freqA[s] += f;
+		if (B.find(u) != B.end()) freqB[s] += f;
+	}
+	return FJW(W, freqA, freqB, R);
 }
 \end{lstlisting}
 
 
+\noindent
+
+\clearpage

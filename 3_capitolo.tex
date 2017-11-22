@@ -607,25 +607,19 @@ In order to validate the effectiveness of our approaches, we compare the previou
 	\SetKwInOut{Output}{Output}
 	\Input{$X =$ array of nodes from graph $G$\\$r =$ number of paths to sample}
 	\Output{$W =$ dictionary of $q$-grams sampled\\$f_X[x] = $ frequency of each $x \in W$, where $W = $ naive random sample multiset of $q$-grams for $X$.}
-	\BlankLine
 	$R\gets\{\}$\;
-	\BlankLine
 	\textbf{parallel} \For{$j\in [r]$}{
 		$u\gets$ randomly chosen $v \in X$ with uniform probability\;
 		$P\gets \textsc{naive-random-path-to}(u)$\;
 		\lIf{$P \neq \mathtt{null}$ and $P\not\in R$}{$R \gets R \cup \{ P \}$}
 		\lElse{$j\gets j-1$ \quad //repeat the step}
 	}
-	\BlankLine
 	$W \gets [ L(P) : P \in R ]$\;
 	$f_X \gets (0,\ldots,0)$\;
-	\BlankLine
 	\lForEach{$x \in W$}{
 		$f_X[x] \gets f_X[x]+1$
 	}
-	\BlankLine
 	\Return{$\langle W, f_X \rangle$}
-	\BlankLine
 	\caption{\textsc{base}\xspace, the baseline sampler}
 	\label{alg:base}
 \end{algorithm}
@@ -646,7 +640,6 @@ And the algorithm \textsc{naive-random-path-to}:
 		$\pi\gets u \cdot \pi$\;
 	}
 	\Return{$\pi$}   
-		
 	\caption{\textsc{naive-random-path-to}}
 	\label{alg:naive-random-path-to}
 \end{algorithm}
@@ -655,4 +648,7 @@ Note that, because this is a naive approach, the \textsc{naive-random-path-to} m
 
 Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $|R| = \Sigma_{x \in W} f_{X}[x]$.
 
+\noindent
+
 \clearpage
+

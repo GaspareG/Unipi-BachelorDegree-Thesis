@@ -15,7 +15,12 @@ pair[] f={
 };
 
 scale(Linear,Log);
-draw(graph(f),"$\textsc{IMDB}$ q=3", marker(scale(0.8mm)*unitcircle,green,FillDraw(green),above=false));
+draw(graph(f),"$\textsc{IMDB}$ q=3", marker(scale(1.5mm)*polygon(4),grey,FillDraw(grey),above=false));
+
+
+// frame mark;
+// filldraw(mark,scale(0.8mm)*polygon(6),green,green);
+// draw(mark,scale(0.8mm)*cross(6),blue);
 
 pair[] f2={
      (3, 684342),
@@ -25,7 +30,7 @@ pair[] f2={
 };
 
 scale(Linear,Log);
-draw(graph(f2),"$\textsc{IMDB}$ q=4", marker(scale(0.8mm)*unitcircle,red,FillDraw(red),above=false));
+draw(graph(f2),"$\textsc{IMDB}$ q=4", marker(scale(1.5mm)*polygon(3),grey,FillDraw(grey),above=false));
 
 scale(Linear,Log);
 
