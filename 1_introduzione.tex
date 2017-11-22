@@ -14,35 +14,35 @@ Graphs are a powerful data structure that natural model the interactions between
 	A \textbf{graph} is a pair of sets $G=(V,E)$, where $V$ is the set of vertices (or nodes) and $E \subseteq V \times V$ is the set of edges.
 \end{definizione}
 
-If two vertices $u, v \in V$ are connected by an edge they are called extreme of the edge, in this case we denote the edge with the pair $(u, v) \in E$
+If two vertices $u, v \in V$ are connected by an edge they are called the extremes of the edge, in this case we denote the edge with the pair $(u, v) \in E$.
 
-If $(u,v) \in E \Leftrightarrow (v,u) \in E$ the graph is called undirected, where not specified we will only deal with undirected graphs.
+If $(u,v) \in E \Leftrightarrow (v,u) \in E$ the graph is called undirected; wherever not specified we will only deal with undirected graphs.
 
-A sequence of nodes  $v_{1}, v_{2}, \ldots, v_{k}$ is called path if $(v_{i}, v_{i+1}) \in E$ $\forall i = 1, \ldots k-1$; a path is called simple if $v_{i} \neq v_{j}$ $\forall i,j$ $1 \leq i < j \leq k$. A cycle is a path where $(v_{k}, v_{1}) \in E$.
+A sequence of nodes  $v_{1}, v_{2}, \ldots, v_{k}$ is called path if $(v_{i}, v_{i+1}) \in E$ for $i = 1, \ldots k-1$; a path is called simple if $v_{i} \neq v_{j}$ for all $i,j$ such that $1 \leq i < j \leq k$. A cycle is a path where $(v_{k}, v_{1}) \in E$.
 
-We denote by $N(u) = \{ v : (u,v) \in E \}$ the set of neighbors of the vertex $u$, the cardinality of this set is called degree of $u$ (\textit{deg} $u$ = $|N(u)|)$. 
+We denote by $N(u) = \{ v : (u,v) \in E \}$ the set of neighbors of the vertex $u$. The cardinality of this set is called degree of $u$ (i.e. \textit{deg} $u$ = $|N(u)|)$. 
 
-With $N^{<k}(u)$ we indicate the set of vertex connected to $u$ by a simple path of length less than $k$ (note that $N(u)$ = $N^{<2}(u)$).
+With $N^{<k}(u)$ we indicate the set of vertices connected to $u$ by a simple path of length less than $k$ (note that $N(u)$ = $N^{<2}(u)$).
 
 \begin{definizione}\label{def:subgraph}
 	A graph $G' = (V', E')$ is called \textbf{subgraph} of $G=(V,E)$ if $V' \subset V$ and $E' \subset E$. A subgraph is called \textbf{induced subgraph} if $E' = (V' \times V') \cap E$.
 \end{definizione}
 
-We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is a induced subgraph of $G$.\medskip
+We use $G' \subset G$ to indicate that the graph $G'$ is a subgraph of $G$ and $G' < G$ to indicate that the graph $G'$ is an induced subgraph of $G$.\medskip
 
-Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the set of its vertex $V'$.
+Note that an induced subgraph $G' = (V', E')$ can be uniquely identified by the set of its vertices $V'$.
 
 \begin{definizione}\label{def:labeledgraph}
 	A \textbf{labeled graph} is a triple $(V,E,L)$ where $(V,E)$ is a graph and $L : V \rightarrow \Sigma$
-	is a function that assign for every node $v$ a symbol of the alphabet $\Sigma$. We call $L(u) \in \Sigma$ label of the node $u$.
+	is a function that assigns a symbol of the alphabet $\Sigma$ to every node $v$. We call $L(u) \in \Sigma$ the label of the node $u$.
 \end{definizione}
 
-Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and we indicate with $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ the string obtained by the concatenation of the labels of the nodes in the path.\medskip
+Given a path $\pi = v_{1}, v_{2}, \ldots, v_{k}$ we extend the function $L$ and indicate with $L(\pi) = L(v_{1}) L(v_{2}) \ldots L(v_{k}) \in \Sigma^{k}$ the string obtained by the concatenation of the labels of the nodes in the path.\medskip
 
-In this thesis, we mainly focus to analyze complex networks: special graphs with a non-trivial topology like random graphs. Complex networks occurs in graphs modeling real system like social networks or computer networks and are characterized by a specific structural feature:
+In this thesis, we mainly focus on analyzing complex networks: special graphs with a non-trivial topology, different from random graphs. Complex networks occurs in graphs that model real system like social networks or computer networks, and are characterized by a specific structural feature:
 
 \begin{definizione}\label{def:power-law-graph}
-	We define as \textbf{power-law degree distribution} a network where the degree of a node $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability distribution:
+	We define as \textbf{power-law degree distribution} a network where the degree of the nodes $u$ follow, for some $\gamma$ (usually $2 < \gamma < 3$), the probability distribution:
 	\begin{equation}
 	P(deg(u) = k) \sim k^{-\gamma}  
 	\end{equation}
@@ -85,11 +85,11 @@ In this thesis, we mainly focus to analyze complex networks: special graphs with
 
 We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\medskip
 
-In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between the subgraph and the external graph.\medskip
+In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between each subgraph and the rest of the graph.\medskip
 
-The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of q and $|\Sigma|$ to $|\Sigma|^{q} \gg |V|$ and, even worse, the number of simple paths can exponentially explode to $|V|^{q}$. For the simple reason that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\medskip
+The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of $q$ and $|\Sigma|$, to $|\Sigma|^{q} \gg |V|$. Even worse, the number of simple paths can exponentially explode to $|V|^{q}$.  The simple reason is that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\medskip
 
-In this thesis, we exploit the problem using randomized techniques and parallelization, which makes the problem suitable even for big networks. 
+In this thesis, we exploit the problem using randomized techniques and parallelization, which makes the problem suitable even for large networks. 
 
 \section{Practical applications}
 
@@ -107,21 +107,21 @@ the edges are the friendship relations between two users.
 
 \section{Thesis organization}
 
-The thesis is divided into five chapters and one appendix,
-the topics covered are respectively:
+The thesis is divided into five chapters and one appendix, where
+the topics covered are respectively the following ones.
 
 \begin{itemize}
-	\item Chapter 1: \textbf{Introduction}, this chapter, where we have presented some basic definitions in order to introduce the problem we are analyzing.
+	\item Chapter 1: \textbf{Introduction},  where we present some basic definitions in order to introduce the problem we are analyzing.
 	
-	\item Chapter 2: \textbf{Basic tools}, definition of some similarity indices already existing in the literature and presentation of two methods we will use.
+	\item Chapter 2: \textbf{Basic tools}, where we present the definition of some similarity indices already existing in the literature, along with two methods we will use.
 	
-	\item Chapter 3: \textbf{Computation of subgraph similarity}, presentation of different approaches to compute the subgraph similarity.
+	\item Chapter 3: \textbf{Computation of subgraph similarity}, where we give a description of different approaches to compute the subgraph similarity.
 	
-	\item Chapter 4: \textbf{Project development}, implementation choices and steps of the project development with some experimental results.
+	\item Chapter 4: \textbf{Project development}, where we perform implementation choices and steps of the project development with some experimental results.
 	
-	\item Chapter 5: \textbf{Conclusion and future works}, conclusions from theoretical and practical analysis of the presented approaches, with some hypothesis of future works.
+	\item Chapter 5: \textbf{Conclusion and future works}, where we draw some conclusions from theoretical and practical analysis of the presented approaches, with some hypothesis of future works.
 	
-	\item Appendix A: \textbf{Code snippets}, some important code snippets of the project used for the experimental results.
+	\item Appendix A: \textbf{Code snippets}, where we give some important code snippets of the project used for the experimental results.
 \end{itemize}
 
 The results in this thesis are joint work with Alessio Conte, Roberto Grossi, Andrea Marino, Kunihiko Sadakane and Takeaki Uno~\cite{SubSim}.

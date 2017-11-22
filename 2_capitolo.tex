@@ -4,14 +4,14 @@
 
 \chapter{Basic tools}
 
-In this chapter, we introduce some notion of similarity already existing in literature and then extending them to define similarity among subgraphs in labeled graphs.
+In this chapter, we introduce some notion of similarity already existing in the literature and then extending them to define similarity among subgraphs in labeled graphs.
 
 In the last sections we present two different techniques we will use afterwards to estimate such similarity.
 
 \section{Similarity indices}
 
 \begin{definizione}\label{def:jaccard}
-	Given two set $A$ and $B$ we define the \textbf{Jaccard} index as the size of the intersection divided by the size of the union between the two sets:
+	Given two sets $A$ and $B$ we define the \textbf{Jaccard} index as the size of the intersection divided by the size of the union between the two sets
 	
 	\begin{equation}
 	J(A,B) = \frac{|A \cap B|}{|A \cup B|}
@@ -20,7 +20,7 @@ In the last sections we present two different techniques we will use afterwards 
 \end{definizione}
 
 \begin{definizione}\label{def:bray}
-	Given two set $A$ and $B$ we define the \textbf{Bray-Curtis} index as:
+	Given two sets $A$ and $B$ we define the \textbf{Bray-Curtis} index as
 	
 	\begin{equation}
 	BC(A,B) = \frac{2 \times |A \cap B|}{|A| + |B|}
@@ -29,7 +29,7 @@ In the last sections we present two different techniques we will use afterwards 
 \end{definizione}
 
 \begin{esempio}
-	Given $A = \{1, 3, 4, 5, 7, 8\}$ and $B = \{1, 2, 4, 6, 8\}$ we have:
+	Given $A = \{1, 3, 4, 5, 7, 8\}$ and $B = \{1, 2, 4, 6, 8\}$ we have
 	
 	\begin{equation*}
 	J(A,B) = \frac{|\{1, 4, 8\}|}{|\{1, 2, 3, 4, 5, 6, 7, 8\}|} = \frac{3}{8} 
@@ -42,22 +42,22 @@ In the last sections we present two different techniques we will use afterwards 
 
 Note that when $A = B$ we have $J(A, B) = BC(A, B) = 1$ and when $A \cap B = \emptyset$ we have $J (A, B) = BC (A, B) = 0$.
 
-Using sets may be limiting as we consider only once the repeated values, we can easily extend the two previous definitions to the multisets.\medskip
+Using sets may be limiting as we consider only once the repeated values. Thus we can extend the two previous definitions to the multisets.\medskip
 
 \begin{definizione}
 	A \textbf{multiset} is a generalization of set that allows multiple instances of elements.
 \end{definizione}
 
-To avoid confusion afterwards we use square brackets $[\ ]$ to indicate multiset and curly brackets $\{\ \}$ to indicate set.\medskip
+To avoid confusion afterwards we use square brackets $[\ ]$ to indicate multisets and curly brackets $\{\ \}$ to indicate sets.\medskip
 
-Multiset can also be seen as an array of frequencies of its object (e.g. we indicate with $A = (2, 0, 3)$ the multiset with $2$ elements of the first type, $0$ elements of the second type and $3$ elements of the third type, this notation is equivalent to write $A = [1, 1, 3, 3, 3]$).\medskip
+A multiset can also be seen as an array of frequencies of its objects: for instance, we can indicate with $A = (2, 0, 3)$ the multiset with $2$ elements of the first type, $0$ elements of the second type and $3$ elements of the third type, where this notation is equivalent to write $A = [1, 1, 3, 3, 3]$.\medskip
 
-Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the following operations:
+Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the following operations.
 
 \begin{itemize}
 	\item intersection $C = A \cap B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \min(a_{i}, b_{i})$
 	\item union $C = A \cup B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = \max(a_{i}, b_{i})$
-	\item multisets union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
+	\item disjoint union $C = A \uplus B  = (c_{1}, \ldots, c_{n})$ where $c_{i} = a_{i} + b_{i}$
 \end{itemize}
 
 % \begin{definizione}\label{def:wjaccard}
@@ -70,7 +70,7 @@ Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n}
 
 
 \begin{definizione}\label{def:wbray}
-	Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis} index on multiset as:
+	Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis} index as
 	
 	\begin{equation}
 	BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {a_{i} + b_{i}}}
@@ -81,7 +81,7 @@ Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n}
 As a side note, Bray-Curtis is a relevant index for multisets, and is also known as Steinhaus similarity, Pielou's Similarity, Sorensen's quantitative, and Czekanowski's similarity~\cite{legendre1998numerical}.
 
 \begin{esempio}
-	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have:
+	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have
 	
 	\begin{equation}
 	J(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 2} = \frac{4}{13} 
@@ -92,10 +92,10 @@ As a side note, Bray-Curtis is a relevant index for multisets, and is also known
 	\end{equation}
 \end{esempio}
 
-Both indices are widely used in practical application, Bray-Curtis index gives a greater weight to the intersection, on the other side the Jaccard Index is a metric and may be preferred to Bray-Curtis index since it is only a semi-metric (as it does not satisfy the triangle inequality). 
+Both indices are widely used in practical application, Bray-Curtis index gives a larger weight to the intersection, on the other side the Jaccard Index is a metric and may be preferred to Bray-Curtis index since the latter is only a semi-metric (as it does not satisfy the triangle inequality). 
 
 \begin{definizione}
-	A function $f : A \times A \rightarrow \mathbb{R}^{+} $ is called \textbf{metric} (or simply \textbf{distance}) if satisfy, for all $x, y, z \in A$, the following conditions:
+	A function $f : A \times A \rightarrow \mathbb{R}^{+} $ is called \textbf{metric} (or simply \textbf{distance}) if it satisfies, for all $x, y, z \in A$, the following conditions.
 	\begin{itemize}
 		\item Non-negativity: $f(x,y) \geq 0$ and $f(x,y) = 0$ iff $x = y$
 		\item Symmetry: $f(x, y) = f(y, x)$
@@ -116,7 +116,7 @@ To define document similarity we need the notion of \textit{$q$-gram}:
 In this case the sequence is a document and the items can be words, characters or even syllables. If the elements used are words, $q$-grams can even be called shingles.\medskip
 
 \begin{esempio}
-	Given the document \textit{"I live and study in Pisa"} all the possible $3$-grams are: 
+	Given the document \textit{"I live and study in Pisa"} all the possible $3$-grams, where items are words, are the following ones:
 	\textit{"I live and"}, \textit{"live and study"}, \textit{"and study in"} and \textit{"study in Pisa"}.
 \end{esempio}
 
@@ -124,7 +124,7 @@ Note that in a document with $n$ words the possible $q$-grams are exactly $n-q+1
 
 It is easy to see if we use the set, or multiset, of the all possible $q$-grams of two documents we can use it to calculate their similarity based on the Jaccard or Bray-Curtis index.\medskip
 
-Considering that the number of $q$-grams in a document is linear in its number of words, document similarity is not an hard problem as we have only to perform union and intersection between set, or multiset.\medskip
+Considering that the number of $q$-grams in a document is linear in its number of words, document similarity is not an hard problem as we have only to perform union and intersection between sets, or multisets.\medskip
 
 \begin{esempio}
 	Given the documents 
@@ -141,7 +141,7 @@ Considering that the number of $q$-grams in a document is linear in its number o
 	\begin{equation*}
 	S_{B} = (\textit{You work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Livorno})
 	\end{equation*}
-	The similarity using both Jaccard and Bray-Curtis are:\medskip
+	The similarity using both Jaccard and Bray-Curtis are\medskip
 	\begin{equation*}
 	J(S_{A},S_{B}) = \frac{|S_{A} \cap S_{B} |}{|S_{A} \cup S_{B} |} = \frac{3}{8}
 	\end{equation*}
@@ -155,7 +155,7 @@ Considering that the number of $q$-grams in a document is linear in its number o
 The definition of similarity between graphs is more complex, as we have to introduce the concept of graph isomorphism.
 
 \begin{definizione}
-	A \textbf{graph isomorphism} between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is a bijective function from vertices of $G$ to vertices of $H$ that preserve the edge structure, i.e.  
+	A \textbf{graph isomorphism} between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is a one-to-one function from vertices of $G$ to vertices of $H$ that preserve the edge structure, i.e.  
 	\begin{equation}
 	f : V_{G} \rightarrow V_{H} \text{ s.t. } (v, u) \in E_{G} \implies (f(v), f(u)) \in E_{H}
 	\end{equation}
@@ -163,7 +163,7 @@ The definition of similarity between graphs is more complex, as we have to intro
 
 If such isomorphism exists, the graphs are called isomorphic and we denote it with $G \simeq H$.\medskip
 
-With the notion of graph similarity we can define a similarity between graph~\cite{Bunke:1998:GDM:289720.289729}.\medskip
+With the notion of graph similarity we can define a similarity between two graphs~\cite{Bunke:1998:GDM:289720.289729}.\medskip
 
 \begin{definizione}
 	The similarity between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is the size of the largest graph isomorphism between a subgraph $G' \subseteq G$ and a subgraph $H' \subseteq H$ (seen as number of vertex of $G'$).
@@ -194,9 +194,9 @@ Unfortunately subgraphs isomorphism is an NP-complete problem~\cite{GareyJohnson
 
 After discussing the already existing notions of similarity, we are ready to extend them to define similarity in a labeled complex network.\medskip
 
-Consider a labeled graph $G = (V, E, L)$ over an alphabet $\Sigma$ where $L \rightarrow \Sigma$ is the node labeling, so that each node $u \in V$ has a label $L(u) \in \Sigma$\footnote{Alternatively we can labeling edges in $E$ instead of nodes in $V$ without making too many changes in the following definitions, for the sake of simplicity we consider the graph labeled on its nodes.}, we are interested in analyzing $G$ using the sequence of labels in its path.\medskip
+Consider a labeled graph $G = (V, E, L)$ over an alphabet $\Sigma$ where $L \rightarrow \Sigma$ is the node labeling, so that each node $u \in V$ has a label $L(u) \in \Sigma$\footnote{Alternatively we can labeling edges in $E$ instead of nodes in $V$ without making too many changes in the following definitions, but for the sake of simplicity we consider the graph labeled on its nodes.}, we are interested in analyzing $G$ using the sequences of labels found along  its paths.\medskip
 
-For a fixed integer $q > 0$, consider an arbitrary simple path $\pi = u_{1}, \ldots, u_{q}$, we call the orientation $u_{1} \rightarrow \ldots \rightarrow u_{q}$ of $\pi$ a $q$-path leading to $u_{q}$ and $L(\pi) = L(u_{i}) \ldots L(u_{q}) \in \Sigma^{q}$ its $q$-gram, obtained by concatenating the labels of its nodes.\footnote{Note that in an undirected graph we have, for a single simple path, two possible $q$-path, one for each orientation: one leading to $u_{q}$ from $u_{1}$ and one leading to $u_{1}$ from $u_{q}$.}.\medskip
+For a fixed integer $q > 0$, consider an arbitrary simple path $\pi = u_{1}, \ldots, u_{q}$. We call the orientation $u_{1} \rightarrow \ldots \rightarrow u_{q}$ of $\pi$ a $q$-path leading to $u_{q}$ and $L(\pi) = L(u_{i}) \ldots L(u_{q}) \in \Sigma^{q}$ its $q$-gram, obtained by concatenating the labels of its nodes.\footnote{Note that in an undirected graph we have, for a single simple path, two possible $q$-paths, one for each orientation: one leading to $u_{q}$ from $u_{1}$ and one leading to $u_{1}$ from $u_{q}$.}.\medskip
 
 For a set of nodes $A \subseteq V$, we define $L(A)$ as the corresponding multiset of $q$-grams for all $q$-path $\pi$ leading to a node $u \in A$. 
 \begin{equation}
@@ -207,14 +207,14 @@ In this way, for each $q$-path $\pi = u_{1}, \ldots, u_{q}$ leading to $u_{q} \i
 
 This is a good definition because, as it was mentioned before, we take into account both the internal structure of $A$ and its neighborhood $N^{<q}(A)$. 
 
-Note that we explicitly exclude all the $q$-path both beginning and starting outside $A$, as we not considering them influential to define the similarity.\medskip
+Note that we explicitly exclude all the $q$-paths that are beginning and starting outside $A$, as we not considering them influential to define the similarity.\medskip
 
-Given a single $q$-gram $x$ we are interested in its frequency within the multiset $L(A)$ so we define:
+Given a single $q$-gram $x$ we are interested in its frequency within the multiset $L(A)$ so we define
 \begin{equation}
 f_{A}[x] = |\{ \pi : \pi \text{ is a $q$-path leading to } u \in A \text{ and } L(\pi) = x \}|
 \end{equation}
 
-With the property that $f_{A}[x] = \sum_{u \in A}{f_{\{u\}}[x]}$.
+Note the property that $f_{A}[x] = \sum_{u \in A}{f_{\{u\}}[x]}$.
 
 \begin{definizione}
 	Given an undirected labeled graph $G = (V,E,L)$ over an alphabet $\Sigma$ and an integer $q > 0$, the Bray-Curtis similarity index between two set of nodes $A, B \subset V$ is:
@@ -232,12 +232,12 @@ With the property that $f_{A}[x] = \sum_{u \in A}{f_{\{u\}}[x]}$.
 
 Let $\mathcal{L} = \{ x \in \Sigma^{q} : x \in L(V) \} \subseteq \Sigma^{q}$ be the set of all distinct $q$-grams found in the $q$-paths of G. 
 
-Note that ranging $x$ over $\mathcal{L}$, instead of $\Sigma^{q}$, is sufficient in both the above formulas for any $A$ and $B$.\medskip
+Note that ranging $x$ over $\mathcal{L}$, instead of $\Sigma^{q}$, is sufficient in both the formulas for any $A$ and $B$.\medskip
 
 In general we have that $BC(A,B) \geq FJ(A,B)$. 
 When $A \cap B = \emptyset$ we have that $f_{A \cup B}[x] = f_{A}[x] + f_{B}[x]$ and $BC(A,B) = 2 \times FJ(A,B)$\medskip
 
-Now we present a little example to better understand.\medskip
+Now we present a little example to better understand our notions.\medskip
 
 \begin{minipage}{0.60\textwidth}\raggedright
 	\begin{esempio}
@@ -263,24 +263,23 @@ Now we present a little example to better understand.\medskip
 
 \section{Sketches}
 
-We have seen that compute the exact similarity between two documents is an easy problem
+We have seen that computing the exact similarity between two documents is an easy problem
 as we have only to compute the union and the intersection between the two sets of shingles.\medskip
 
-More difficult to manage becomes when we have to consider thousands or millions of documents
+This task becomes more difficult to handle when we have to consider thousands or millions of documents
 (e.g. the set of Internet web pages), each one of them has thousands of shingles.\medskip
 
 To solve this problem, it is no longer possible to handle all the shingles for all the documents, 
 instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}~\cite{Broder2000}.
 
-The computation of the sketches is linear in the size of the documents and can be used to calculate the similarity in linear time in the size of the sketches.\medskip
+The computation of the sketches is linear in the size of the documents and can be used to calculate the similarity in linear time in the size of the sketches only.\medskip
 
 In the next chapter, we will use the sketches applied to the set of $q$-grams of a labeled graph to fast compute the similarity between two subgraphs.\medskip
 
 Usually sketches are used with explicit documents, we will use it to avoid to generate all the $q$-grams.\bigskip
 
 Now we present two different existing techniques to compute the sketches of a document, 
-for simplicity we assume that our document is composed of all numbers between $1$ and $n$, 
-in practice we will use a ranking function to define a sorting to the elements in documents.
+for simplicity we assume that our document is composed of all numbers between $1$ and $n$, where in practice we use a ranking function to define an ordering of the items in the documents.
 
 \subsection*{Min-wise permutation}
 
@@ -295,25 +294,25 @@ S_{A} = \{ \min(\pi_{1}(A)), \ldots, \min(\pi_{k}(A)) \}
 
 \medskip
 
-Note that using the min-wise permutation we can take multiple times the same number, as the permutation are independent.
+Note that using the min-wise permutation we can take multiple times the same number, as the permutations are independently and uniformly chosen.
 
 \subsection*{Bottom-k sketches}
 
 Another approach that works best in terms of performance is the bottom-k sketches~\cite{Cohen:2007:SDU:1281100.1281133}.\medskip
 
-Instead of using $k$ random permutation $\pi_{1}, \ldots, \pi_{k}$ and take the minimum for each of them,
-like we did before in the min-wise permutation, we choose only one random permutation $\pi$ and take the bottom $k$ elements\footnote{With $\min_{x}$ we indicate the x-minimum element} with lower value in permutation.
+Instead of using $k$ random permutation $\pi_{1}, \ldots, \pi_{k}$ and taking the minimum from each of them,
+as we did before in the min-wise permutation, we choose only one random permutation $\pi$ and take the bottom $k$ elements in the permutation, where $\min_{x}$ indicates the $x$th smallest element in the permutation.
 
 \begin{equation}
-S_{A} = \{ \min_{1}(\pi(A)), \ldots, \min_{k}(\pi(A)) \}
+S_{A} = \{ \min{\!}_{1}(\pi(A)), \ldots, \min{\!}_{k}(\pi(A)) \}
 \end{equation}
 
 \medskip
 
-Note that, unlike the min-wise permutation, in a bottom-k sketch we don't have repeated numbers as we take the numbers from a single permutation.
+Note that, unlike the min-wise permutation, in a bottom-k sketch we do not have repeated numbers as we take the numbers from a single permutation.
 
 \begin{esempio}
-	Consider the document $A=\{1, \ldots, 10\}$ and the following $4$ permutation ($k = 4$):
+	Consider the document $A=\{1, \ldots, 10\}$ and the following $4$ permutation ($k = 4$)
 	
 	\begin{equation*}
 	\pi_{1} = \{3, 5, 8, 2, 4, 9, 1, 10, 7, 6\}
@@ -328,12 +327,12 @@ Note that, unlike the min-wise permutation, in a bottom-k sketch we don't have r
 	\pi_{4} = \{9, 1, 3, 5, 4, 10, 7, 8, 2, 6\}
 	\end{equation*}
 	
-	With the min-wise permutation approach we have that:
+	With the min-wise permutation approach we have that
 	\begin{equation*}
 	S_{A} = \{ \min(\pi_{1}(A)), \min(\pi_{2}(A)), \min(\pi_{3}(A)), \min(\pi_{4}(A)) \} = \{3, 7, 3, 9\}
 	\end{equation*}
 	
-	Instead with the bottom-k sketches using $\pi_{4}$ as permutation:
+	Instead with the bottom-k sketches using $\pi_{4}$ as permutation
 	\begin{equation*}
 	S_{A} = \{ \min_{1}(\pi_{4}(A)), \min_{2}(\pi_{4}(A)), \min_{3}(\pi_{4}(A)), \min_{4}(\pi_{4}(A)) \} = \{9, 1, 3, 5\}
 	\end{equation*}
@@ -343,32 +342,31 @@ Note that, unlike the min-wise permutation, in a bottom-k sketch we don't have r
 
 \section{Color Coding}
 
-The color coding is a method proposed in 1994 by Alon et al.~\cite{Alon:1995:COL:210332.210337} that efficiently finds simple path, cycles or many other small subgraphs using probabilistic algorithm. We will focus only in finding $q$-simple paths.\medskip
+The color coding is a method proposed in 1994 by Alon et al.~\cite{Alon:1995:COL:210332.210337} that efficiently finds simple path, cycles or many other small subgraphs using a probabilistic and parameterized algorithm. We will focus only in finding $q$-simple paths.\medskip
 
 The idea behind this method, which gives it the name, is to randomly coloring each node of $V$ with one of the $q$ possible colors.
 
-We restrict our attention to $q = O(\log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Where $[q] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ have a color $\chi(u) \in [q]$.\medskip
+We restrict our attention to $q = O(\log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Here $[q] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ has a color $\chi(u) \in [q]$.\medskip
 
-After assigning a color to each node, we will focus to find only the colorful $q$-paths. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\medskip
+After assigning a color to each node, we will focus on finding only the colorful $q$-paths. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\medskip
 
-The main advantage of this method is that reduce the number of $q$-paths by roughly a factor of $q! / q^{q} \geq 1/e^{q}$, as a colorful $q$-path can use $q!$ colorings of its nodes out of $q^{q}$ possible ones. So the number of $q$-paths exponentially decrease as the value of $q$ increases, when $q = 3$ we look only for the $\sim22\%$ colorful $q$-paths and only for $\sim4\%$ when $q = 5$.\bigskip
+The main advantage of this method is that it reduces the number of $q$-paths by roughly a factor of $q! / q^{q} \geq 1/e^{q}$, as a colorful $q$-path can use $q!$ colorings of its nodes out of $q^{q}$ possible ones. So the number of $q$-paths exponentially decrease as the value of $q$ increases (e.g. when $q = 3$ we look only for the $\sim22\%$ colorful $q$-paths and only for $\sim4\%$ when $q = 5$).\bigskip
 
 As we will show in the next chapter, all the colorful $q$-paths can be easily found using a dynamic programming approach.\medskip
 
-An interesting fact is that the method of color coding can be derandomized using a $k$-perfect hash family~\cite{Alon:1995:COL:210332.210337}, that enumerating all the possible $k$-colorings of $V$.
+An interesting fact is that the method of color coding can be derandomized using a $q$-perfect hash family~\cite{Alon:1995:COL:210332.210337}, that enumerates all the possible $q$-colorings of $V$ that are relevant to the computation (as otherwise there would be $n^q$ possible $q$-colorings).
 This makes the method exponential in the value of $q$, as if we set $q = |V|$ the problem became to find an Hamiltonian path, which is NP-complete~\cite{GareyJohnson:1979}.\medskip
 
 To improve the precision we can repeat the random coloring of nodes for $e^{q}\ t$ times, 
 so that the success probability becomes $\geq 1-e^{-t}$. 
-Another way is to randomly coloring nodes using a greater number of colors $q'$ and then, instead of looking for the colorful $q'$-paths,
+Another way is to randomly coloring nodes using a larger number of colors $q'$ and then, instead of looking for the colorful $q'$-paths,
 we search the color-diversified $q$-paths (i.e. $q$-paths without color repetition in $[q']$)~\cite{deshpande2007randomized}.\medskip
 
-In practice, choosing a simple random coloring is working pretty well on complex networks, 
-so do not add overhead to our algorithms we won't utilize the previous optimizations.\medskip
+In practice, choosing a simple random coloring is working pretty well on complex networks, and we do not use these optimizations thus avoiding this overhead for our algorithms.\medskip
 
 \begin{minipage}{0.55\textwidth}\raggedright
 	\begin{esempio}
-		In this $3$-colored graph out of $6$ simple $3$-path starting from $0$\medskip
+		In this $3$-colored graph out of $6$ simple $3$-paths starting from $0$\medskip
 		
 		($\textsc{0-1-2}$ $\textsc{0-1-3}$ $\textsc{0-2-1}$ $\textsc{0-2-4}$ $\textsc{0-2-6}$ $\textsc{0-5-6}$)\medskip
 		

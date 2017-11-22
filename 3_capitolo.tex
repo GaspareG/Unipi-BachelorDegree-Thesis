@@ -1,20 +1,20 @@
 \chapter{Computation of subgraph similarity}
 
-In this chapter, we present four different theoretical algorithms to compute subgraphs similarity as previously defined: an exhaustive enumeration, two similar randomized approaches using the tools described in the previous chapter and a naive randomized approach.\medskip
+In this chapter, we present four different theoretical algorithms to compute subgraphs similarity as previously defined: an exhaustive enumeration, two similar randomized approaches using the tools described in the previous chapter, and a naive randomized approach as a baseline for comparison.\medskip
 	
-In the following algorithms, we will make use of parallel instructions, but we leave the specific programming choices and the comparison among the different approaches in the next chapter.
+In the following algorithms, we will make use of parallel instructions, postponing the specific programming choices and the comparison among the different approaches to the next chapter.
 	
-\section{Indices calculation}
+\section{Indices computation}
 
-Now we illustrate the procedures to calculate the Frequency Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.\bigskip
+Now we illustrate the algorithms to calculate the Frequency Jaccard and Bray-Curtis indices, as they are independent from the next algorithms we will present.\bigskip
 
-As previously seen, instead of iterate over all the strings in $\Sigma^{q}$ we can restrict to $\mathcal{L} \subseteq \Sigma^{q}$, the set of all possible $q$-grams found in the $q$-paths of $G$.\medskip 
+As previously seen, instead of iterating over all the strings in $\Sigma^{q}$ we can restrict to $\mathcal{L} \subseteq \Sigma^{q}$, which is the set of all possible $q$-grams found in the $q$-paths of $G$.\medskip 
 
-An additional improvement can be made: if we want to calculate the similarity between two set $A, B \subset V$ it is enough to ranging, instead over $\mathcal{L}$, over $\mathcal{W} = \{ x \in \Sigma^{q} : x \in L(A) \text{ or } x \in L(B) \} \subseteq \Sigma^{q}$, as we can easily see that for any $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.\bigskip
+An additional improvement can be made as follows. If we want to compute the similarity between two set $A, B \subset V$, it is enough to ranging, instead over $\mathcal{L}$, over $\mathcal{W} = \{ x \in \Sigma^{q} : x \in L(A) \text{ or } x \in L(B) \} \subseteq \Sigma^{q}$, as we can easily see that for any $x \in ( \Sigma^{q} \setminus \mathcal{W} )$ both $f_A[x]$ and $f_B[x]$ are equal to zero.\bigskip
 
-A last note, we can observe that in the Frequency Jaccard index we don't have to explicitly calculate $f_{A \cup B}[x]$ and its summary, as the exact value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$ can be easily calculated from $f_{A}[x] \text{ and } f_{B}[x]$.\bigskip
+Also, we can observe that in the Frequency Jaccard index we do not have to explicitly calculate $f_{A \cup B}[x]$ and its sketch, as the exact value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$ can be easily calculated from $f_{A}[x] \text{ and } f_{B}[x]$.\bigskip
 
-So we define the following procedures based on \eqref{bray-sub} and \eqref{jaccard-sub}:\medskip
+So we define the following procedures based on \eqref{bray-sub} and \eqref{jaccard-sub}.\medskip
 
 \begin{algorithm}[h]
 	\small
@@ -54,7 +54,7 @@ So we define the following procedures based on \eqref{bray-sub} and \eqref{jacca
 	\label{alg:jaccard}
 \end{algorithm}
 
-Algorithm 1 and 2 calculate the values of $BC(A,B)$ and $FJ(A,B)$, as previously defined, by ranging over the given dictionary of $q$-grams $\mathcal{W}$.
+Algorithm 1 and 2 compute the values of $BC(A,B)$ and $FJ(A,B)$, as previously defined, by ranging over the given dictionary of $q$-grams $\mathcal{W}$.
 
 \begin{lemma}
 	The execution of \textsc{Bray-Curtis} or \textsc{Frequency-Jaccard} requires $O(|W|)$ time and $O(1)$ space. 	
@@ -66,7 +66,7 @@ In the next algorithms, we will only focus to compute the values of $\mathcal{W}
 
 \section{Naive approach}
 
-The naive approach consists in enumerate all the possible $q$-grams of simple $q$-paths leading to $u \in A \cup B$. This can be done by starting an exhaustive search for each $u \in A \cup B$.
+The naive approach consists in enumerating all the possible $q$-grams of simple $q$-paths leading to $u \in A \cup B$. This can be done by starting an exhaustive search for each $u \in A \cup B$.
 	
 \begin{algorithm}[h]
 	\small
@@ -105,15 +105,15 @@ The naive approach consists in enumerate all the possible $q$-grams of simple $q
 
 Here we define $\mathcal{W}_{u}$ and $f_{u}$ as, respectively, the dictionary and the frequency of $q$-grams of the $q$-paths leading to the node $u \in A \cup B$.
 	 
-Thus we calculate $\mathcal{W}$ with the property $\mathcal{W} = \Sigma_{u \in A \cup B}{\ \mathcal{W}_{u} }$ and, in the same way, $f_{A \cup B}$ with the property $f_{A \cup B} = \Sigma_{u \in A \cup B}{\ f_{u} }$.
+Thus we compute $\mathcal{W}$ with the property $\mathcal{W} = \Sigma_{u \in A \cup B}{\ \mathcal{W}_{u} }$ and, in the same way, $f_{A \cup B}$ with the property $f_{A \cup B} = \Sigma_{u \in A \cup B}{\ f_{u} }$.
 	
-The value of R is calculated as we defined it in the beginning of the chapter $R = \Sigma_{x \in \mathcal{W} }{\ f_{A \cup B}[x] }$.
+The value of $R$ is computed as described at the beginning of the chapter, namely, $R = \Sigma_{x \in \mathcal{W} }{\ f_{A \cup B}[x] }$.
 
-At last, we can calculate the value of $f_{A}$ and $f_{B}$ from $f_{A \cup B}$ by looking at the leading nodes and separate the frequencies, depending if it belong to $A$, $B$ or both.
+At last, we can compute the value of $f_{A}$ and $f_{B}$ from $f_{A \cup B}$ by looking at the leading nodes and separate the frequencies, depending if it belongs to $A$, $B$ or both.
 
-Note that, as we have to separate the frequencies between $f_{A}$ and $f_{B}$, the type of $f_{A \cup B}$ is not a map $ \Sigma^{q} \rightarrow \mathbb{N}$ but instead is a map $V \times \Sigma^{q} \rightarrow \mathbb{N}$, where the element in $V$ is the leading node of the $q$-path associated to the $q$-gram.\medskip
+Note that, as we have to separate the frequencies between $f_{A}$ and $f_{B}$, the type of $f_{A \cup B}$ is not a mapping $ \Sigma^{q} \rightarrow \mathbb{N}$ but instead is a mapping $V \times \Sigma^{q} \rightarrow \mathbb{N}$, where the element in $V$ is the leading node of the $q$-path associated with the $q$-gram.\medskip
 	
-The values of $FJ(A,B)$ and $BC(A,B)$ calculated using this method are exact, we will use it only to compare the precision of the following approaches as it found all the possible $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\medskip
+The values of $FJ(A,B)$ and $BC(A,B)$ computed using this method are exact, and we will use it only to evaluate the precision of the other approaches, as it requires to examine all the possible $O(|\Sigma|^{q})$ $q$-gram with a complexity of $O(|V|^{q})$.\medskip
 	
 For completeness, we also illustrate the $\textsc{ExhaustiveSearch}$ algorithm that keeps track of the current $q$-path and its relative $q$-gram.
 	
@@ -145,21 +145,21 @@ For completeness, we also illustrate the $\textsc{ExhaustiveSearch}$ algorithm t
 	\label{alg:exhaustive-search}
 \end{algorithm}
 
-Where the symbol $\cdot$ is the concatenation of the paths, note that we put the node $v$ before the path $\pi$ as we are interested to find all the $q$-path leading to the original calling node $u$.\medskip
+Here the symbol $\cdot$ is the concatenation of the paths. Note that we put the node $v$ before the path $\pi$ as we are interested to find all the $q$-paths leading to the node $u$.\medskip
 	
-In Algorithm 4, when path $\pi$ is a complete $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
+In Algorithm 4, when $\pi$ is a $q$-path, we have the base case of the recursion that simply returns $\mathcal{W} = \{ L(\pi) \}$, which is the dictionary composed only by the label of $\pi$, and the frequency $f_{u}[\langle u_{q}, L(\pi) \rangle] = 1$ as we have only one path.
 	
-When the path $\pi$ is not completed, we recursively visit all its neighbors, with the new path obtained by prepending the node $v$ to the current path $\pi$.\medskip
+When the path $\pi$ is shorted than $q$, we recursively visit all its neighbors, with the new path obtained by prepending the node $v$ to the current path $\pi$.\medskip
 	
 \clearpage
 	
-As a last thing, with $N(u_{1}) \setminus \pi$ we avoid to revisiting the nodes already in the path $\pi$, in this way we restrict the searching only on the simple $q$-paths.
+Finally, using $N(u_{1}) \setminus \pi$ we avoid to traverse again the nodes already in the path $\pi$. In this way we restrict the searching only to the simple $q$-paths.
 	
 \begin{lemma}
 	For any two sets of nodes $A, B \subseteq V$, the running time of \textsc{brute-force} requires $O(|V|^{q})$ time and $O(\mathcal{L}) = O(|\Sigma|^{q})$ space.
 \end{lemma}
 
-Now we present a little example to better understand:
+Now we present a little example to better understand our ideas.
 	
 \begin{esempio}
 	We want to compute the similarity between the two nodes $4$ and $3$ in the following graph.	
@@ -169,7 +169,7 @@ Now we present a little example to better understand:
 	\includegraphics[width=0.35\textwidth]{figure/figure-3-2}
 \end{wrapfigure}
 	
-$\textsc{ExhaustiveSearch}(4, 3)$ return: \medskip
+$\textsc{ExhaustiveSearch}(4, 3)$ returns \medskip
 
 $\mathcal{W}_{4} = \{ abc, bac, bbc, cbc \}$ \medskip
 		
@@ -181,7 +181,7 @@ $f_{4}[\langle 4, bbc \rangle] = 2$ ($\textsc{3-4-0}$)\medskip
 		
 $f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-4-0}$)\bigskip
 		
-$\textsc{ExhaustiveSearch}(3, 3)$ return:\medskip
+$\textsc{ExhaustiveSearch}(3, 3)$ returns\medskip
 		
 $\mathcal{W}_{3} = \{ abc, acc, bcc, cbc \}$\medskip
 		
@@ -193,11 +193,11 @@ $f_{3}[\langle 3, bcc \rangle] = 2$ ($\textsc{1-4-3}$, $\textsc{2-4-3}$)\medskip
 		
 $f_{3}[\langle 3, cbc \rangle] = 2$ ($\textsc{4-1-3}$, $\textsc{4-2-3}$)\bigskip
 		
-So the dictionary $\mathcal{W}$ is: \medskip
+So the dictionary $\mathcal{W}$ is \medskip
 		
 $\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bbc, bcc, cbc \}$\bigskip
 		
-The similarity according to the two indices is: \medskip
+The similarity according to the two indices is \medskip
 
 $BC(\{3\}, \{4\}) = \frac{2 \times ( 2 + 0 + 0 + 0 + 0 + 2 ) }{ 4 + 1 + 2 + 2 + 2 + 4 } = \frac{8}{15}$ \medskip
 		
@@ -207,19 +207,19 @@ $FJ(\{3\}, \{4\}) = \frac{ 2 + 0 + 0 + 0 + 0 + 2 }{ 4 + 1 + 2 + 2 + 2 + 4 } = \f
 
 \section{Efficient computation}
 
-The main hurdle of the problem is to compute the frequency map $f_{X}[\ ]$ for some sets $X \in V$, as it can grow up to have a size of $|\Sigma|^{q}$ and its definition requires to explore $|V|^{q}$ $q$-paths.\medskip
+The main hurdle of our problem is to compute the frequency mapping $f_{X}[\ ]$ for some sets $X \in V$, as it can grow up to a size of $|\Sigma|^{q}$, and its definition requires to explore potentially $|V|^{q}$ $q$-paths.\medskip
 
-We present a random estimator based on color coding and sketching with the property that it can be computed efficiently even on big networks and its expected value is the actual similarity index~\cite{SubSim}.\medskip
+We present a random unbiased estimator based on color coding and sketching with the property that it can be computed efficiently even on large networks, and its expected value is the actual similarity index~\cite{SubSim}.\medskip
 
-As first thing, using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)}|V|$, thus making it feasible for large value of $|V|$ and with $q = O(\log |V|)$.
+First, using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)}|V|$, thus making it feasible for large values of $|V|$, assuming $q = O(\log |V|)$.
 
-Second, instead of calculating the correct value of $f_{X}$ we computing its sketch with a size small compared to $|\Sigma|^{q}$, which is a significant benefit when $|\Sigma|$ or $q$ are large.
+Second, instead of calculating the correct value of $f_{X}$, we compute its sketch with a size small compared to $|\Sigma|^{q}$, which is a significant benefit when $|\Sigma|$ or $q$ are large.
 
 \subsection*{$preprocess(G,q)$: Color coding of the $q$-paths}
 
-Now we illustrate how to preprocessing the input graph $G=(V,E)$ given an integer $q > 0$, in particular, we restrict our attention to $q = O(\log |V|)$.
+Now we illustrate how to preprocess the input graph $G=(V,E)$ given an integer $q > 0$, in particular, where $q = O(\log |V|)$.
 
-Note that the preprocessing of independent from the labeling function $L$ and from the subsets $A,B$ to compare, as it depends only from the graph $G$ and the value of $q$, so we can execute the preprocessing once and then reuse the color coding table for different values of $A,B$ or even $L$.\medskip
+Note that the preprocessing task is performed independently from the choice of the labeling function $L$ and the subsets $A,B$ to compare. It depends only on the graph $G$ and the value of $q$, so we can execute the preprocessing once and then reuse the same color coding table for different values of $A,B$ or even $L$.\medskip
 
 \begin{algorithm}[h]
 		
@@ -247,15 +247,15 @@ Note that the preprocessing of independent from the labeling function $L$ and fr
 	\label{alg:color-coding}
 \end{algorithm}
 
-The goal is to list all the colorful $q$-paths in $G$ using a dynamic programming approach.\medskip
+The next goal is to list all the colorful $q$-paths in $G$ using a dynamic programming approach.\medskip
 
-First of all we assign a random coloring $\chi : V \rightarrow [q]$, so each node $u \in V$ has a color $\chi(u)$ independently and uniformly chosen from $[q]$. Algorithm 5 build and return a table $M$ of size $q \times |V|$ where $M_{i,j}$ stores the collection of pairs $\langle C, f \rangle$ where  $C \subseteq [q]$ is a color set such $|C| = i$ and there are $f$ colorful $i$-paths leading to the node $j$.\medskip
+First of all we assign a random coloring $\chi : V \rightarrow [q]$, so that each node $u \in V$ has a color $\chi(u)$ independently and uniformly chosen from $[q]$. Algorithm 5 build and return a table $M$ of size $q \times |V|$ where $M_{i,j}$ stores the collection of pairs $\langle C, f \rangle$ where  $C \subseteq [q]$ is a color set such that $|C| = i$ and there are $f$ colorful $i$-paths leading to the node $j$.\medskip
 
-Our assumption that $q = O(\log |V|)$ allows us to implement, using bit manipulations, operations on color sets in $O(1)$ time as they fits in a machine words.\medskip
+Our assumption that $q = O(\log |V|)$ allows us to implement, using bit manipulations, operations on color sets in $O(1)$ time as they fit in a machine words.\medskip
 
 Note that each entry $M_{i, j}$ contains at most $\binom{q}{i}$ sets, each with $i$ colors. Hence the computation of the row $i$ can be done in parallel as it depends only from the row $i-1$ and require $O(|E|\ \binom{q}{i-1})$ time (as we scan all the adjacency list). The entire computation requires thus $O(|E|\ \Sigma_{i=1}^{q}{\binom{q}{i-1}}) = O(|E|\ 2^{q})$ time.\bigskip
 
-For what concern space, the table $M$, as we already told, have a total of $q \times |V|$ entry, each of which contains at most $\binom{q}{i}$ pairs $\langle C, f \rangle$.
+For what concern space, the table $M$, as we already said, has a total of $q \times |V|$ entries, each of which contains at most $\binom{q}{i}$ pairs $\langle C, f \rangle$.
 
 Each pair can be stored in $O(1)$ as they are simply $2$ integer, we have a total size of $O(\Sigma_{i=1}^{q}{\Sigma_{j=1}^{|V|}{ \binom{q}{i}}}) = O(|V|\ \Sigma_{i=1}^{q}{\binom{q}{i}}) = O(|V|\ 2^{q})$.\bigskip
 
@@ -273,17 +273,17 @@ So we will pass to the next step.
 
 Now using the color coding table $M$, and given two set of nodes $A, B$, we want to approximate the values of $BC(A,B)$ and $FJ(A,B)$.\bigskip
 
-As already said, we can't explore all the colorful $q$-grams, so our idea is to construct a sketch of $\mathcal{L}$, without explicitly calculate it, by sampling $r$ $q$-paths from $M$, where $r < |\mathcal{L}|$ is a user-selectable parameter.
+As already said, we cannnot explore all the colorful $q$-grams, so our idea is to construct a sample of $\mathcal{L}$, without explicitly calculate it, by sampling $r$ $q$-paths from $M$, where $r < |\mathcal{L}|$ is a user-selectable parameter.
 
-We will use the method of the bottom-$k$ sketch by taking, without repetition, the first $r$ $q$-paths. \bigskip 
+We will use as a sample $r$ $q$-paths  without repetition. This can be also seen as a bottom-r sketch of all the $q$-paths.\bigskip 
 
 \clearpage
 
 Our algorithm for $\textsc{query}(A,B)$ consist of three phases as follows:
 
 \begin{itemize}
-	\item Compute a suitable sketch $W \subset \mathcal{L}$ such $\tau = |W|$ is at most $r$, by sampling colorful $q$-paths using $M$.
-	\item Compute $R$ and $f_{A}[x]$, $f_{B}[x]$ for each $x \in W$.
+	\item Compute a suitable sketch $W \subset \mathcal{L}$ such that $\tau = |W|$ is at most $r$, by sampling $r$ colorful $q$-paths using $M$ and setting $W$ as the sets of the $q$-grams of these paths.
+	\item Compute $f_{A}[x]$, $f_{B}[x]$ for each $x \in W$.
 	\item Approximate $BC(A,B)$ as $BC_{W}(A,B)$ and $FJ(A,B)$ as $FJ_{W}(A,B)$.
 \end{itemize}
 
@@ -299,11 +299,11 @@ Where $BC_{W}(A,B)$ and $FJ_{W}(A,B)$ are defined as:
 
 \subsection*{Phase 1: Colorful sampler}
 
-Sampling uniformly using a dynamic programming approach is a topic already covered in the literature, e.g. Martin Dyer in ~\cite{Dyer:2003:ACD:780542.780643} or Eric Vigoda in ~\cite{Vigoda2010LectureNO}, in particular, we are interested in sampling $r$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\bigskip
+Sampling uniformly using a dynamic programming approach is a topic already covered in the literature, e.g. Martin Dyer in ~\cite{Dyer:2003:ACD:780542.780643} or Eric Vigoda in ~\cite{Vigoda2010LectureNO}. In particular, we are interested in sampling $\tau$ $q$-grams from colorful $q$-paths, leading to nodes belonging to $X$, using the color coding table $M$.\bigskip
 
-In particular the sample depends on the frequencies of the $q$-grams ending in $x \in X$, as in the case of consistent weighted sampling, where more frequent $q$-grams need to be sampled more often.
+As we are dealing with weighted sets (where the weights are frequencies), the sample must depend on the frequencies of the $q$-grams ending in $x \in X$, as in the case of consistent weighted sampling, where more frequent $q$-grams need to be sampled more often.
  
-As we don't know a priori the frequency of $q$-grams before sampling, we can extract the $q$-paths by looking the frequencies of colorful $q$-paths in $M$. We know that the number of colorful $q$-paths ending in $v$ is $M_{q,v}([q])$, so we extract the starting node $x \in X$ of our weighted random $q$-paths with a probability:\bigskip
+As we do not know a priori the frequency of $q$-grams before sampling, we sample $q$-paths uniformly at random so that the probability of getting a $q$-gram is proportional to the number of paths having that $q$-gram, i.e. its frequency. The uniform sampling of paths can be done by looking at the frequencies of colorful $q$-paths in $M$. We know that the number of colorful $q$-paths ending in $v$ is $M_{q,v}([q])$, hence we extract the starting node $x \in X$ of our weighted random $q$-paths with a probability:\bigskip
 
 \begin{equation}
 	p_{X}(v) = \frac{ M_{q,v}([q]) }{ \Sigma_{x \in X}{M_{q, x}([q])} }
@@ -311,11 +311,11 @@ As we don't know a priori the frequency of $q$-grams before sampling, we can ext
 
 \bigskip
 
-And then generating a random $q$-path by scanning the color coding table $M$ backward from $q-1$ to $1$, choosing nodes with a probability similar to $p_{X}(v)$ (except that during step $i$ we look at row $i$ and in the complementary of the color set of the current $i$-path).\bigskip
+Then we generate a random $q$-path by scanning the color coding table $M$ backward from $q-1$ to $1$, choosing nodes with a probability similar to $p_{X}(v)$ (except that during step $i$ we look at row $i$ and in the complementary of the color set of the current $i$-path).\bigskip
 
 \clearpage
 
-We define out sampling algorithm as:
+We define out sampling algorithm as shown in Algorithm~\ref{alg:colorful-sampler}.
 
 \begin{algorithm}[h]
 	\small
@@ -340,7 +340,7 @@ We define out sampling algorithm as:
 	\label{alg:colorful-sampler}
 \end{algorithm}
 
-And $\textsc{random-path-to}$ is defined as:
+The procedure $\textsc{random-path-to}$ is defined in Algorithm~\ref{alg:random-path-to}.
 
 \begin{algorithm}[h]
 	\small
@@ -361,19 +361,18 @@ And $\textsc{random-path-to}$ is defined as:
 	\label{alg:random-path-to}
 \end{algorithm}
 
-Note that the method $\textsc{random-path-to}$ always finds a colorful $q$-path, as we at each step, select only between the nodes that lead us to a colorful $q$-path (i.e. the probability $p_{v}$ is $0$ for nodes that don't lead to a colorful $q$-path). This property is guaranteed by the way the color coding table $M$ is generated by Algorithm 5.
+Note that the method $\textsc{random-path-to}$ always finds a colorful $q$-path, as at each step we choose nodes only among the ones that will lead to a colorful $q$-path (i.e. the probability $p_{v}$ is $0$ for nodes that don't lead to a colorful $q$-path). This property is guaranteed by the way the color coding table $M$ is generated by Algorithm 5.
 
 \begin{lemma}
 	For any multiset of nodes $X$, 
-	Algorithm 6 return a random sample $W \subset |\Sigma^{q}|$ and the map frequency $f_{X}[x]$
-	with a complexity of $O(rq)$ both in time and space, 
+	Algorithm 6 returns a random sample $W \subset |\Sigma^{q}|$ with a complexity of $O(rq)$ both in time and space, 
 	where $q = O(\log |V|)$ and $r < |\mathcal{L}| \leq |\Sigma|^{q}$.
 \end{lemma}
 
 \clearpage
 \subsection*{Phase 2: Frequency count}
 
-Now that we have a sample $W$, of suitable size, composed by $q$-grams, we are interested, for a multiset of nodes $X$, in calculate $f_{X}[x]$ for each $x \in W$. Algorithm 8, for steps $i = 1, 2, \ldots, q$, proceed by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by a binary search in a set of strings).\medskip
+Now that we have a sample $W$, of suitable size, composed by $q$-grams, we are interested, for a multiset of nodes $X$, in calculating $f_{X}[x]$ for each $x \in W$. Algorithm~\ref{alg:f-count}, for steps $i = 1, 2, \ldots, q$, proceeds by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by a binary search in a set of strings).\medskip
 
 We maintain a multiset $T$ of these $i$-grams, each represented by a triple $\langle z, x, C \rangle$ to indicate that exists a $i$-path starting from z and leading to a node $u \in X$ whose $i$-gram is $x$ and its colorset is $C$ (note that the same triple triple $\langle z, x, C \rangle$ can appear more times in $T$ as there might exist multiple paths from $z$ to $u$ labeled with the same $i$-gram $x$).\medskip
 
