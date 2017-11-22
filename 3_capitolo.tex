@@ -211,9 +211,9 @@ The main hurdle of the problem is to compute the frequency map $f_{X}[\ ]$ for s
 
 We present a random estimator based on color coding and sketching with the property that it can be computed efficiently even on big networks and its expected value is the actual similarity index~\cite{SubSim}.\medskip
 
-As first thing using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)}|V|$, thus making it feasible for large value of $|V|$ and with $q = O(\log |V|)$.
+As first thing, using the color coding we reduce the number of potentially explored $q$-paths from $|V|^{q}$ to $2^{O(q)}|V|$, thus making it feasible for large value of $|V|$ and with $q = O(\log |V|)$.
 
-Second, instead of calculating the correct value of $f_{X}[\ ]$ we computing its sketch with a size small compared to $|\Sigma|^{q}$, which is a significant benefit when $|\Sigma|$ or $q$ are large.
+Second, instead of calculating the correct value of $f_{X}$ we computing its sketch with a size small compared to $|\Sigma|^{q}$, which is a significant benefit when $|\Sigma|$ or $q$ are large.
 
 \subsection*{$preprocess(G,q)$: Color coding of the $q$-paths}
 
@@ -323,7 +323,7 @@ We define out sampling algorithm as:
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\Input{$X =$ multiset of nodes from graph $G$\\$M =$ color coding table for $G$\\$r =$ number of colorful paths to sample.}
-	\Output{$W = $ random sample set of colorful $q$-grams of $q$-paths leading to $x \in X$ with probability $p_X(x)$.}
+	\Output{$W = $ random sample composed by $q$-grams of $q$-paths leading to $x \in X$}
 	\BlankLine
 	$R \gets \{\}$\;
 	\BlankLine
@@ -373,7 +373,7 @@ Note that the method $\textsc{random-path-to}$ always finds a colorful $q$-path,
 \clearpage
 \subsection*{Phase 2: Frequency count}
 
-Now that we have a sample $W$ composed by colorful $q$-grams, of a suitable size, we are interested, for a multiset of nodes $X$, in calculate $f_{X}[x]$ for each $x \in W$. Algorithm 8, for steps $i = 1, 2, \ldots, q$, proceed by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by a binary search in a set of strings).\medskip
+Now that we have a sample $W$, of suitable size, composed by $q$-grams, we are interested, for a multiset of nodes $X$, in calculate $f_{X}[x]$ for each $x \in W$. Algorithm 8, for steps $i = 1, 2, \ldots, q$, proceed by expanding in $BFS$ order only the $i$-paths ending in a node $u \in X$ and having $i$-grams that are suffixes of $W$ (this operation can be made more space efficient by using tries or by a binary search in a set of strings).\medskip
 
 We maintain a multiset $T$ of these $i$-grams, each represented by a triple $\langle z, x, C \rangle$ to indicate that exists a $i$-path starting from z and leading to a node $u \in X$ whose $i$-gram is $x$ and its colorset is $C$ (note that the same triple triple $\langle z, x, C \rangle$ can appear more times in $T$ as there might exist multiple paths from $z$ to $u$ labeled with the same $i$-gram $x$).\medskip
 
@@ -419,11 +419,11 @@ Also in this case, considering that the computation for the $i$-grams depends on
 
 \clearpage
 
-It may happen that, in some big instance, Algorithm 8 can explore many colorful paths as it expands the paths in the $X \cup N^{<q}(X)$ nodes.
+It may happen that, in some big instance, Algorithm 8 explore many colorful paths as it expands the paths in $X \cup N^{<q}(X)$ .
 
-To alleviate this issue we present a modified version of the Algorithm 6, that we call $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\medskip
+To alleviate this issue we present a modified version of the Algorithm 6, called $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\medskip
 
-In Algorithms 9, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $R$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
+In Algorithms 9, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
 
 Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $r$ to have a better estimation of the similarity indices.
 
@@ -474,7 +474,7 @@ The sampling algorithms, $\textsc{colorful-sampler}$ and \fsamp, can be used for
 
 In this way, in the Bray-Curtis index, we give more weight of being extracted to the $q$-paths leading to $u \in A \cap B$, as in the multisets union ($\uplus$) we sum the frequency of the elements that belong to the intersection.\medskip
 
-We now present the four final algorithms for estimating both Bray-Curtis index and Frequency Jaccard index, using both approaches \fcount and \fsamp.
+We now present the four final algorithms for estimating both Bray-Curtis index and Frequency Jaccard index, using both \fcount and \fsamp.
 
 \subsection*{F-Count}
 
@@ -543,7 +543,7 @@ We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally
 
 \subsection*{F-Samp}
 
-Estimating the two indices using the \fsamp algorithm is easier that using \fcount, as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.\medskip
+Estimating the two indices using the \fsamp algorithm is easier than using \fcount, as \fsamp compute the sketch $\mathcal{W}$ and the frequency map $f_X[x]$ at the same time.\medskip
 
 To estimate the Bray-Curtis index we first call \fsamp with $X = A \uplus B$, then we compute the values of $f_A$ and $f_B$ from $f_X$ by looking if the leading nodes of the $q$-paths belongs to $A$, $B$ or both.
 
