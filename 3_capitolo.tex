@@ -502,7 +502,7 @@ For estimating the Frequency Jaccard index, we create the sketch $\mathcal{W}$ w
 
 Then the values of $f_{A}[x]$ and $f_{B}[x]$ are calculated in a different way, as we also want to calculate the value of $R = \Sigma_{x \in \mathcal{W}} f_{A \cup B}[x]$.
 
-Using the property $|R|= \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$, the exact value $f_{u}$, which is the frequency of each $q$-gram leading to $u$, for $q$-grams belonging to the sampled dictionary $\mathcal{W}$.
+Using the property $R = \Sigma_{u \in A \cup B}\ \Sigma_{x \in \mathcal{W}} f_{u}[x] $ and $f_{X}[x] = \Sigma_{u \in X}{ f_{u}[x] }$, we calculate, for each $u \in A \cup B$, the exact value $f_{u}$, which is the frequency of each $q$-gram leading to $u$, for $q$-grams belonging to the sampled dictionary $\mathcal{W}$.
 
 We sum all the frequencies $f_u[x]$, for $x \in \mathcal{W}$, to $R$ and finally merge $f_{u}$ to $f_A$, if $u \in A$, and $f_B$, if $u \in B$.
 
@@ -646,7 +646,7 @@ And the algorithm \textsc{naive-random-path-to}:
 
 Note that, because this is a naive approach, the \textsc{naive-random-path-to} may fail to find a $q$-path leading to $u$ as it goes to explore dead-end paths.
 
-Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $|R| = \Sigma_{x \in W} f_{X}[x]$.
+Also in this case we estimate $BC(A,C)$ using $X = A \uplus B$ and $FJ(A,B)$ using $X = A \cup B$ and $R = \Sigma_{x \in W} f_{X}[x]$.
 
 \noindent
 
