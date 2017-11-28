@@ -28,7 +28,7 @@ So we define the following procedures based on \eqref{bray-sub} and \eqref{jacca
 	$den \gets 0$\;
 	\ForEach{$x \in \mathcal{W}$}{
 		$num \gets num + 2 \times \min( f_{A}[x], f_{B}[x] )$\;
-		$dem \gets den + f_{A}[x] + f_{B}[x]$\;
+		$den \gets den + f_{A}[x] + f_{B}[x]$\;
 	}
 	$BC \gets \frac{num}{den}$\;
 	\Return{$BC$}
@@ -171,15 +171,15 @@ Now we present a little example to better understand our ideas.
 	
 $\textsc{ExhaustiveSearch}(4, 3)$ returns \medskip
 
-$\mathcal{W}_{4} = \{ abc, bac, bbc, cbc \}$ \medskip
+$\mathcal{W}_{4} = \{ abc, bac, bcc, cbc \}$ \medskip
 		
-$f_{4}[\langle 4, abc \rangle] = 2$ ($\textsc{3-1-0}$ $\textsc{4-1-0}$ $\textsc{3-2-0}$ $\textsc{4-2-0}$)\medskip
+$f_{4}[\langle 4, abc \rangle] = 2$ ($\textsc{0-1-4}$ $\textsc{0-2-4}$)\medskip
 		
-$f_{4}[\langle 4, bac \rangle] = 2$ ($\textsc{1-4-0}$ $\textsc{2-4-0}$)\medskip
+$f_{4}[\langle 4, bac \rangle] = 2$ ($\textsc{1-0-4}$ $\textsc{2-0-4}$)\medskip
 		
-$f_{4}[\langle 4, bbc \rangle] = 2$ ($\textsc{3-4-0}$)\medskip
+$f_{4}[\langle 4, bcc \rangle] = 2$ ($\textsc{1-3-4}$ $\textsc{2-3-4}$)\medskip
 		
-$f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-4-0}$)\bigskip
+$f_{4}[\langle 4, cbc \rangle] = 2$ ($\textsc{3-1-4}$ $\textsc{3-2-4}$)\bigskip
 		
 $\textsc{ExhaustiveSearch}(3, 3)$ returns\medskip
 		
@@ -195,13 +195,13 @@ $f_{3}[\langle 3, cbc \rangle] = 2$ ($\textsc{4-1-3}$, $\textsc{4-2-3}$)\bigskip
 		
 So the dictionary $\mathcal{W}$ is \medskip
 		
-$\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bbc, bcc, cbc \}$\bigskip
+$\mathcal{W} = \mathcal{W}_3 \cup \mathcal{W}_4 = \{ abc, acc, bac, bcc, cbc \}$\bigskip
 		
 The similarity according to the two indices is \medskip
 
-$BC(\{3\}, \{4\}) = \frac{2 \times ( 2 + 0 + 0 + 0 + 0 + 2 ) }{ 4 + 1 + 2 + 2 + 2 + 4 } = \frac{8}{15}$ \medskip
+$BC(\{3\}, \{4\}) = \frac{2 \times (2 + 0 + 0 + 2 + 2) }{4 + 1 + 2 + 4 + 4} = \frac{12}{15}$ \medskip
 		
-$FJ(\{3\}, \{4\}) = \frac{ 2 + 0 + 0 + 0 + 0 + 2 }{ 4 + 1 + 2 + 2 + 2 + 4 } = \frac{4}{15}$ \medskip
+$FJ(\{3\}, \{4\}) = \frac{2 + 0 + 0 + 2 + 2}{4 + 1 + 2 + 4 + 4} = \frac{6}{15}$ \medskip
 		
 \clearpage
 
@@ -422,7 +422,7 @@ It may happen that, in some big instance, Algorithm \ref{alg:f-count} explores m
 
 To alleviate this issue we present a modified version of the Algorithm \ref{alg:colorful-sampler}, called $\textsc{f-samp}$, that estimate the value of $f_{X}[x]$ after having computed the sketch.\medskip
 
-In Algorithms \ref{alg:f-samp}, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
+In Algorithm \ref{alg:f-samp}, as we already did in \textsc{Brute-Force}, we keep track of the leading nodes of all the $q$-paths, in this way we can use $f_{X}$ to construct $f_A$, $f_B$ and $f_{A \cup B}$. In addition, we estimate, with the lines $8$ and $9$, the value of $f_X$ using the sampled $q$-paths $R$.\medskip
 
 Of course, this speed up the computation time, on the other hand, as we will see in the next chapter, the accuracy will be affected and we will need a greater value of $r$ to have a better estimation of the similarity indices.
 
@@ -597,7 +597,7 @@ We have shown how to estimate the two Bray-Curtis and Frequency Jaccard similari
 
 \section{Baseline algorithm}
 
-In order to validate the effectiveness of our approaches, we compare the previously seen algorithms against a naive randomized approach, which is the following baseline algorithm $\textsc{base}$ that find random paths by simply performing random walks.
+In order to validate the effectiveness of our approaches, we compare the previously seen algorithms against a naive randomized approach, which is the following baseline algorithm $\textsc{base}$ that finds random paths by simply performing random walks.
 
 \begin{algorithm}[h]
 		

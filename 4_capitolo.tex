@@ -66,7 +66,7 @@ This collaboration graph is also known as Erdős collaboration graph~\cite{BATAG
 
 We describe the experimental evaluation for our approach. Our computing platform is a machine with Intel(R) Xeon(R) CPU E5-2620 v3 at 2.40GHz, 24 virtual cores, 128 Gb RAM, running Ubuntu Linux v.4.4.0-22-generic. Code written in C++17, compiled with g++ v.5.4.1 and OpenMP 4.5.\medskip
 
-To better analyze the different approaches described, we take several kinds of experiments. In each of them~\footnote{Unless otherwise stated, all the results are the average of $100$ identical experiments, in order to reduce the possible errors randomly caused by the machine.}, all times are expressed in milliseconds.\medskip
+To better analyze the different approaches described, we take several kinds of experiments. In each of them~\footnote{Unless otherwise stated, all the results are the average of $100$ identical experiments, in order to reduce the possible errors randomly caused by the machine.}, all the execution times are expressed in milliseconds and are referred to the parallel execution of the algorithms using $24$ cores.\medskip
 
 An important fact to take into account is that we make large use of parallelization, 
 so all the running time scale (approximately) linearly on the number of CPU cores used.
@@ -78,7 +78,7 @@ In this experiment we compare the different running times, of all the parts, fro
 
 First of all we test how much we can go up in \textsc{Brute-Force} with the value of $q$ and the sample size, as this is our bottleneck to analyze the relative errors for the approximated methods.\medskip 
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|}
 		\hline
@@ -99,7 +99,7 @@ As expected, we can see that the running time for the bruteforce approach is lin
 
 The second bottleneck for our algorithms is the preprocessing time for the dynamic programming table of color-coding, so that we test for both the dataset how can we go up with the value of $q$. We recall that, from initial assumptions, the value of $q$ should not be too high. 
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|}
 		\hline
@@ -122,7 +122,7 @@ To better understand these values, the official \textsc{IMDb} statistic~\cite{im
 
 Finally, we test the running time for the different approaches for different value of $q$ and number $r$ of $q$-paths sampled. 
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
@@ -153,7 +153,7 @@ In this experiment we will compare, for increasing value of $r$, how accurate an
 
 The accuracy is calculated with the average of the relative error between the exact solution of $\textsc{brute}$ and the analyzed algorithms \fcount, \fsamp or \base, while the stability is calculated as the variance of the results, considering $100$ experiments for each combination of parameters.
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
@@ -172,7 +172,7 @@ The accuracy is calculated with the average of the relative error between the ex
 	\caption{Relative error and variance of the \fcount approach}	
 \end{table}
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
@@ -190,7 +190,7 @@ The accuracy is calculated with the average of the relative error between the ex
 	\caption{Relative error and variance of the \fsamp approach}	
 \end{table}
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\hline
@@ -211,13 +211,13 @@ The accuracy is calculated with the average of the relative error between the ex
 \clearpage
 
 From the three previous tables, we can clearly see that \fcount provides the best approximation for both the indices, 
-with high precision and extremely low variance even for $R=10$. 
+with high precision and extremely low variance even for $r=10$. 
 The \fsamp approach has a lower relative error compared to \base, however here the variance between the two approaches seems to be nearly the same.\medskip
 
 We further investigate the variance between \fsamp and \base, this time using $\textsc{IMDb}$ as dataset,
 in order to study the stability in a real application.
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|}
 		\cline{5-8}
@@ -235,9 +235,9 @@ in order to study the stability in a real application.
 Now we can see that, for both indices, the variance of \fsamp is one, or in some case two, orders of magnitude fewer compared to \base.
 
 Finally, in the last test, to compare \fsamp and \base on $\textsc{IMDb}$, we show some real values of the two indices comparing the ego-networks of the famous comic duo Laurel and Hardy
-($q=3$, $R=1\,000$, $|A| = 186$ and $|B| = 415$).
+($q=3$, $r=1\,000$, $|A| = 186$ and $|B| = 415$).
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{l|l|l|l|l|}
 		\cline{2-5}
@@ -267,7 +267,7 @@ Finally, in the last test, to compare \fsamp and \base on $\textsc{IMDb}$, we sh
 
 In this experiment we set the relative error and compare, for each approach, how many paths $r$ we need to sample in order to get this relative error.\medskip
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
 		\cline{3-11}
@@ -296,7 +296,7 @@ Instead \fsamp and \base needed many more $q$-paths to reach the precision of \f
 \subsection*{Actors' ego-networks}
 
 In order to show a real application easy to understand, we compare
-some pairs of actors ego-networks (using \fcount algorithm with $q=3$ and $R=1\,000$):\medskip
+some pairs of actors ego-networks (using \fcount algorithm with $q=3$ and $r=1\,000$):\medskip
 
 \begin{table}[h]
 	\centering

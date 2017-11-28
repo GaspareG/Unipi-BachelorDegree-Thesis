@@ -18,7 +18,7 @@ A sequence of nodes  $v_{1}, v_{2}, \ldots, v_{k}$ is called path if $(v_{i}, v_
 
 We denote by $N(u) = \{ v : (u,v) \in E \}$ the set of neighbors of the vertex $u$. The cardinality of this set is called degree of $u$ (i.e. \textit{deg} $u$ = $|N(u)|)$. 
 
-With $N^{<k}(u)$ we indicate the set of vertices connected to $u$ by a simple path of length less than $k$ (note that $N(u)$ = $N^{<2}(u)$).
+With $N^{<k}(u)$ we indicate the set of vertices connected to $u$ by a simple path of length less than $k$ (note that $N(u)$ = $N^{<2}(u)$). We can extend the previous definition to a set of vertices $V' \subseteq V$ as $N^{<k}(V') = \cup_{v \in V'}{ N^{<k}(v) }$.
 
 \begin{definizione}\label{def:subgraph}
 	A graph $G' = (V', E')$ is called \textbf{subgraph} of $G=(V,E)$ if $V' \subset V$ and $E' \subset E$. A subgraph is called \textbf{induced subgraph} if $E' = (V' \times V') \cap E$.
@@ -79,9 +79,9 @@ In this thesis, we mainly focus on analyzing complex networks: special graphs wi
 	and two set of nodes $V_{1}, V_{2} \subset V$, we want to estimate the similarity between the two induced subgraphs $V_{1}, V_{2} < G$, based on the labels frequency of simple paths with nodes in $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ that ends in $V_1$ and $V_2$.
 \end{problema}
 
-We will talk about a more formal and rigorous definition of subgraphs similarity in chapter 2.\medskip
+We will talk about a more formal and rigorous definition of subgraph similarity in chapter 2.\medskip
 
-In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind of the interaction between each subgraph and the rest of the graph.\medskip
+In the definition we use $V_{1} \cup N^{<q}(V_{1})$ and $V_{2} \cup N^{<q}(V_{2})$ instead of simply $V_{1}$ and $V_{2}$ because, in a complex graph, we also want to keep in mind the interaction between each subgraph and the rest of the graph.\medskip
 
 The difficulty we must face is that, in a complex network, the labels can exponentially explode for increasing values of $q$ and $|\Sigma|$, to $|\Sigma|^{q} \gg |V|$. Even worse, the number of simple paths can exponentially explode to $|V|^{q}$.  The simple reason is that in complex networks the average separation is very low (the famous idea of \textit{six degrees of separation}).\medskip
 

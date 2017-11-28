@@ -70,7 +70,7 @@ Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n}
 	Given two multisets $A = (a_{1}, \ldots, a_{n}) $ and $B = (b_{1}, \ldots, b_{n})$ we define the \textbf{Bray-Curtis} index as
 	
 	\begin{equation}
-	BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {a_{i} + b_{i}}}
+	BC(A,B) = \frac{ 2 \times \sum\limits_{i=1}^n { min(a_{i}, b_{i}) } }{\sum\limits_{i=1}^n {(a_{i} + b_{i})}}
 	\end{equation}
 	
 \end{definizione}
@@ -81,11 +81,11 @@ As a side note, Bray-Curtis is a relevant index for multisets, and is also known
 	Given $A = (0, 2, 3, 1, 0, 3) $ and $B = (2, 0, 1, 3, 1, 2)$ we have
 	
 	\begin{equation}
-	J(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 2} = \frac{4}{13} 
+	J(A,B) = \frac{0 + 0 + 1 + 1 + 0 + 2}{2 + 2 + 3 + 3 + 1 + 3} = \frac{2}{7} 
 	\end{equation}
 	
 	\begin{equation}
-	BC(A,B) = \frac{2 \times (0 + 0 + 1 + 1 + 0 + 2) }{2 + 2 + 4 + 4 + 1 + 4} = \frac{8}{17}
+	BC(A,B) = \frac{2 \times (0 + 0 + 1 + 1 + 0 + 2) }{2 + 2 + 4 + 4 + 1 + 5} = \frac{4}{9}
 	\end{equation}
 \end{esempio}
 
@@ -119,9 +119,9 @@ In this case the sequence is a document and the items can be words, characters o
 
 Note that in a document with $n$ words the possible $q$-grams are exactly $n-q+1$.\medskip
 
-It is easy to see if we use the set, or multiset, of the all possible $q$-grams of two documents we can use it to calculate their similarity based on the Jaccard or Bray-Curtis index.\medskip
+It is easy to see that if we use the set, or multiset, of the all possible $q$-grams of two documents we can use it to calculate their similarity based on the Jaccard or Bray-Curtis index.\medskip
 
-Considering that the number of $q$-grams in a document is linear in its number of words, document similarity is not an hard problem as we have only to perform union and intersection between sets, or multisets.\medskip
+Considering that the number of $q$-grams in a document is linear in its number of words, document similarity is not a hard problem as we have only to perform union and intersection between sets, or multisets.\medskip
 
 \begin{esempio}
 	Given the documents 
@@ -133,10 +133,10 @@ Considering that the number of $q$-grams in a document is linear in its number o
 	\end{equation*}
 	The set of their $2$-grams are:
 	\begin{equation*}
-	S_{A} = (\textit{I live}, \textit{live work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Pisa})
+	S_{A} = (\textit{I live}, \textit{live work}, \textit{\textbf{work and}}, \textit{\textbf{and study}}, \textit{\textbf{study in}}, \textit{in Pisa})
 	\end{equation*}
 	\begin{equation*}
-	S_{B} = (\textit{You work}, \textit{work and}, \textit{and study}, \textit{study in}, \textit{in Livorno})
+	S_{B} = (\textit{You work}, \textit{\textbf{work and}}, \textit{\textbf{and study}}, \textit{\textbf{study in}}, \textit{in Livorno})
 	\end{equation*}
 	The similarity using both Jaccard and Bray-Curtis are\medskip
 	\begin{equation*}
@@ -154,7 +154,7 @@ The definition of similarity between graphs is more complex, as we have to intro
 \begin{definizione}
 	A \textbf{graph isomorphism} between two graphs $G=(V_{G}, E_{G})$ and $H=(V_{H}, E_{H})$ is a one-to-one function from vertices of $G$ to vertices of $H$ that preserve the edge structure, i.e.  
 	\begin{equation}
-	f : V_{G} \rightarrow V_{H} \text{ s.t. } (v, u) \in E_{G} \implies (f(v), f(u)) \in E_{H}
+	f : V_{G} \rightarrow V_{H} \text{ s.t. } (v, u) \in E_{G} \iff (f(v), f(u)) \in E_{H}
 	\end{equation}
 \end{definizione}
 
@@ -169,21 +169,23 @@ With the notion of graph similarity we can define a similarity between two graph
 Unfortunately subgraphs isomorphism is an NP-complete problem~\cite{GareyJohnson:1979}, so the only way to solve it is by using heuristic or approximated methods.
 
 \begin{esempio}
-	\begin{figure}[h]
+	\begin{figure}[ht]
 		\centering
 		\begin{minipage}[t]{.45\textwidth}
 			\centering
-			\includegraphics[width=5cm,height=3.33cm]{figure/figure-2-3}
+			\includegraphics[width=5cm,height=2.92cm]{figure/figure-2-3}
 			\caption{Graph $G=(V_G, E_G)$}
+			\label{fig:graph-2-1}
 		\end{minipage}\hfill
 		\begin{minipage}[t]{.45\textwidth}
 			\centering
 			\includegraphics[width=4cm,height=4cm]{figure/figure-2-4}
 			\caption{Graph $H=(V_H, E_H)$}
+			\label{fig:graph-2-2}
 		\end{minipage}
 	\end{figure}
 	
-	The two graphs are isomorphic with the function $f : V_{G} \rightarrow V_{H}$ s.t. $f(0) = 3$, $f(1) = 4$, $f(2) = 2$, $f(3) = 0$, $f(4) = 5$ and $f(5) = 1$. 
+	The two graphs in figures \ref{fig:graph-2-1} and \ref{fig:graph-2-2} are isomorphic with the function $f : V_{G} \rightarrow V_{H}$ s.t. $f(0) = 3$, $f(1) = 4$, $f(2) = 2$, $f(3) = 0$, $f(4) = 5$ and $f(5) = 1$. 
 	
 \end{esempio}
 
@@ -240,7 +242,7 @@ Now we present a little example to better understand our notions.\medskip
 	\begin{esempio}
 	\end{esempio}
 	
-	We want to calculate the similarity between the two set $S_{1} = \{0,1\}$ and $S_{2} = \{1, 3\}$ using their $3$-grams of this graph:
+	Given the graph in figure \ref{pic:graph-cc}, we want to calculate the similarity between the two sets $S_{1} = \{0,1\}$ and $S_{2} = \{1, 3\}$ according to their sets of $3$-grams:
 	
 	\begin{equation*}
 	L(S_{1}) = [aab, acb, baa, bca, bca, bcb, cab, cba]
@@ -256,6 +258,7 @@ Now we present a little example to better understand our notions.\medskip
 \end{minipage}
 \begin{minipage}{0.30\textwidth}
 	\includegraphics[width=\linewidth]{figure/figure-2-1}
+	\label{pic:graph-cc}
 \end{minipage}
 
 \section{Sketches}
@@ -267,7 +270,7 @@ This task becomes more difficult to handle when we have to consider thousands or
 (e.g. the set of Internet web pages), each one of them has thousands of shingles.\medskip
 
 To solve this problem, it is no longer possible to handle all the shingles for all the documents,  
-instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}~\cite{Broder2000}.
+instead we can, for each of them, keep a relatively small, fixed size \textit{sketch}~\cite{Broder2000}, i.e. a fingerprint of the document.
 
 The computation of the sketches is linear in the size of the documents and can be used to calculate the similarity in linear time in the size of the sketches only.\medskip
 
@@ -283,7 +286,7 @@ for simplicity we assume that our document is composed of all numbers between $1
 The first approach to compute a sketch of a document is the min-wise permutation~\cite{Broder:1998:MIP:276698.276781}.\bigskip
 
 Given a document $A = \{1, \ldots, n\}$, to calculate its sketch $S_{A}$ of size $k$ 
-we choose $k$ random independent permutations $\pi_{i} : \{1, \ldots, n\} \rightarrow \{1, \ldots, n\}$ and define the sketch $S_A$ of $A$ as:
+we choose $k$ random independent permutations\footnote{We define the minimum of a permutation as the element with the lowest mapped index.} $\pi_{i} : \{1, \ldots, n\} \rightarrow \{1, \ldots, n\}$ and define the sketch $S_A$ of $A$ as:
 
 \begin{equation}
 S_{A} = \{ \min(\pi_{1}(A)), \ldots, \min(\pi_{k}(A)) \}
@@ -331,7 +334,7 @@ Note that, unlike the min-wise permutation, in a bottom-k sketch we do not have 
 	
 	Instead with the bottom-k sketches using $\pi_{4}$ as permutation
 	\begin{equation*}
-	S_{A} = \{ \min_{1}(\pi_{4}(A)), \min_{2}(\pi_{4}(A)), \min_{3}(\pi_{4}(A)), \min_{4}(\pi_{4}(A)) \} = \{9, 1, 3, 5\}
+	S_{A} = \{ \min{\!}_{1}(\pi_{4}(A)), \min{\!}_{2}(\pi_{4}(A)), \min{\!}_{3}(\pi_{4}(A)), \min{\!}_{4}(\pi_{4}(A)) \} = \{9, 1, 3, 5\}
 	\end{equation*}
 	
 \end{esempio}
@@ -343,7 +346,7 @@ The color coding is a method proposed in 1994 by Alon et al.~\cite{Alon:1995:COL
 
 The idea behind this method, which gives it the name, is to randomly coloring each node of $V$ with one of the $q$ possible colors.
 
-We restrict our attention to $q = O(\log |V|)$ and denote with $\chi : V \rightarrow [q]$\footnote{Here $[q] \equiv [1, \ldots, q]$ is the set of all possible colors} the coloring function, where each node $u \in V$ has a color $\chi(u) \in [q]$.\medskip
+We restrict our attention to $q = O(\log |V|)$ and denote with $\chi : V \rightarrow [q]$ the coloring function\footnote{Here $[q] \equiv [1, \ldots, q]$ is the set of all possible colors}, where each node $u \in V$ has a color $\chi(u) \in [q]$.\medskip
 
 After assigning a color to each node, we will focus on finding only the colorful $q$-paths. We say that a $q$-path $u_{1}, \ldots, u_{q}$ is colorful iff $\chi(u_{i}) \neq \chi(u_{j})$ for $1 \leq i < j \leq q$ (i.e. all the $q$ colors appear in the $q$-path).\medskip
 
